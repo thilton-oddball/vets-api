@@ -80,7 +80,8 @@ module Common
               developer_message = doc.root.to_html
             end
 
-            log_message_to_sentry(developer_message, :error)
+            # Prevent invalid format string error in log_message_to_sentry
+            log_message_to_sentry(developer_message&.gsub(/%/, '%%'), :error)
 
             {
               'message' => message.blank? ? 'Received an error response that could not be processed' : message

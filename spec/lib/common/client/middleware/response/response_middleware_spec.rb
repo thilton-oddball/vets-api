@@ -36,6 +36,15 @@ describe 'Response Middleware' do
     )
   end
 
+  let(:mhv_generic_message_with_bad_chars) do
+    %(
+      <html>
+        <head><title>Some Title</title></head>
+        <body><p>log_message_to_sentry does not like '%' in strings, only %%</p></body>
+      </html>
+    )
+  end
+
   subject(:faraday_client) do
     Faraday.new do |conn|
       conn.response :snakecase
@@ -55,6 +64,9 @@ describe 'Response Middleware' do
           [400, { 'Content-Type' => 'application/xml' }, mhv_generic_xml_error_code]
         end
         stub.get('mhv-service-outage') { [400, { 'Content-Type' => 'application/xml' }, mhv_service_outage] }
+        stub.get('mhv-generic-message-with-bad-chars') do
+          [400, { 'Content-Type' => 'application/html' }, mhv_generic_message_with_bad_chars]
+        end
       end
     end
   end
@@ -140,6 +152,12 @@ describe 'Response Middleware' do
       expect { faraday_client.get('mhv-service-outage') }.to raise_error do |error|
         expect(error).to be_a(Common::Exceptions::BackendServiceException)
         expect(error.errors.first[:detail]).to eq('MHV Service Outage')
+      end
+    end
+
+    it 'can handle errors with embedded percents' do
+      expect { faraday_client.get('mhv-generic-message-with-bad-chars') }.to raise_error do |error|
+        expect(error).to be_a(Common::Exceptions::BackendServiceException)
       end
     end
   end
