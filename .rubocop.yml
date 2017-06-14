@@ -54,6 +54,11 @@ Style/Next:
 Style/ZeroLengthPredicate:
   Enabled: false
 
+# This changes things like `foo == 0` to `foo.zero?`. The problem is the first statement
+# works with nil but the 2nd will raise an error.
+Style/NumericPredicate:
+  Enabled: false
+
 Metrics/LineLength:
   Max: 120
 
