@@ -5,14 +5,15 @@ module EVSS
   module Letters
     class Letter < Common::Base
       LETTER_TYPES = %w(
+        benefit_summary
+        benefit_verification
+        certificate_of_eligiblity
+        civil_service
         commissary
         proof_of_service
         medicare_partd
         minimum_essential_coverage
         service_verification
-        civil_service
-        benefit_summary
-        benefit_verification
       ).freeze
 
       attribute :name, String
