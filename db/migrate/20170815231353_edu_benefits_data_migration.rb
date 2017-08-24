@@ -23,6 +23,5 @@ class EduBenefitsDataMigration < ActiveRecord::Migration
     sql
 
     ActiveRecord::Base.connection.execute(sql)
-    binding.pry; fail
   end
 end
