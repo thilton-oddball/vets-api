@@ -37,7 +37,7 @@ module Common
         connection.send(method.to_sym, path, params) do |request|
           request.headers.update(headers)
           yield(request) if block_given?
-          log_message_to_sentry('full req', :info, request.to_h)
+          log_message_to_sentry('full req', :info, headers: Base64.encode64(request.to_h[:headers].to_json))
         end.env
       rescue Timeout::Error, Faraday::TimeoutError
         log_message_to_sentry(
