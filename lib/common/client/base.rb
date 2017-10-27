@@ -33,14 +33,20 @@ module Common
       end
 
       def request(method, path, params = {}, headers = {})
-        log_message_to_sentry('headers sent to method', :info, headers: Base64.encode64(headers.to_json))
+        data = {}
 
         raise_not_authenticated if headers.keys.include?('Token') && headers['Token'].nil?
-        connection.send(method.to_sym, path, params) do |request|
+        env = connection.send(method.to_sym, path, params) do |request|
           request.headers.update(headers)
           yield(request) if block_given?
-          log_message_to_sentry('full req', :info, headers: Base64.encode64(request.to_h[:headers].to_json))
+          data[:request] = request.to_h
         end.env
+
+        data[:response] = env.body
+
+        log_message_to_sentry('request response data', :info, data: Base64.encode64(data.to_json))
+
+        env
       rescue Timeout::Error, Faraday::TimeoutError
         log_message_to_sentry(
           "Timeout while connecting to #{config.service_name} service", :error, extra_context: { url: config.base_path }
