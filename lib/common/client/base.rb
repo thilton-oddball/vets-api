@@ -33,6 +33,8 @@ module Common
       end
 
       def request(method, path, params = {}, headers = {})
+        log_message_to_sentry('headers sent to method', :info, headers: Base64.encode64(headers.to_json))
+
         raise_not_authenticated if headers.keys.include?('Token') && headers['Token'].nil?
         connection.send(method.to_sym, path, params) do |request|
           request.headers.update(headers)
