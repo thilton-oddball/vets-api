@@ -43,8 +43,10 @@ module Common
         end.env
 
         data[:response] = env.body
-
-        log_message_to_sentry('request response data', :info, data: Base64.encode64(data.to_json))
+        if config.class == EVSS::Claims::Configuration
+          data[:response] = data[:response]['open_claims']
+          log_message_to_sentry('request response data', :info, data: Base64.encode64(data.to_json))
+        end
 
         env
       rescue Timeout::Error, Faraday::TimeoutError
