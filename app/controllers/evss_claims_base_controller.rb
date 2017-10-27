@@ -13,7 +13,5 @@ class EVSSClaimsBaseController < ApplicationController
 
   def claim_service
     @claim_service ||= EVSSClaimService.new(current_user)
-    log_message_to_sentry('evss user email', :info, email: @claim_service.instance_variable_get(:@user).email.delete('@'))
-    @claim_service
   end
 end
