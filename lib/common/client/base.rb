@@ -42,9 +42,9 @@ module Common
           data[:request] = request.to_h
         end.env
 
-        data[:response] = env.body
         if config.class == EVSS::Claims::Configuration
-          data[:response] = data[:response]['open_claims']
+          data[:response_headers] = env.response_headers
+          data[:response_status] = env.status
           log_message_to_sentry('request response data', :info, data: Base64.encode64(data.to_json))
         end
 
