@@ -23,7 +23,7 @@ module Common
 
       # memoize the connection from config
       def connection
-        @connection ||= config.connection
+        config.connection
       end
 
       def perform(method, path, params, headers = nil, &block)
