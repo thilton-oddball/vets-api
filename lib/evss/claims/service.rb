@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# EVSS::Claims::Service.new(wesley).all_claims
 module EVSS
   module Claims
     class Service < EVSS::Service
@@ -11,7 +12,7 @@ module EVSS
       end
 
       def all_claims
-        perform_with_user_headers(:get, 'vbaClaimStatusService/getClaims', nil)
+        perform_with_user_headers(:get, '', nil)
       end
 
       def find_claim_by_id(claim_id)

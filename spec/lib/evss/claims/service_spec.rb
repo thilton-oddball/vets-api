@@ -11,10 +11,16 @@ describe EVSS::Claims::Service do
     let(:evss_id) { 189_625 }
 
     it 'should get claims' do
-      VCR.use_cassette('evss/claims/claims') do
-        response = subject.all_claims
-        expect(response).to be_success
+      VCR.config do |c|
+        c.allow_http_connections_when_no_cassette = true
       end
+      puts subject.all_claims.body
+      puts described_class.new(create(:loa3_user, ssn: '234234234')).all_claims.body
+
+      # VCR.use_cassette('evss/claims/claims') do
+      #   response = subject.all_claims
+      #   expect(response).to be_success
+      # end
     end
 
     it 'should post a 5103 waiver' do
