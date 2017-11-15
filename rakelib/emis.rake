@@ -11,26 +11,41 @@ namespace :emis do
 
     mock = YAML.load_file(args[:ymlfile])
     CSV.open(outfile, 'w') do |file|
-      file << %w(name ssn edipi addressee veteran episodes)
+      file << %w(name ssn edipi addressee old_is_veteran title38 branches discharges)
       mock['find_candidate'].each do |ssn, user|
         is_veteran = false
-        has_eps = false
         begin
           resp = vss.get_veteran_status(edipi: user[:edipi])
+          title38 = resp.items.first.title38StatusCode
           is_veteran = any_veteran_indicator?(resp.items.first)
           ep_resp = mis.get_military_service_episodes(edipi: user[:edipi])
-          has_eps = ep_resp.items.present?
+          eps = ep_resp&.items || []
+          branches = eps.map { |e| e.branch_of_service_code }
+          branchstring = branches.compact.join('/')
+          discharges = eps.map { |e| e.discharge_character_of_service_code }
+          dischargestring = discharges.compact.join('/')
         rescue StandardError
+          puts "Error for #{name} #{ssn}"
           is_veteran = false
-          has_eps = false
         end
         has_addr = addressee?(user[:address])
         file << [user[:given_names][0], user[:family_name], ssn,
-                 user[:edipi], has_addr, is_veteran, has_eps]
+                 user[:edipi], has_addr, is_veteran, title38, 
+                 branchstring, dischargestring]
       end
     end
   end
 end
+
+# branches = @user.military_information.service_episodes_by_date.map do |ep|
+#       SERVICE_KEYS[ep.branch_of_service_code]
+#           end
+#               branches.compact.join(',')
+#
+#               discharges = @user.military_information
+#                                     .service_episodes_by_date
+#                 .map(&:discharge_character_of_service_code)
+#                            discharges.compact.join(',')
 
 def any_veteran_indicator?(item)
   item&.post911_deployment_indicator == 'Y' ||
