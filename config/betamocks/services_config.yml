@@ -68,10 +68,20 @@
 # EMIS
 - :name: 'EMIS'
   :base_uri: <%= "#{URI(Settings.emis.host).host}:#{URI(Settings.emis.host).port}" %>
+  emis_common: &emis_common
+    :method: :post
+    :cache_multiple_responses:
+      :uid_location: body
+      :uid_locator: '<v13:edipiORicnValue>(\d+)<\/v13:edipiORicnValue>'
+
   :endpoints:
-  - :method: :post
+  - <<: *emis_common
     :path: "/VIERSService/eMIS/v1/VeteranStatusService"
     :file_path: "emis/veteran_status"
+
+  - <<: *emis_common
+    :path: "/VIERSService/eMIS/v1/MilitaryInformationService"
+    :file_path: "emis/military_information_service"
     :cache_multiple_responses:
       :uid_location: body
       :uid_locator: '<v13:edipiORicnValue>(\d+)<\/v13:edipiORicnValue>'
