@@ -39,6 +39,22 @@ RSpec.describe PensionBurial::Service do
 
   describe '#upload' do
     it 'should upload a file' do
+      VCR.config do |c|
+        c.allow_http_connections_when_no_cassette = true
+      end
+
+      response = described_class.new.upload(
+        metadata: get_fixture('pension/metadata').to_json,
+        document: Faraday::UploadIO.new(
+          'spec/fixtures/pension/form.pdf',
+          Mime[:pdf].to_s
+        ),
+        attachment1: Faraday::UploadIO.new(
+          'spec/fixtures/pension/attachment.pdf',
+          Mime[:pdf].to_s
+        )
+      )
+      binding.pry; fail
       header_matcher = lambda do |r1, r2|
         [r1, r2].each { |r| r.headers.delete('Content-Length') }
         expect(r1.headers).to eq(r2.headers)
