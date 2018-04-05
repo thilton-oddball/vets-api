@@ -11,6 +11,7 @@ module PensionBurial
         'upload',
         body
       )
+      binding.pry; fail
       # TODO: remove logging after confirming that pension burial uploads are working in staging
       if Rails.env.production?
         log_message_to_sentry(
