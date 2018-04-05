@@ -6,6 +6,7 @@ module PensionBurial
     def upload(body)
       body['token'] = Settings.pension_burial.upload.token
 
+      binding.pry; fail
       response = request(
         :post,
         'upload',
