@@ -116,6 +116,7 @@ module BGS
       # }}}
 
       { applicationName: @application,
+        Username: @client_username,
         CLIENT_MACHINE: @client_ip,
         STN_ID: @client_station_id,
         ExternalUid: 'user1',
