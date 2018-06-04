@@ -72,6 +72,7 @@ module BGS
     end
 
     def wsdl
+      return "#{Rails.root.to_s}/ruby-bgs/bgs.wsdl"
       "#{base_url}/#{bean_name}/#{@service_name}?WSDL"
     end
 
