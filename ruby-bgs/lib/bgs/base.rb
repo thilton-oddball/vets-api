@@ -108,13 +108,18 @@ module BGS
       <vaws:CLIENT_MACHINE></vaws:CLIENT_MACHINE>
       <vaws:STN_ID></vaws:STN_ID>
       <vaws:applicationName></vaws:applicationName>
+      <vaws:ExternalUid></vaws:ExternalUid>
+      <vaws:ExternalKey></vaws:ExternalKey>
     </vaws:VaServiceHeaders>
   </wsse:Security>
   EOXML
       # }}}
 
       { Username: @client_username, CLIENT_MACHINE: @client_ip,
-        STN_ID: @client_station_id, applicationName: @application }.each do |k, v|
+        STN_ID: @client_station_id, applicationName: @application,
+        ExternalUid: 'user1',
+        ExternalKey: '4e568055-df59-4c05-8107-8b4bf1d1b9e6'
+      }.each do |k, v|
         header.xpath(".//*[local-name()='#{k}']")[0].content = v
       end
       header
