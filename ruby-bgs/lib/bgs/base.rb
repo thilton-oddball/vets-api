@@ -102,6 +102,7 @@ module BGS
       header = Nokogiri::XML::DocumentFragment.parse <<-EOXML
   <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
     <vaws:VaServiceHeaders xmlns:vaws="http://vbawebservices.vba.va.gov/vawss">
+      <vaws:CLIENT_MACHINE></vaws:CLIENT_MACHINE>
       <vaws:applicationName></vaws:applicationName>
       <vaws:ExternalUid></vaws:ExternalUid>
       <vaws:ExternalKey></vaws:ExternalKey>
@@ -111,6 +112,7 @@ module BGS
       # }}}
 
       { applicationName: @application,
+        CLIENT_MACHINE: @client_ip,
         ExternalUid: 'user1',
         ExternalKey: '4e568055-df59-4c05-8107-8b4bf1d1b9e6'
       }.each do |k, v|
