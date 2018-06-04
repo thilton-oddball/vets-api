@@ -74,6 +74,7 @@ gem 'vets_json_schema', git: 'https://github.com/department-of-veterans-affairs/
 gem 'virtus'
 gem 'will_paginate'
 gem 'zero_downtime_migrations'
+gem 'bgs', path: 'ruby-bgs'
 
 group :development do
   gem 'guard-rubocop'

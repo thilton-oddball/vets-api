@@ -39,9 +39,15 @@ PATH
       rails (~> 4.2.7.1)
       sidekiq
 
+PATH
+  remote: ruby-bgs
+  specs:
+    bgs (0.2)
+      nokogiri (~> 1.8.2)
+      savon (~> 2.11)
+
 GEM
   remote: https://rubygems.org/
-  remote: https://enterprise.contribsys.com/
   specs:
     Ascii85 (1.0.2)
     aasm (4.12.0)
@@ -981,14 +987,9 @@ GEM
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (~> 3.2, >= 3.2.1)
-    sidekiq-ent (1.6.1)
-      sidekiq (>= 4.2.9)
-      sidekiq-pro (>= 3.5.0)
     sidekiq-instrument (0.3.0)
       sidekiq (>= 4.2, < 6)
       statsd-instrument (~> 2.0, >= 2.0.4)
-    sidekiq-pro (3.7.0)
-      sidekiq (>= 4.1.5)
     sidekiq-scheduler (2.0.19)
       hashie (~> 3.4)
       redis (~> 3)
@@ -1064,6 +1065,7 @@ DEPENDENCIES
   awrence
   aws-sdk (~> 3)
   betamocks!
+  bgs!
   brakeman
   breakers
   bundler-audit
@@ -1138,9 +1140,7 @@ DEPENDENCIES
   shrine
   shrine-memory
   sidekiq
-  sidekiq-ent!
   sidekiq-instrument
-  sidekiq-pro!
   sidekiq-scheduler (~> 2.0)
   sidekiq-unique-jobs
   simplecov
