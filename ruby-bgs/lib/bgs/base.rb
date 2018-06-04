@@ -82,8 +82,7 @@ module BGS
     end
 
     def domain
-      # "#{@env}.vba.va.gov"
-      Settings.bgs.url
+      "#{@env}.vba.va.gov"
     end
 
     def bean_name
