@@ -101,6 +101,8 @@ module BGS
       # Stock XML structure {{{
       header = Nokogiri::XML::DocumentFragment.parse <<-EOXML
   <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <wsse:UsernameToken>
+    </wsse:UsernameToken>
     <vaws:VaServiceHeaders xmlns:vaws="http://vbawebservices.vba.va.gov/vawss">
       <vaws:CLIENT_MACHINE></vaws:CLIENT_MACHINE>
       <vaws:STN_ID></vaws:STN_ID>
