@@ -130,6 +130,7 @@ module BGS
 
       @client ||= Savon.client(
         wsdl: wsdl, soap_header: header, log: @log,
+        ssl_verify_mode: :none,
         ssl_cert_key_file: @ssl_cert_key_file,
         headers: headers,
         ssl_cert_file: @ssl_cert_file,
