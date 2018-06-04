@@ -1,0 +1,8 @@
+language: ruby
+cache: bundler
+
+matrix:
+  include:
+    - rvm: 2.2.4
+
+  fast_finish: true
