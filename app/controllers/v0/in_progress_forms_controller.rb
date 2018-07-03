@@ -12,6 +12,19 @@ module V0
     end
 
     def show
+      return render(json: {:form_data=>
+        {"veteranFullName"=>{"first"=>"Abraham", "last"=>"Lincoln", "suffix"=>"Jr."},
+         "gender"=>"M",
+         "veteranDateOfBirth"=>"1809-02-12",
+         "veteranSocialSecurityNumber"=>"111223333",
+         "homePhone"=>"(303) 555-1234",
+         "veteranAddress"=>{"street"=>"1493 Martin Luther King Rd", "city"=>"Fulton", "state"=>"MS", "country"=>"USA", "postalCode"=>"38843"},
+         "email"=>"person101@example.com",
+         "toursOfDuty"=>[{"serviceBranch"=>"Air Force", "dateRange"=>{"from"=>"2007-04-01", "to"=>"2016-06-01"}}],
+         "currentlyActiveDuty"=>{"yes"=>true},
+         "mobilePhone"=>"(303) 555-1234"},
+       :metadata=>{:version=>0, :prefill=>true, :returnUrl=>"/applicant/information"}}
+      )
       form_id = params[:id]
       form = InProgressForm.form_for_user(form_id, @current_user)
       if form
