@@ -9,6 +9,10 @@ module EVSS
         perform(:get, 'load/retrieve')
       end
 
+      def headers_for_user(user)
+        JSON.parse(ENV['evss_headers'])
+      end
+
       def clean_form(form)
         perform(:post, 'inflightform/cleanForm', form.to_json, headers)
       end

@@ -39,9 +39,10 @@ namespace :evss do
   desc '686 load test'
   task load_test_686: :environment do
     require './rakelib/support/vic_load_test'
-
+    binding.pry; fail
     LoadTest.measure_elapsed do
       1.times do
+        service = EVSS::Dependents::Service.new(nil)
 
         LoadTest.conn(args[:host], 'profile_photo_attachments').post do |req|
           req.body = LoadTest.photo_payload
