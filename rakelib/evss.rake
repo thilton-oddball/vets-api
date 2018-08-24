@@ -36,6 +36,20 @@ namespace :evss do
     end
   end
 
+  desc '686 load test'
+  task load_test_686: :environment do
+    require './rakelib/support/vic_load_test'
+
+    LoadTest.measure_elapsed do
+      1.times do
+
+        LoadTest.conn(args[:host], 'profile_photo_attachments').post do |req|
+          req.body = LoadTest.photo_payload
+        end
+      end
+    end
+  end
+
   desc 'export EDIPIs users with invalid addresss, usage: rake evss:export_invalid_address_edipis[/export/path.csv]'
   task :export_invalid_address_edipis, [:csv_path] => [:environment] do |_, args|
     raise 'No CSV path provided' unless args[:csv_path]
