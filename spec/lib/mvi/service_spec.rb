@@ -82,6 +82,9 @@ describe MVI::Service do
         allow(SecureRandom).to receive(:uuid).and_return('5e819d17-ce9b-4860-929e-f9062836ebd0')
 
         match = { match_requests_on: %i[method uri headers body] }
+        VCR.config do |c|
+          c.allow_http_connections_when_no_cassette = true
+        end
         binding.pry; fail
         VCR.use_cassette('mvi/find_candidate/historical_icns_with_icn', match) do
           response = subject.find_profile(user)
