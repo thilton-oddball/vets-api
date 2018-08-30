@@ -21,7 +21,6 @@ describe EVSS::ClaimsService do
     let(:evss_id) { 189_625 }
 
     it 'should get claims', run_at: 'Tue, 12 Dec 2017 03:09:06 GMT' do
-      binding.pry; fail
       VCR.use_cassette(
         'evss/claims/claims',
         VCR::MATCH_EVERYTHING
