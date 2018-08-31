@@ -65,6 +65,7 @@ namespace :evss do
       1.times do
         service = EVSS::Dependents::Service.new(nil)
         form = service.retrieve.body.deep_transform_keys { |k| k.camelize(:lower) }
+        binding.pry; fail
         form = service.clean_form(form).body.deep_transform_keys { |k| k.camelize(:lower) }
         service.validate(form)
         form_id = subject.save(form).body['form_id']
