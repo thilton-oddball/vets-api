@@ -88,6 +88,7 @@ describe PdfFill::Filler do
               end
 
               file_path = described_class.fill_form(saved_claim)
+              binding.pry; fail
 
               if type == 'overflow'
                 extras_path = the_extras_generator.generate
