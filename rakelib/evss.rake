@@ -70,7 +70,7 @@ namespace :evss do
         form_id = subject.save(form).body['form_id']
         form['submitProcess']['application']['draftFormId'] = form_id
         change_evss_times(form)
-        service.submit(form)
+        # service.submit(form)
       end
     end
   end
