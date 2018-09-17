@@ -16,7 +16,9 @@ module EVSS
       when 200
         resp = env.body
         raise EVSSError.new(resp['messages'], resp['messages']) if resp['success'] == false
-        binding.pry; fail
+        if resp['messages'].is_a?(String)
+          binding.pry; fail
+        end
         if resp['messages']&.find { |m| m['severity'] =~ /fatal|error/i }
           raise EVSSError.new(resp['messages'], resp['messages'])
         end
