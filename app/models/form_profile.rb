@@ -22,6 +22,7 @@ class FormMilitaryInformation
 
   attribute :post_nov_1998_combat, Boolean
   attribute :last_service_branch, String
+  attribute :hca_last_service_branch, String
   attribute :last_entry_date, String
   attribute :last_discharge_date, String
   attribute :discharge_type, String
@@ -84,7 +85,7 @@ class FormProfile
 
   MAPPINGS = Dir[Rails.root.join('config', 'form_profile_mappings', '*.yml')].map { |f| File.basename(f, '.*') }
 
-  EDU_FORMS = ['22-1990', '22-1990N', '22-1990E', '22-1995', '22-5490', '22-5495', '22-0993'].freeze
+  EDU_FORMS = ['22-1990', '22-1990N', '22-1990E', '22-1995', '22-5490', '22-5495', '22-0993', 'FEEDBACK-TOOL'].freeze
   EVSS_FORMS = ['21-526EZ'].freeze
   HCA_FORMS = ['1010ez'].freeze
   PENSION_BURIAL_FORMS = ['21P-530', '21P-527EZ'].freeze
@@ -105,7 +106,7 @@ class FormProfile
     '40-10007'       => ::FormProfiles::VA4010007,
     '21P-527EZ'      => ::FormProfiles::VA21p527ez,
     '22-0993'        => ::FormProfiles::VA0993,
-    'COMPLAINT-TOOL' => ::FormProfiles::ComplaintTool
+    'FEEDBACK-TOOL'  => ::FormProfiles::FeedbackTool
   }.freeze
 
   APT_REGEX = /\S\s+((apt|apartment|unit|ste|suite).+)/i
@@ -125,7 +126,6 @@ class FormProfile
     forms += VIC_FORMS if Settings.vic.prefill
     forms << '21-686C'
     forms << '40-10007'
-    forms << 'COMPLAINT-TOOL'
     forms += EVSS_FORMS if Settings.evss.prefill
 
     forms
@@ -179,7 +179,6 @@ class FormProfile
 
   def initialize_military_information(user)
     return {} unless user.authorize :emis, :access?
-
     military_information = user.military_information
     military_information_data = {}
 
