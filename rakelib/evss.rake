@@ -64,8 +64,8 @@ namespace :evss do
     LoadTest.measure_elapsed do
       1.times do
         service = EVSS::Dependents::Service.new(nil)
-        form = service.retrieve.body.deep_transform_keys { |k| k.camelize(:lower) }
-        form = service.clean_form(form).body.deep_transform_keys { |k| k.camelize(:lower) }
+        form = service.retrieve.body
+        form = service.clean_form(form).body
         service.validate(form)
         form_id = subject.save(form).body['form_id']
         form['submitProcess']['application']['draftFormId'] = form_id
