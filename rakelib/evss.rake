@@ -40,7 +40,7 @@ namespace :evss do
   task load_test_686: :environment do
     require './rakelib/support/vic_load_test'
 
-    EVSS_TIME_KEYS = %w[createdDate expirationDate modifiedDate dateOfBirth]
+    EVSS_TIME_KEYS = %w[createdDate expirationDate modifiedDate dateOfBirth dateUploaded courseBeginDate graduationDate termBeginDate]
 
     def convert_evss_time(time)
       Time.at(BigDecimal.new(time.to_s.insert(10, '.'))).iso8601
@@ -49,7 +49,7 @@ namespace :evss do
     def change_evss_times(object)
       if object.is_a?(Hash)
         object.each do |k, v|
-          if EVSS_TIME_KEYS.include?(k)
+          if k.downcase.include?('date') && v.is_a?(Number)
             object[k] = convert_evss_time(v)
           else
             change_evss_times(v)
