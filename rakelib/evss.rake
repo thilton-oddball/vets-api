@@ -49,7 +49,7 @@ namespace :evss do
     def change_evss_times(object)
       if object.is_a?(Hash)
         object.each do |k, v|
-          if k.downcase.include?('date') && v.is_a?(Number)
+          if k.downcase.include?('date') && v.is_a?(Numeric)
             object[k] = convert_evss_time(v)
           else
             change_evss_times(v)
