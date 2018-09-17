@@ -40,6 +40,8 @@ namespace :evss do
   task load_test_686: :environment do
     require './rakelib/support/vic_load_test'
 
+    EVSS_TIME_KEYS = %w[createdDate expirationDate modifiedDate dateOfBirth]
+
     def convert_evss_time(time)
       Time.at(BigDecimal.new(time.to_s.insert(10, '.'))).iso8601
     end
