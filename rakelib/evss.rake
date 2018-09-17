@@ -64,6 +64,7 @@ namespace :evss do
     LoadTest.measure_elapsed do
       1.times do
         service = EVSS::Dependents::Service.new(nil)
+        binding.pry; fail
         form = service.retrieve.body
         form = service.clean_form(form).body
         service.validate(form)
