@@ -71,6 +71,7 @@ namespace :evss do
         service.validate(form)
         form_id = service.save(form).body['form_id']
         form['submitProcess']['application']['draftFormId'] = form_id
+        binding.pry; fail
         change_evss_times(form)
         service.submit(form)
       end
