@@ -43,7 +43,8 @@ namespace :evss do
     EVSS_TIME_KEYS = %w[createdDate expirationDate modifiedDate dateOfBirth dateUploaded courseBeginDate graduationDate termBeginDate]
 
     def convert_evss_time(time)
-      Time.at(BigDecimal.new(time.to_s.insert(10, '.'))).iso8601
+      time_string = time.to_s
+      Time.at(BigDecimal.new(time_string.insert(time_string.size - 3, '.'))).iso8601
     end
 
     def change_evss_times(object)
