@@ -70,10 +70,10 @@ namespace :evss do
         form = service.retrieve.body
         form = service.clean_form(form).body
         service.validate(form)
-        binding.pry; fail
         form_id = service.save(form).body['formId']
         form['submitProcess']['application']['draftFormId'] = form_id
         change_evss_times(form)
+        binding.pry; fail
         service.submit(form)
       end
     end
