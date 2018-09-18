@@ -8,6 +8,7 @@ describe Gibft::Service, type: :model do
 
   describe '#submit' do
     before do
+      binding.pry; fail
       expect(service).to receive(:get_oauth_token).and_return('token')
 
       expect(Restforce).to receive(:new).with(
