@@ -12,7 +12,7 @@ describe Gibft::Service, type: :model do
         c.allow_http_connections_when_no_cassette = true
       end
       gi_bill_feedback = FactoryBot.create(:gi_bill_feedback)
-      gi_bill_feedback.user = FactoryBot.create(:evss_user)
+      # gi_bill_feedback.user = FactoryBot.create(:evss_user)
       res = Gibft::Service.new.submit(gi_bill_feedback.transform_form)
 
       binding.pry; fail
