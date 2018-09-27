@@ -28,7 +28,7 @@ FactoryBot.define do
         },
         # socialSecurityNumberLastFour: '1234',
         anonymousEmail: 'foo@foo.com',
-        onBehalfOf: 'Myself',
+        onBehalfOf: 'Anonymous',
         educationDetails: {
           school: {
             name: 'UNIVERSITY OF LOUISVILLE',
