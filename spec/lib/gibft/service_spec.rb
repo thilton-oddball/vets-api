@@ -11,9 +11,56 @@ describe Gibft::Service, type: :model do
       VCR.config do |c|
         c.allow_http_connections_when_no_cassette = true
       end
-      gi_bill_feedback = FactoryBot.create(:gi_bill_feedback)
+      gi_bill_feedback = FactoryBot.create(
+        :gi_bill_feedback,
+        form: {  
+           "issue":{  
+              "other":false,
+              "recruiting":false,
+              "studentLoans":true,
+              "quality":false,
+              "creditTransfer":false,
+              "accreditation":false,
+              "jobOpportunities":false,
+              "gradePolicy":false,
+              "refundIssues":false,
+              "financialIssues":false,
+              "changeInDegree":false,
+              "transcriptRelease":false
+           },
+           "issueDescription":"f",
+           "issueResolution":"s",
+           "educationDetails":{  
+              "school":{  
+                 "name":"ABO AKADEMI UNIVERSITY",
+                 "address":{  
+                    "country":"United States",
+                    "street":"FILTERED",
+                    "city":"FILTERED"
+                 }
+              },
+              "programs":{  
+                 "Post-9/11 Ch 33":false,
+                 "MGIB-AD Ch 30":false,
+                 "MGIB-SR Ch 1606":false,
+                 "TATU":false,
+                 "REAP":false,
+                 "DEA Ch 35":true,
+                 "VRE Ch 31":false
+              },
+              "assistance":{  
+                 "TA":false,
+                 "TA-AGR":false,
+                 "MyCAA":true,
+                 "FFA":false
+              }
+           },
+           "onBehalfOf":"Anonymous",
+           "privacyAgreementAccepted":true
+        }.to_json
+      )
       user = create(:evss_user)
-      allow(user).to receive(:ssn).and_return('1234')
+      binding.pry; fail
       # gi_bill_feedback.user = user
       res = Gibft::Service.new.submit(gi_bill_feedback.transform_form)
 
