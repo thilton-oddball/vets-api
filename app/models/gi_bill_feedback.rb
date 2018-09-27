@@ -48,6 +48,7 @@ class GIBillFeedback < Common::RedisStore
 
   def transform_form
     transformed = parsed_form.deep_transform_keys(&:underscore)
+    transformed.delete('privacy_agreement_accepted')
     transformed['affiliation'] = transformed.delete('service_affiliation')
     transformed.delete('service_date_range').tap do |service_date_range|
       next if service_date_range.blank?
