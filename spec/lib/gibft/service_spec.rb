@@ -14,7 +14,7 @@ describe Gibft::Service, type: :model do
       gi_bill_feedback = FactoryBot.create(:gi_bill_feedback)
       user = create(:evss_user)
       allow(user).to receive(:ssn).and_return('1234')
-      gi_bill_feedback.user = user
+      # gi_bill_feedback.user = user
       res = Gibft::Service.new.submit(gi_bill_feedback.transform_form)
 
       binding.pry; fail
