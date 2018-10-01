@@ -60,6 +60,7 @@ class GIBillFeedback < Common::RedisStore
     if transformed['social_security_number_last_four'].present?
       transformed['profile_data']['SSN'] = transformed.delete('social_security_number_last_four')
     end
+    transformed['profile_data'] = nil if transformed['profile_data'].blank?
 
     transformed['education_details'].tap do |education_details|
       transform_school_address(education_details['school']['address'])
