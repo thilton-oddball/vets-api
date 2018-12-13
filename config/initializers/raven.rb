@@ -10,6 +10,7 @@ Raven.configure do |config|
   config.processors << Sentry::Processor::LogAsWarning
 
   config.async = lambda { |event|
+    binding.pry; fail
     SentryJob.perform_async(event)
   }
 end
