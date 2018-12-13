@@ -11,6 +11,7 @@ module Sentry
       ].freeze
 
       def process(data)
+        binding.pry; fail
         return data if data[:exception].blank? && data['exception'].blank?
 
         exception_class = get_exception_class(data)
