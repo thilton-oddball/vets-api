@@ -8,6 +8,7 @@ class V0::Facilities::CcpController < FacilitiesController
     result = ppms.provider_info(params[:id])
     raise Common::Exceptions::RecordNotFound, params[:id] if result.nil?
     services = ppms.provider_services(params[:id])
+    Rails.logger.error(services[0]['CareSiteLocationAddress']) if services.present?
     caresites = ppms.provider_caresites(services[0]['CareSiteLocationAddress']) if services.present?
     result.add_caresite(caresites[0]) if caresites.present?
     render json: result, serializer: ProviderSerializer
