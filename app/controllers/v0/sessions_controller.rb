@@ -71,7 +71,7 @@ module V0
     end
 
     def saml_callback
-      saml_response = OneLogin::RubySaml::Response.new(params[:SAMLResponse], settings: saml_settings)
+      saml_response = SAML::Response.new(params[:SAMLResponse], settings: saml_settings)
       @sso_service = SSOService.new(saml_response)
       if @sso_service.persist_authentication!
         @current_user = @sso_service.new_user
@@ -82,10 +82,10 @@ module V0
         redirect_to saml_login_redirect_url
 
         StatsD.increment(STATSD_LOGIN_NEW_USER_KEY) if @sso_service.new_login?
-        StatsD.increment(STATSD_SSO_CALLBACK_KEY, tags: ['status:success', "context:#{@sso_service.context_key}"])
+        StatsD.increment(STATSD_SSO_CALLBACK_KEY, tags: ['status:success', "context:#{saml_response.context_key}"])
       else
         redirect_to url_service.login_redirect_url(auth: 'fail', code: @sso_service.auth_error_code)
-        StatsD.increment(STATSD_SSO_CALLBACK_KEY, tags: ['status:failure', "context:#{@sso_service.context_key}"])
+        StatsD.increment(STATSD_SSO_CALLBACK_KEY, tags: ['status:failure', "context:#{saml_response.context_key}"])
         StatsD.increment(STATSD_SSO_CALLBACK_FAILED_KEY, tags: [@sso_service.failure_instrumentation_tag])
       end
     rescue NoMethodError

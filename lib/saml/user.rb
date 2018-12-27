@@ -10,37 +10,23 @@ module SAML
   class User
     include SentryLogging
 
-    CONTEXT_MAP = { LOA::MAPPING.invert[1] => 'idme',
-                    'dslogon' => 'dslogon',
-                    'myhealthevet' => 'myhealthevet',
-                    LOA::MAPPING.invert[3] => 'idproof',
-                    'multifactor' => 'multifactor',
-                    'dslogon_multifactor' => 'dslogon_multifactor',
-                    'myhealthevet_multifactor' => 'myhealthevet_multifactor' }.freeze
-    UNKNOWN_CONTEXT = 'unknown'
-
     attr_reader :saml_response, :saml_attributes, :user_attributes
 
     def initialize(saml_response)
       @saml_response = saml_response
       @saml_attributes = saml_response.attributes
-      @user_attributes = user_attributes_class.new(saml_attributes, real_authn_context)
+      @real_authn_context = saml_response.real_authn_context
+      @user_attributes = user_attributes_class.new(saml_attributes, @real_authn_context)
       log_warnings_to_sentry!
     end
 
     def changing_multifactor?
-      return false if real_authn_context.nil?
-      real_authn_context.include?('multifactor')
+      return false if @real_authn_context.nil?
+      @real_authn_context.include?('multifactor')
     end
 
     def to_hash
       user_attributes.to_hash.merge(Hash[serializable_attributes.map { |k| [k, send(k)] }])
-    end
-
-    def self.context_key(authn_context)
-      CONTEXT_MAP[authn_context] || UNKNOWN_CONTEXT
-    rescue StandardError
-      UNKNOWN_CONTEXT
     end
 
     private
@@ -73,28 +59,14 @@ module SAML
       suppress(Exception) do
         if (warnings = warnings_for_sentry).any?
           warning_context = {
-            real_authn_context: real_authn_context,
+            real_authn_context: @real_authn_context,
             authn_context: authn_context,
             warnings: warnings.join(', '),
             loa: user_attributes.loa
           }
-          log_message_to_sentry("Issues in SAML Response - #{real_authn_context}", :warn, warning_context)
+          log_message_to_sentry("Issues in SAML Response - #{@real_authn_context}", :warn, warning_context)
         end
       end
-    end
-
-    # will be one of [loa1, loa3, multifactor, dslogon, mhv]
-    # this is the real authn-context returned in the response without the use of heuristics
-    def real_authn_context
-      REXML::XPath.first(saml_response.decrypted_document, '//saml:AuthnContextClassRef')&.text
-    # this is to add additional context when we cannot parse for authn_context
-    rescue NoMethodError
-      Raven.extra_context(
-        base64encodedpayload: Base64.encode64(saml_response.response),
-        attributes: saml_response.attributes.to_h
-      )
-      Raven.tags_context(controller_name: 'sessions', sign_in_method: 'not-signed-in:error')
-      raise
     end
 
     # We want to do some logging of when and how the following issues could arise, since loa is

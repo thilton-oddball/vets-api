@@ -22,10 +22,13 @@ module SAML
 
     def saml_response(attributes = saml_attributes)
       decrypted_document_partial = REXML::Document.new(authn_context_xml_partial)
-      instance_double(OneLogin::RubySaml::Response, attributes: attributes,
-                                                    decrypted_document: decrypted_document_partial,
-                                                    is_a?: true,
-                                                    is_valid?: true)
+      instance_double(SAML::Response,
+                      attributes: attributes,
+                      decrypted_document: decrypted_document_partial,
+                      is_a?: true,
+                      is_valid?: true,
+                      context_key: type,
+                      real_authn_context: authn_context)
     end
 
     def authn_context_xml_partial
