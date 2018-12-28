@@ -20,7 +20,7 @@ RSpec.describe SAML::User do
 
       context 'add additional context when no decrypted document' do
         let(:saml_response) do
-          instance_double(OneLogin::RubySaml::Response, attributes: saml_attributes,
+          instance_double(SAML::Response, attributes: saml_attributes,
                                                         response: 'base64decoded-stuff',
                                                         decrypted_document: decrypted_document_partial)
         end
