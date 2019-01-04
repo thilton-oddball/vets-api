@@ -39,10 +39,6 @@ describe MVI::Service do
 
   describe '#find_profile_with_attributes' do
     it 'should allow searching mvi with user attributes' do
-      VCR.config do |c|
-        c.allow_http_connections_when_no_cassette = true
-      end
-      binding.pry; fail
       VCR.use_cassette(
         'mvi/find_candidate/find_profile_with_attributes',
         record: :once
