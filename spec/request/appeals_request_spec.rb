@@ -54,7 +54,7 @@ RSpec.describe 'Appeals Status', type: :request do
         VCR.use_cassette('appeals/not_found') do
           get '/v0/appeals'
           expect(response).to have_http_status(:not_found)
-          expect(response).to match_response_schema('errors')
+          expect(response).to match_response_schema('record_not_found')
         end
       end
     end

@@ -16,6 +16,12 @@ module Appeals
         response = perform(:get, '/api/v2/appeals', {}, request_headers(user, additional_headers))
         Appeals::Responses::Appeals.new(response.body, response.status)
       end
+    rescue Common::Exceptions::BackendServiceException => e
+      if e.original_status == 404
+        raise Common::Exceptions::RecordNotFound, '[FILTERED SSN]'
+      else
+        raise e
+      end
     end
 
     def healthcheck
