@@ -112,6 +112,9 @@ group :test do
   gem 'simplecov', require: false
   gem 'vcr'
   gem 'webrick'
+
+  gem 'watir-rails'
+  gem 'webdrivers'
 end
 
 group :development, :test do
