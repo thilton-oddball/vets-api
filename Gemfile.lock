@@ -122,7 +122,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     adal (1.0.0)
-      jwt (~> 1.5)
+      jwt (~> 2.1)
       nokogiri (~> 1.6)
       uri_template (~> 0.7)
     addressable (2.4.0)
@@ -823,7 +823,7 @@ GEM
       jsonapi-renderer (= 0.1.1.beta1)
     jsonapi-parser (0.1.1.beta3)
     jsonapi-renderer (0.1.1.beta1)
-    jwt (1.5.0)
+    jwt (2.1.0)
     levenshtein-ffi (1.1.0)
       ffi (~> 1.9)
     liquid (4.0.0)
@@ -1150,7 +1150,7 @@ DEPENDENCIES
   iconv
   iso_country_codes
   json-schema
-  jwt (= 1.5)
+  jwt (= 2.1)
   levenshtein-ffi
   liquid
   memoist
