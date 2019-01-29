@@ -8,15 +8,16 @@ class SSOService
   include ActiveModel::Validations
   attr_reader :auth_error_code
   DEFAULT_ERROR_MESSAGE = 'Default generic identity provider error'
-  AUTH_ERRORS =  {DEFAULT_ERROR_MESSAGE => '007' }.merge SAML::AuthFailHandler::AUTH_ERRORS
+  AUTH_ERRORS = { DEFAULT_ERROR_MESSAGE => '007' }
   # 004, 005 and 006 are user persistence errors
 
   def initialize(response)
     raise 'SAML Response is not a SAML::Response' unless response.is_a?(SAML::Response)
     @saml_response = response
 
+    #  is_valid?(true) will collect all validation errors
     if saml_response.is_valid?(true)
-      @saml_attributes = SAML::User.new(@saml_response)
+      @saml_attributes = SAML::User.new(saml_response)
       @existing_user = User.find(saml_attributes.user_attributes.uuid)
       @new_user_identity = UserIdentity.new(saml_attributes.to_hash)
       @new_user = init_new_user(new_user_identity, existing_user, saml_attributes.changing_multifactor?)
@@ -112,10 +113,14 @@ class SSOService
 
   # TODO: Eventually some of this needs to just be instrumentation and not a custom sentry error
   def invalid_saml_response_handler
+
+
     return if saml_response.is_valid?
-    fail_handler = SAML::AuthFailHandler.new(saml_response)
-    @auth_error_code = AUTH_ERRORS[DEFAULT_ERROR_MESSAGE]
-    if fail_handler.errors?
+    error_type = saml_response.error_type
+    # fail_handler = SAML::AuthFailHandler.new(saml_response)
+    @auth_error_code = SAML::Response::ERROR_TYPES[error_type]
+    if saml_response.errors.present?
+
       # fixme status_message is nil for too early/late
       @auth_error_code = AUTH_ERRORS[fail_handler.context[:saml_response][:status_message]]
       @failure_instrumentation_tag = "error:#{fail_handler.error}"
@@ -124,6 +129,13 @@ class SSOService
       @failure_instrumentation_tag = 'error:unknown'
       log_message_to_sentry('Unknown SAML Login Error', :error, error_context)
     end
+
+
+
+
+      @auth_error_code=''#todo
+      @failure_instrumentation_tag=''#todo
+      saml_response.log_message_to_sentry
   end
 
   def error_context
