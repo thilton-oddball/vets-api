@@ -8,11 +8,9 @@ class SSOService
   include ActiveModel::Validations
   attr_reader :auth_error_code
   DEFAULT_ERROR_MESSAGE = 'Default generic identity provider error'
-  AUTH_ERRORS = { 'Subject did not consent to attribute release' => '001',
-                  'Current time is on or after NotOnOrAfter condition' => '002',
-                  'Current time is earlier than NotBefore condition' => '003',
-                  # 004, 005 and 006 are user persistence errors
-                  DEFAULT_ERROR_MESSAGE => '007' }.freeze
+  AUTH_ERRORS =  {DEFAULT_ERROR_MESSAGE => '007' }.merge SAML::AuthFailHandler::AUTH_ERRORS
+  # 004, 005 and 006 are user persistence errors
+
   def initialize(response)
     raise 'SAML Response is not a OneLogin::RubySaml::Response' unless response.is_a?(OneLogin::RubySaml::Response)
     @saml_response = response

@@ -8,7 +8,13 @@ module SAML
     TOO_LATE_MSG     = 'Current time is on or after NotOnOrAfter condition'
     TOO_EARLY_MSG    = 'Current time is earlier than NotBefore condition'
 
+    AUTH_ERRORS = { CLICKED_DENY_MSG => '001',
+                    TOO_LATE_MSG => '002',
+                    TOO_EARLY_MSG => '003'}.freeze
+
+
     KNOWN_ERRORS = %i[clicked_deny auth_too_late auth_too_early].freeze
+
 
     def initialize(saml_response)
       @saml_response = saml_response
