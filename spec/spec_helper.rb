@@ -40,6 +40,7 @@ unless ENV['NOCOVERAGE']
     add_filter 'lib/vet360/exceptions/builder.rb'
     # TODO: Remove once IHub is ready to merge into master
     add_filter 'lib/ihub'
+    add_filter 'modules/adal'
     # TODO: remove this filter after removing sentry logging
     add_filter 'lib/central_mail/service.rb'
     add_filter 'lib/search/response.rb'
