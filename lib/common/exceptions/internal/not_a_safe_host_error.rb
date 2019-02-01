@@ -10,8 +10,10 @@ module Common
         @host = host
       end
 
-      def errors
-        Array(SerializableError.new(i18n_interpolated(detail: { host: @host })))
+      private
+
+      def interpolated
+        i18n_interpolated(detail: { host: @host })
       end
     end
   end

@@ -11,8 +11,10 @@ module Common
         @value = value
       end
 
-      def errors
-        Array(SerializableError.new(i18n_interpolated(detail: { field: @field, value: @value })))
+      private
+
+      def interpolated
+        i18n_interpolated(detail: { field: @field, value: @value })
       end
     end
   end

@@ -41,7 +41,7 @@ module Benchmark
     def whitelisted?(page)
       unless WHITELIST.include?(page)
         raise Common::Exceptions::Forbidden.new(
-          detail: "Page at #{page} is not whitelisted for performance monitoring.",
+          detail: "Page at #{page} is not whitelisted for performance monitoring",
           source: 'Benchmark::Performance'
         )
       end

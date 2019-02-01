@@ -10,8 +10,10 @@ module Common
         @format = format
       end
 
-      def errors
-        Array(SerializableError.new(i18n_interpolated(detail: { format: @format })))
+      private
+
+      def interpolated
+        i18n_interpolated(detail: { format: @format })
       end
     end
   end

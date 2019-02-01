@@ -15,12 +15,7 @@ module SentryLogging
 
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
-  def log_exception_to_sentry(
-    exception,
-    extra_context = {},
-    tags_context = {},
-    level = 'error'
-  )
+  def log_exception_to_sentry(exception, extra_context = {}, tags_context = {}, level = 'error')
     level = normalize_level(level)
     if Settings.sentry.dsn.present?
       Raven.extra_context(extra_context) if non_nil_hash?(extra_context)
@@ -33,7 +28,6 @@ module SentryLogging
     else
       rails_logger(level, "#{exception.message}.")
     end
-    rails_logger(level, exception.backtrace.join("\n")) unless exception.backtrace.nil?
   end
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity

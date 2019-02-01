@@ -68,7 +68,7 @@ describe 'Response Middleware' do
   end
 
   it 'can override a response error using i18n' do
-    message = 'BackendServiceException: {:status=>400, :detail=>"server response", :code=>"RX139", :source=>"blah"}'
+    message = 'RX139 : Prescription is not refillable'
     expect { faraday_client.get('refill-fail') }
       .to raise_error do |error|
         expect(error).to be_a(Common::Exceptions::BackendServiceException)

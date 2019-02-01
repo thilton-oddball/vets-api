@@ -11,6 +11,10 @@ module Common
         raise TypeError, 'the resource provided has no errors' if resource.errors.empty?
       end
 
+      def message
+        "#{i18n_data[:code]} : One or more validation errors"
+      end
+
       def errors
         @resource.errors.map do |k, v|
           full_message = resource.errors.full_message(k, v)

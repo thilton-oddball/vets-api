@@ -281,7 +281,9 @@ describe MVI::Service do
       let(:base_path) { MVI::Configuration.instance.base_path }
       it 'should raise a service error', :aggregate_failures do
         allow_any_instance_of(Faraday::Connection).to receive(:post).and_raise(Faraday::TimeoutError)
-        expect(Rails.logger).to receive(:error).with('MVI find_profile error: Gateway timeout')
+        expect(Rails.logger).to receive(:error).with(
+          'MVI find_profile error: Gateway timeout: Did not receive a timely response from an upstream server (504)'
+        )
 
         response = subject.find_profile(user)
 

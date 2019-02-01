@@ -9,10 +9,12 @@ module Common
         @signature = options[:signature]
       end
 
-      def errors
-        Array(SerializableError.new(i18n_data.merge(source: 'AWS SNS Verification', meta: {
-                                                      raw_post: @raw_post, signature: @signature
-                                                    })))
+      private
+
+      def interpolated
+        i18n_data.merge(source: 'AWS SNS Verification', meta: {
+          raw_post: @raw_post, signature: @signature
+        })
       end
     end
   end

@@ -11,9 +11,11 @@ module Common
         @exception = exception
       end
 
-      def errors
-        meta = { exception: exception.message, backtrace: exception.backtrace } unless ::Rails.env.production?
-        Array(SerializableError.new(i18n_data.merge(meta: meta)))
+      private
+
+      def interpolated
+        meta = { backtrace: exception.backtrace } unless ::Rails.env.production?
+        i18n_data.merge(detail: @exception.message, meta: meta)
       end
     end
   end

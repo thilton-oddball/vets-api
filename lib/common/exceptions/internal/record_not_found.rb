@@ -10,8 +10,10 @@ module Common
         @id = id
       end
 
-      def errors
-        Array(SerializableError.new(i18n_interpolated(detail: { id: @id })))
+      private
+
+      def interpolated
+        i18n_interpolated(detail: { id: @id })
       end
     end
   end

@@ -11,8 +11,10 @@ module Common
         @detail = options[:detail] || i18n_field(:detail, params: @pagination_params)
       end
 
-      def errors
-        Array(SerializableError.new(i18n_data.merge(detail: @detail)))
+      private
+
+      def interpolated
+        i18n_data.merge(detail: @detail)
       end
     end
   end

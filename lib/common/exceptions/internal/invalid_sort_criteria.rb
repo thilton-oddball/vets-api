@@ -11,8 +11,10 @@ module Common
         @resource = resource
       end
 
-      def errors
-        Array(SerializableError.new(i18n_interpolated(detail: { sort_criteria: @sort_criteria, resource: @resource })))
+      private
+
+      def interpolated
+        i18n_interpolated(detail: { sort_criteria: @sort_criteria, resource: @resource })
       end
     end
   end

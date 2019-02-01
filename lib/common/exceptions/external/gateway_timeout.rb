@@ -3,8 +3,10 @@
 module Common
   module Exceptions
     class GatewayTimeout < BaseError
-      def errors
-        Array(SerializableError.new(i18n_data))
+      private
+
+      def interpolated
+        i18n_data
       end
     end
   end

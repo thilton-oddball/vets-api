@@ -92,18 +92,13 @@ en:
       forbidden:
         <<: *defaults
         title: Forbidden
+        detail: "You do not have access to the requested resource"
         code: 403
         status: 403
       record_not_found:
         <<: *defaults
         title: Record not found
         detail: "The record identified by %{id} could not be found"
-        code: 404
-        status: 404
-      resource_not_found:
-        <<: *defaults
-        title: Resource not found
-        detail: The requested resource could not be found
         code: 404
         status: 404
       routing_error:
@@ -167,6 +162,7 @@ en:
     # Below this line just define the minor code as key to be used by client error
       VA900:
         <<: *external_defaults
+        detail: 'unmapped error message'
       SM105: # What casues this? Perhaps then we can come up with more customized detail below
         <<: *external_defaults
         code: 'SM105'

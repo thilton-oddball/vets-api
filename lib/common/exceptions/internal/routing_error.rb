@@ -11,7 +11,13 @@ module Common
       end
 
       def errors
-        Array(SerializableError.new(i18n_interpolated(detail: { path: @path })))
+        Array(SerializableError.new(interpolated))
+      end
+
+      private
+
+      def interpolated
+        i18n_interpolated(detail: { path: @path })
       end
     end
   end

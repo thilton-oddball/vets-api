@@ -11,7 +11,16 @@ Raven.configure do |config|
 
   config.excluded_exceptions += ['Sentry::IgnoredError']
 
-  config.async = lambda { |event|
-    SentryJob.perform_async(event)
-  }
+  config.before_send = -> event, hint do
+    return unless hint[:exception] && hint[:exception].is_a?(Common::Exceptions::BaseError)
+
+    ex = hint[:exception]
+
+    # '{{ default }}'
+    event.fingerprint = ex.respond_to?(:key) ? [hint[:exception].key] : ['{{ default }}']
+    event.tags = event.tags.merge!(key: hint[:exception].key)
+    event
+  end
+
+  config.async = -> event { SentryJob.perform_async(event) }
 end

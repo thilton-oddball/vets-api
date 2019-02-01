@@ -17,12 +17,6 @@ module Common
         validate_arguments!
       end
 
-      # The message will be the actual backend service response from middleware,
-      # not the I18n version.
-      def message
-        "BackendServiceException: #{response_values.merge(code: code)}"
-      end
-
       def errors
         Array(SerializableError.new(i18n_data.merge(render_overides)))
       end

@@ -9,8 +9,10 @@ module Common
         @detail = options[:detail] || i18n_field(:detail, service: @outage.service.name, since: @outage.start_time)
       end
 
-      def errors
-        Array(SerializableError.new(i18n_data.merge(detail: @detail)))
+      private
+
+      def internal_service_error
+        i18n_data.merge(detail: @detail)
       end
     end
   end

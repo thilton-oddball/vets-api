@@ -9,8 +9,9 @@ require 'aes_256_cbc_encryptor'
 
 class ApplicationController < ActionController::API
   include AuthenticationAndSSOConcerns
-  include SentryLogging
   include Pundit
+  include SentryLogging
+  include ExceptionConcerns
 
   SKIP_SENTRY_EXCEPTION_TYPES = [
     Common::Exceptions::Unauthorized,
@@ -23,6 +24,13 @@ class ApplicationController < ActionController::API
   # See Also AuthenticationAndSSOConcerns for more before filters
   skip_before_action :authenticate, only: %i[cors_preflight routing_error]
   before_action :set_tags_and_extra_context
+
+  rescue_from 'Exception' do |exception|
+    log_exception(exception)
+    va_exception = map_to_va_exception(exception)
+    headers['WWW-Authenticate'] = 'Token realm="Application"' if va_exception.is_a?(Common::Exceptions::Unauthorized)
+    render json: { errors: va_exception.errors }, status: va_exception.status_code
+  end
 
   def tag_rainbows
     Sentry::TagRainbows.tag
@@ -59,51 +67,6 @@ class ApplicationController < ActionController::API
   def skip_sentry_exception_types
     SKIP_SENTRY_EXCEPTION_TYPES
   end
-
-  # rubocop:disable Metrics/BlockLength
-  rescue_from 'Exception' do |exception|
-    # report the original 'cause' of the exception when present
-    if skip_sentry_exception_types.include?(exception.class)
-      Rails.logger.error "#{exception.message}.", backtrace: exception.backtrace
-    else
-      extra = exception.respond_to?(:errors) ? { errors: exception.errors.map(&:to_hash) } : {}
-      if exception.is_a?(Common::Exceptions::BackendServiceException)
-        # Add additional user specific context to the logs
-        if current_user.present?
-          extra[:icn] = current_user.icn
-          extra[:mhv_correlation_id] = current_user.mhv_correlation_id
-        end
-        # Warn about VA900 needing to be added to exception.en.yml
-        if exception.generic_error?
-          log_message_to_sentry(exception.va900_warning, :warn, i18n_exception_hint: exception.va900_hint)
-        end
-      end
-      log_exception_to_sentry(exception, extra)
-    end
-
-    va_exception =
-      case exception
-      when Pundit::NotAuthorizedError
-        Common::Exceptions::Forbidden.new(detail: 'User does not have access to the requested resource')
-      when ActionController::ParameterMissing
-        Common::Exceptions::ParameterMissing.new(exception.param)
-      when ActionController::UnknownFormat
-        Common::Exceptions::UnknownFormat.new
-      when Common::Exceptions::BaseError
-        exception
-      when Breakers::OutageException
-        Common::Exceptions::ServiceOutage.new(exception.outage)
-      when Common::Client::Errors::ClientError
-        # SSLError, ConnectionFailed, SerializationError, etc
-        Common::Exceptions::ServiceOutage.new(nil, detail: 'Backend Service Outage')
-      else
-        Common::Exceptions::InternalServerError.new(exception)
-      end
-
-    headers['WWW-Authenticate'] = 'Token realm="Application"' if va_exception.is_a?(Common::Exceptions::Unauthorized)
-    render json: { errors: va_exception.errors }, status: va_exception.status_code
-  end
-  # rubocop:enable Metrics/BlockLength
 
   def set_tags_and_extra_context
     Thread.current['request_id'] = request.uuid

@@ -9,8 +9,10 @@ module Common
         @source = options[:source]
       end
 
-      def errors
-        Array(SerializableError.new(i18n_data.merge(detail: @detail, source: @source)))
+      private
+      
+      def interpolated
+        i18n_data.merge(detail: @detail, source: @source)
       end
     end
   end

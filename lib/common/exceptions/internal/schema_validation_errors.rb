@@ -8,6 +8,10 @@ module Common
         raise TypeError, 'the resource provided has no errors' if resource.blank?
       end
 
+      def message
+        "#{i18n_data[:code]} : One or more schema validation errors"
+      end
+
       def errors
         @resource.map do |error|
           SerializableError.new(

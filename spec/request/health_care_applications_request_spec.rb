@@ -199,7 +199,7 @@ RSpec.describe 'Health Care Application Integration', type: %i[request serialize
             expect(response.code).to eq('400')
             expect(JSON.parse(response.body)).to eq(
               'errors' => [
-                { 'title' => 'Operation failed', 'detail' => 'error message', 'code' => 'VA900', 'status' => '400' }
+                { 'title' => 'Operation failed', 'detail' => 'unmapped error message', 'code' => 'VA900', 'status' => '400' }
               ]
             )
           end
