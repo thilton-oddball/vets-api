@@ -162,7 +162,14 @@ en:
     # Below this line just define the minor code as key to be used by client error
       VA900:
         <<: *external_defaults
-        detail: 'unmapped error message'
+        detail: 'Unmapped error'
+      MHV422:
+        <<: *external_defaults
+        title: Unprocessable Entity
+        code: 'MHV422'
+        detail: 'Received an error response that could not be processed'
+        status: 422
+        source: 'MHV provided unparsable error response, check logs for original request body'
       SM105: # What casues this? Perhaps then we can come up with more customized detail below
         <<: *external_defaults
         code: 'SM105'
@@ -272,6 +279,8 @@ en:
         <<: *validation_errors
         code: 'RX157'
         detail: 'Email address is invalid'
+      RX404:
+
       MHVACCTCREATION99: # 'Unknown application error occurred'
         <<: *external_defaults
         code: 'MHVACCTCREATION99'

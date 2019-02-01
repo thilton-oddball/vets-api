@@ -16,18 +16,7 @@ module Common
 
             extra_context = { original_status: @status, original_body: @body }
             log_message_to_sentry('Could not parse XML/HTML response from MHV', :warn, extra_context)
-            raise Common::Exceptions::BackendServiceException.new('VA900', response_values, @status, @body)
-          end
-
-          private
-
-          def response_values
-            {
-              status: status,
-              detail: 'Received an error response that could not be processed',
-              code:   'VA900',
-              source: 'MHV provided unparsable error response, check logs for original request body.'
-            }
+            raise Common::Exceptions::BackendServiceException.new('MHV422', {}, @status, @body)
           end
         end
       end

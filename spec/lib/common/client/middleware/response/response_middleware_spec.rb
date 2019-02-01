@@ -56,19 +56,19 @@ describe 'Response Middleware' do
   end
 
   it 'raises client response error' do
-    message = 'BackendServiceException: {:status=>404, :detail=>"Record Not Found", :code=>"VA900", :source=>"blah"}'
+    message = 'VA900 : Operation failed : Unmapped error for key RX400'
     expect { faraday_client.get('not-found') }
       .to raise_error do |error|
         expect(error).to be_a(Common::Exceptions::BackendServiceException)
         expect(error.message)
           .to eq(message)
         expect(error.errors.first[:detail])
-          .to eq('Record Not Found')
+          .to eq('Unmapped error')
       end
   end
 
   it 'can override a response error using i18n' do
-    message = 'RX139 : Prescription is not refillable'
+    message = 'RX139 : Operation failed : Prescription is not refillable'
     expect { faraday_client.get('refill-fail') }
       .to raise_error do |error|
         expect(error).to be_a(Common::Exceptions::BackendServiceException)
@@ -84,7 +84,7 @@ describe 'Response Middleware' do
     let(:code) { '"VA900"' }
     let(:source) { '"MHV provided unparsable error response, check logs for original request body."' }
     let(:xml_or_html_response) do
-      "BackendServiceException: {:status=>400, :detail=>#{detail}, :code=>#{code}, :source=>#{source}}"
+      "MHV422 : Unprocessable Entity : Received an error response that could not be processed"
     end
     it 'can handle generic html errors' do
       expect { faraday_client.get('mhv-generic-html') }.to raise_error do |error|

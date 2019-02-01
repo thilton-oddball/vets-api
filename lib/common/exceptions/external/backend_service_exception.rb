@@ -17,6 +17,10 @@ module Common
         validate_arguments!
       end
 
+      def message
+        key? ? super : "VA900 : #{interpolated[:title]} : Unmapped error for key #{@key}"
+      end
+
       def errors
         Array(SerializableError.new(i18n_data.merge(render_overides)))
       end
@@ -45,6 +49,14 @@ module Common
 
       private
 
+      def key?
+        @key.present? && I18n.exists?("common.exceptions.#{@key}")
+      end
+
+      def interpolated
+        i18n_interpolated(render_overides)
+      end
+
       def render_overides
         { status: status, detail: detail, code: code, source: source }
       end
@@ -52,11 +64,7 @@ module Common
       # REQUIRED - This is the i18n code returned from raise_error middleware. If it exists in
       # I18n then it should be like RX139 or EVSS144, otherwise VA900
       def code
-        if @key.present? && I18n.exists?("common.exceptions.#{@key}")
-          @key
-        else
-          'VA900'
-        end
+        key? ? @key : 'VA900'
       end
 
       # REQUIRED - This is the http status code.
@@ -79,6 +87,10 @@ module Common
       # if one is not provided by the backend this can be nil and the key will not be rendered
       def source
         response_values[:source]
+      end
+
+      def title
+        i18n_data[:status].presence || 400
       end
 
       def validate_arguments!
