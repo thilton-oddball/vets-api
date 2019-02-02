@@ -32,7 +32,7 @@ describe Common::Exceptions::InternalServerError do
       it 'the errors object has limited keys' do
         expect(subject.errors.first.to_hash)
           .to eq(title: 'Internal server error',
-                 detail: 'Internal server error',
+                 detail: 'some message',
                  code: '500', status: '500')
       end
     end
@@ -43,8 +43,8 @@ describe Common::Exceptions::InternalServerError do
       it 'the errors object has all relevant keys' do
         expect(subject.errors.first.to_hash)
           .to eq(title: 'Internal server error',
-                 detail: 'Internal server error',
-                 meta: { exception: 'some message', backtrace: nil },
+                 detail: 'some message',
+                 meta: { backtrace: nil },
                  code: '500', status: '500')
       end
     end

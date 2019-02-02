@@ -13,7 +13,7 @@ module Common
       end
 
       def message
-        "#{i18n_data[:code]} : #{interpolated[:title]} : #{interpolated[:detail]}"
+        "#{interpolated[:title]}: #{interpolated[:detail]} (#{i18n_data[:code]})"
       end
 
       def errors

@@ -20,7 +20,7 @@ describe Benchmark::Whitelist do
       it 'raises a Common::Exceptions::Forbidden error', :aggregate_failures do
         expect { Benchmark::Whitelist.new(bad_tag).authorize! }.to raise_error do |error|
           expect(error).to be_a Common::Exceptions::Forbidden
-          expect(error.message).to eq 'Forbidden: Page at some_random_tag is not whitelisted for performance monitoring (403)'
+          expect(error.message).to eq '403 : Forbidden : Page at some_random_tag is not whitelisted for performance monitoring'
           expect(error.status_code).to eq 403
         end
       end
