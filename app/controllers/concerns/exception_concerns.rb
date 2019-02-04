@@ -20,12 +20,6 @@ module ExceptionConcerns
       extra[:icn] = current_user.icn
       extra[:mhv_correlation_id] = current_user.mhv_correlation_id
     end
-
-    if exception.generic_error?
-      # Warn about VA900 needing to be added to exception.en.yml
-      log_message_to_sentry(exception.va900_warning, :warn, i18n_exception_hint: exception.va900_hint)
-    end
-
     extra
   end
 

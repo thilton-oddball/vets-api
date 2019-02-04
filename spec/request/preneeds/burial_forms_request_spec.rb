@@ -45,7 +45,7 @@ RSpec.describe 'Preneeds Burial Form Integration', type: :request do
 
       expect(error['status']).to eq('400')
       expect(error['title']).to match(/operation failed/i)
-      expect(error['detail']).to match(/Error committing transaction/i)
+      expect(error['detail']).to match(/Unmapped error/i)
     end
 
     it 'returns with a VA900 error when the status is 200' do
@@ -58,7 +58,7 @@ RSpec.describe 'Preneeds Burial Form Integration', type: :request do
 
       expect(error['status']).to eq('400')
       expect(error['title']).to match(/operation failed/i)
-      expect(error['detail']).to match(/Tracking number '19' already exists/i)
+      expect(error['detail']).to match(/Unmapped error/i)
     end
   end
 

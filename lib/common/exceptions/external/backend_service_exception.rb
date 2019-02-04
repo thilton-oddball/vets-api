@@ -18,7 +18,7 @@ module Common
       end
 
       def message
-        key? ? super : "VA900 : #{interpolated[:title]} : Unmapped error for key #{@key}"
+        key? ? super : "#{interpolated[:title]}: Unmapped error for key #{@key}"
       end
 
       def errors
@@ -29,8 +29,6 @@ module Common
       def va900?
         code == 'VA900'
       end
-
-      alias generic_error? va900?
 
       def va900_warning
         "Unmapped VA900 (Backend Response: { status: #{original_status}, message: #{original_body}) }"

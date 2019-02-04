@@ -164,7 +164,7 @@ RSpec.describe UserPreferences::Grantor do
         expect { set_user_preferences.execute! }.to raise_error do |error|
           expect(error).to be_a(Common::Exceptions::RecordNotFound)
           expect(error.status_code).to eq(404)
-          expect(error.message).to eq('Record not found')
+          expect(error.message).to eq("Record not found: The record identified by #{non_existant_code} could not be found (404)")
           expect(
             error.errors.first.detail
           ).to eq "The record identified by #{non_existant_code} could not be found"
@@ -188,7 +188,7 @@ RSpec.describe UserPreferences::Grantor do
         expect { set_user_preferences.execute! }.to raise_error do |error|
           expect(error).to be_a(Common::Exceptions::RecordNotFound)
           expect(error.status_code).to eq(404)
-          expect(error.message).to eq('Record not found')
+          expect(error.message).to eq("Record not found: The record identified by #{non_existant_code} could not be found (404)")
           expect(
             error.errors.first.detail
           ).to eq "The record identified by #{non_existant_code} could not be found"

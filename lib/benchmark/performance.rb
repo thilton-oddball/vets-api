@@ -68,7 +68,7 @@ module Benchmark
         if metric.blank?
           raise Common::Exceptions::ParameterMissing.new(
             'Missing parameter',
-            detail: 'A value for metric is required.'
+            detail: 'A value for metric is required'
           )
         end
       end

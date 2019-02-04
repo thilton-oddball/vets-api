@@ -243,7 +243,7 @@ en:
       SM99: # 'Unknown application error occurred'
         <<: *external_defaults
         code: 'SM99'
-        detail: 'Something went wrong. Please try again later.'
+        detail: 'Something went wrong, please try again later'
         status: 502
       HCA422:
         <<: *external_defaults
@@ -253,12 +253,12 @@ en:
       BB99: # 'Unknown application error occurred'
         <<: *external_defaults
         code: 'BB99'
-        detail: 'Something went wrong. Please try again later.'
+        detail: 'Something went wrong, please try again later'
         status: 502
       RX99: # 'Unknown application error occurred'
         <<: *external_defaults
         code: 'RX99'
-        detail: 'Something went wrong. Please try again later.'
+        detail: 'Something went wrong, please try again later'
         status: 502
       RX135: # 'The User has not accepted the Rx Agreement. Please login to MHV to accept it'
         <<: *external_defaults
@@ -284,7 +284,7 @@ en:
       MHVACCTCREATION99: # 'Unknown application error occurred'
         <<: *external_defaults
         code: 'MHVACCTCREATION99'
-        detail: 'Something went wrong. Please try again later.'
+        detail: 'Something went wrong, please try again later'
         status: 400
       MHVACCTCREATION150:
         <<: *external_defaults
@@ -299,7 +299,7 @@ en:
       MHVACCTCREATION158: # 'Sign-in Partner Blocked'
         <<: *external_defaults
         code: 'MHVACCTCREATION158'
-        detail: 'Something went wrong. Please try again later.'
+        detail: 'Something went wrong, please try again later'
         status: 502
       MHVACCTCREATION159:
         <<: *external_defaults
@@ -388,7 +388,7 @@ en:
         <<: *external_defaults
         title: Unexpected response body
         code: 'EMIS_HIST502'
-        detail: EMIS service responded with something other than the expected array of service history hashes.
+        detail: EMIS service responded with something other than the expected array of service history hashes
         status: 502
       EMIS_STATUS502:
         <<: *external_defaults
@@ -400,13 +400,13 @@ en:
         <<: *external_defaults
         title: Error Occurred
         code: 'IHUB_101'
-        detail: 'General error received from iHub.  Check sentry logs for details.'
+        detail: 'General error received from iHub, check sentry logs for details'
         status: 400
       IHUB_102:
         <<: *external_defaults
         title: User missing ICN
         code: 'IHUB_102'
-        detail: 'The user does not have an ICN.'
+        detail: 'The user does not have an ICN'
         status: 502
       MVI_404:
         <<: *external_defaults
@@ -430,7 +430,7 @@ en:
         <<: *external_defaults
         title: Unexpected response body
         code: 'MVI_BD502'
-        detail: MVI service responded without a birthday or a gender.
+        detail: MVI service responded without a birthday or a gender
         status: 502
       SEARCH_400:
         <<: *external_defaults
@@ -454,7 +454,7 @@ en:
         <<: *external_defaults
         title: Address Type Size
         code: VET360_ADDR101
-        detail: Address type size must be between 0 and 35.
+        detail: Address type size must be between 0 and 35
         status: 400
       VET360_ADDR102:
         <<: *external_defaults
@@ -496,7 +496,7 @@ en:
         <<: *external_defaults
         title: Address Line 1 Size
         code: VET360_ADDR108
-        detail: Size must be between 0 and 100.
+        detail: Size must be between 0 and 100
         status: 400
       VET360_ADDR109:
         <<: *external_defaults
@@ -508,13 +508,13 @@ en:
         <<: *external_defaults
         title: Address Line 2 Size
         code: VET360_ADDR110
-        detail: Size must be between 0 and 100.
+        detail: Size must be between 0 and 100
         status: 400
       VET360_ADDR110:
         <<: *external_defaults
         title: Address Line 2 Size
         code: VET360_ADDR110
-        detail: Size must be between 0 and 100.
+        detail: Size must be between 0 and 100
         status: 400
       VET360_ADDR111:
         <<: *external_defaults
@@ -526,7 +526,7 @@ en:
         <<: *external_defaults
         title: Address Line 3 Size
         code: VET360_ADDR112
-        detail: Size must be between 0 and 100.
+        detail: Size must be between 0 and 100
         status: 400
       VET360_ADDR113:
         <<: *external_defaults
@@ -544,7 +544,7 @@ en:
         <<: *external_defaults
         title: Bad address indicator size
         code: VET360_ADDR115
-        detail: Bad address indicator size must be between 0 and 35.
+        detail: Bad address indicator size must be between 0 and 35
         status: 400
       VET360_ADDR116:
         <<: *external_defaults
@@ -562,7 +562,7 @@ en:
         <<: *external_defaults
         title: City Name Size
         code: VET360_ADDR118
-        detail: City name size must be between 0 and 100.
+        detail: City name size must be between 0 and 100
         status: 400
       VET360_ADDR119:
         <<: *external_defaults
@@ -574,19 +574,19 @@ en:
         <<: *external_defaults
         title: State Code Size
         code: VET360_ADDR120
-        detail: State code size must be 2.
+        detail: State code size must be 2
         status: 400
       VET360_ADDR121:
         <<: *external_defaults
         title: State Code Pattern
         code: VET360_ADDR121
-        detail: State code pattern must match "^[a-zA-Z]+$".
+        detail: State code pattern must match "^[a-zA-Z]+$"
         status: 400
       VET360_ADDR122:
         <<: *external_defaults
         title: Zip Code 5 Size
         code: VET360_ADDR122
-        detail: Zip code 5 size must be between 0 and 5.
+        detail: Zip code 5 size must be between 0 and 5
         status: 400
       VET360_ADDR123:
         <<: *external_defaults
@@ -598,19 +598,19 @@ en:
         <<: *external_defaults
         title: Zip Code 4 Size
         code: VET360_ADDR124
-        detail: Zip code 4 size must be between 0 and 4.
+        detail: Zip code 4 size must be between 0 and 4
         status: 400
       VET360_ADDR125:
         <<: *external_defaults
         title: Zip Code 4 Pattern
         code: VET360_ADDR125
-        detail: Zip code 4 pattern must match "[0-9]+".
+        detail: Zip code 4 pattern must match "[0-9]+"
         status: 400
       VET360_ADDR126:
         <<: *external_defaults
         title: Province Name Size
         code: VET360_ADDR126
-        detail: Province name size must be between 0 and 100.
+        detail: Province name size must be between 0 and 100
         status: 400
       VET360_ADDR127:
         <<: *external_defaults
@@ -622,7 +622,7 @@ en:
         <<: *external_defaults
         title: Int Postal Code Size
         code: VET360_ADDR128
-        detail: International postal code size must be between 0 and 100.
+        detail: International postal code size must be between 0 and 100
         status: 400
       VET360_ADDR129:
         <<: *external_defaults
@@ -634,7 +634,7 @@ en:
         <<: *external_defaults
         title: Country Name Size
         code: VET360_ADDR130
-        detail: Country name size must be between 0 and 35.
+        detail: Country name size must be between 0 and 35
         status: 400
       VET360_ADDR131:
         <<: *external_defaults
@@ -646,7 +646,7 @@ en:
         <<: *external_defaults
         title: Country code FIPS size
         code: VET360_ADDR132
-        detail: Country code FIPS size must be between 0 and 3.
+        detail: Country code FIPS size must be between 0 and 3
         status: 400
       VET360_ADDR133:
         <<: *external_defaults
@@ -658,7 +658,7 @@ en:
         <<: *external_defaults
         title: County Code ISO2 Size
         code: VET360_ADDR134
-        detail: County code size must be between 0 and 3.
+        detail: County code size must be between 0 and 3
         status: 400
       VET360_ADDR135:
         <<: *external_defaults
@@ -670,7 +670,7 @@ en:
         <<: *external_defaults
         title: County Code ISO3 Size
         code: VET360_ADDR136
-        detail: County code size must be between 0 and 3.
+        detail: County code size must be between 0 and 3
         status: 400
       VET360_ADDR137:
         <<: *external_defaults
@@ -682,7 +682,7 @@ en:
         <<: *external_defaults
         title: Latitude size
         code: VET360_ADDR138
-        detail: Latitude size must be between 0 and 35.
+        detail: Latitude size must be between 0 and 35
         status: 400
       VET360_ADDR139:
         <<: *external_defaults
@@ -694,7 +694,7 @@ en:
         <<: *external_defaults
         title: Longitude size
         code: VET360_ADDR140
-        detail: Longitude size must be between 0 and 35.
+        detail: Longitude size must be between 0 and 35
         status: 400
       VET360_ADDR141:
         <<: *external_defaults
@@ -706,7 +706,7 @@ en:
         <<: *external_defaults
         title: Geocode precision size
         code: VET360_ADDR142
-        detail: Geocode precision size must be between 0 and 35.
+        detail: Geocode precision size must be between 0 and 35
         status: 400
       VET360_ADDR143:
         <<: *external_defaults
@@ -766,13 +766,13 @@ en:
         <<: *external_defaults
         title: Address ID Not Null
         code: VET360_ADDR200
-        detail: Address ID must be null.
+        detail: Address ID must be null
         status: 400
       VET360_ADDR201:
         <<: *external_defaults
         title: Address ID Null
         code: VET360_ADDR201
-        detail: Address ID may not be null.
+        detail: Address ID may not be null
         status: 400
       VET360_ADDR202:
         <<: *external_defaults
@@ -808,43 +808,43 @@ en:
         <<: *external_defaults
         title: Address Inactive
         code: VET360_ADDR300
-        detail: Cannot modify an existing inactive record.
+        detail: Cannot modify an existing inactive record
         status: 400
       VET360_ADDR300:
         <<: *external_defaults
         title: Address Inactive
         code: VET360_ADDR300
-        detail: Cannot modify an existing inactive record.
+        detail: Cannot modify an existing inactive record
         status: 400
       VET360_ADDR301:
         <<: *external_defaults
         title: Address POU
         code: VET360_ADDR301
-        detail: Cannot insert a record for an address POU that already exists.
+        detail: Cannot insert a record for an address POU that already exists
         status: 400
       VET360_ADDR304:
         <<: *external_defaults
         title: Duplicate Address POU
         code: VET360_ADDR304
-        detail: Cannot accept a request with multiple addresses of the same POU.
+        detail: Cannot accept a request with multiple addresses of the same POU
         status: 400
       VET360_ADDR305:
         <<: *external_defaults
         title: Delivery Point Not Confirmed
         code: VET360_ADDR305
-        detail: Delivery Point is Not Confirmed for Domestic Residence.
+        detail: Delivery Point is Not Confirmed for Domestic Residence
         status: 400
       VET360_ADDR306:
         <<: *external_defaults
         title: Low confidence score
         code: VET360_ADDR306
-        detail: Confidence Score less than 80.
+        detail: Confidence Score less than 80
         status: 400
       VET360_ADDR307:
         <<: *external_defaults
         title: Additional Input
         code: VET360_ADDR307
-        detail: Additional input found. Please review.
+        detail: Additional input found, please review
         status: 400
       VET360_ADDR308:
         <<: *external_defaults
@@ -946,7 +946,7 @@ en:
         <<: *external_defaults
         title: Data integrity violation
         code: VET360_CORE102
-        detail: The operation could not be fulfilled due to a data integrity violation.
+        detail: The operation could not be fulfilled due to a data integrity violation
         status: 400
       VET360_CORE103:
         <<: *external_defaults
@@ -979,13 +979,13 @@ en:
         <<: *external_defaults
         title: Invalid txAuditId key
         code: VET360_CORE107
-        detail: The operation could not be completed due to invalid txAuditId.
+        detail: The operation could not be completed due to invalid txAuditId
         status: 400
       VET360_CORE108:
         <<: *external_defaults
         title: Null version hash
         code: VET360_CORE108
-        detail: Version Hash is null for Type {0} with a ID of {1}.
+        detail: Version Hash is null for Type {0} with a ID of {1}
         status: 400
       VET360_CORE109:
         <<: *external_defaults
@@ -1000,19 +1000,19 @@ en:
         detail: Source dates are invalid for Type {0} with a ID of {1}. Previous source
           date was {2} but received new source date of {3}. Source dates may not be null,
           and new must be greater than the previous. Please correct your request and try
-          again!
+          again.
         status: 400
       VET360_CORE111:
         <<: *external_defaults
         title: Check Address Line
         code: 'VET360_CORE111'
-        detail: 'Required data set missing.'
+        detail: 'Required data set missing'
         status: 400
       VET360_CORE300:
         <<: *external_defaults
         title: Bio not null
         code: VET360_CORE300
-        detail: The submitted person contact bio is invalid/null and cannot be.
+        detail: The submitted person contact bio is invalid/null and cannot be
         status: 400
       VET360_CORE301:
         <<: *external_defaults
@@ -1042,13 +1042,13 @@ en:
         <<: *external_defaults
         title: Originating source system size
         code: VET360_CORE501
-        detail: Originating source system size must be between 0 and 255.
+        detail: Originating source system size must be between 0 and 255
         status: 400
       VET360_CORE502:
         <<: *external_defaults
         title: Source system user size
         code: VET360_CORE502
-        detail: Source system user size must be between 0 and 255.
+        detail: Source system user size must be between 0 and 255
         status: 400
       VET360_CORE503:
         <<: *external_defaults
@@ -1121,7 +1121,7 @@ en:
         <<: *external_defaults
         title: Email ID Not Null
         code: VET360_EMAIL200
-        detail: Email ID must be null.
+        detail: Email ID must be null
         status: 400
       VET360_EMAIL201:
         <<: *external_defaults
@@ -1182,13 +1182,13 @@ en:
         <<: *external_defaults
         title: Check email local part
         code: VET360_EMAIL303
-        detail: AlphaNumeric LocalPart of email must be <= 64 Characters.
+        detail: AlphaNumeric LocalPart of email must be <= 64 Characters
         status: 400
       VET360_EMAIL304:
         <<: *external_defaults
         title: Check Email Domain
         code: VET360_EMAIL304
-        detail: AlphaNumeric ToplevelDomainName must be <= 63 Characters.
+        detail: AlphaNumeric ToplevelDomainName must be <= 63 Characters
         status: 400
       VET360_EMAIL305:
         <<: *external_defaults
@@ -1202,50 +1202,50 @@ en:
         <<: *external_defaults
         title: Duplicate Email Address
         code: VET360_EMAIL306
-        detail: Cannot accept a request with multiple emailAddress records.
+        detail: Cannot accept a request with multiple emailAddress records
         status: 400
       VET360_EMAIL307:
         <<: *external_defaults
         title: Email Inactive
         code: VET360_EMAIL307
-        detail: Cannot modify an existing inactive record.
+        detail: Cannot modify an existing inactive record
         status: 400
       VET360_MVI100:
         <<: *external_defaults
         title: MVI identifier invalid
         code: VET360_MVI100
-        detail: MVI invalid request identifier.
+        detail: MVI invalid request identifier
         status: 400
       VET360_MVI101:
         <<: *external_defaults
         title: MVI identifier mismatch
         code: VET360_MVI101
         detail: The person was found in MVI but the vet360Id returned did not match the
-          submitted vet360Id.
+          submitted vet360Id
         status: 400
       VET360_MVI200:
         <<: *external_defaults
         title: MVI error
         code: VET360_MVI200
-        detail: The MVI Service returned an error.
+        detail: The MVI Service returned an error
         status: 400
       VET360_MVI201:
         <<: *external_defaults
         title: MVI not found
         code: VET360_MVI201
-        detail: The person with the identifier requested was not found in MVI.
+        detail: The person with the identifier requested was not found in MVI
         status: 400
       VET360_MVI202:
         <<: *external_defaults
         title: MVI duplicate correlations
         code: VET360_MVI202
-        detail: The MVI Service returned duplicate correlations for the requested identifier.
+        detail: The MVI Service returned duplicate correlations for the requested identifier
         status: 400
       VET360_MVI203:
         <<: *external_defaults
         title: MVI response error
         code: VET360_MVI203
-        detail: The MVI Service returned an error response for the requested identifier.
+        detail: The MVI Service returned an error response for the requested identifier
         status: 400
       VET360_MVI204:
         <<: *external_defaults
@@ -1263,20 +1263,20 @@ en:
         <<: *external_defaults
         title: MVI person deceased
         code: VET360_MVI300
-        detail: The MVI Service returned that the requested veteran is deceased.
+        detail: The MVI Service returned that the requested veteran is deceased
         status: 400
       VET360_PERS100:
         <<: *external_defaults
         title: vet360Id must match
         code: VET360_PERS100
         detail: The vet360Id in the person contact sub-bio(s) must match the vet360Id
-          in the Person bio.
+          in the Person bio
         status: 404
       VET360_PERS101:
         <<: *external_defaults
         title: vet360Id not null
         code: VET360_PERS101
-        detail: The vet360Id cannot be null.
+        detail: The vet360Id cannot be null
         status: 400
       VET360_PERS104:
         <<: *external_defaults
@@ -1288,25 +1288,25 @@ en:
         <<: *external_defaults
         title: Duplicate create veteran
         code: 'VET360_PERS200'
-        detail: 'The veteran with the id requested has already been created.'
+        detail: 'The veteran with the id requested has already been created'
         status: 400
       VET360_PERS300:
         <<: *external_defaults
         title: Check EffectiveStartDate
         code: VET360_PERS300
-        detail: EffectiveStartDate can not be more than 6 months after current date.
+        detail: EffectiveStartDate can not be more than 6 months after current date
         status: 400
       VET360_PERS301:
         <<: *external_defaults
         title: Check EffectiveEndDate
         code: VET360_PERS301
-        detail: EffectiveEndDate must be after EffectiveStartDate.
+        detail: EffectiveEndDate must be after EffectiveStartDate
         status: 400
       VET360_PERS302:
         <<: *external_defaults
         title: confirmationDate past
         code: VET360_PERS302
-        detail: confirmationDate cannot be in the future.
+        detail: confirmationDate cannot be in the future
         status: 400
       VET360_PERS303:
         <<: *external_defaults
@@ -1318,7 +1318,7 @@ en:
         <<: *external_defaults
         title: Check confirmationDate
         code: VET360_PERS304
-        detail: ConfirmationDate can not be greater than sourceDate.
+        detail: ConfirmationDate can not be greater than sourceDate
         status: 400
       VET360_PHON100:
         <<: *external_defaults
@@ -1512,32 +1512,32 @@ en:
         <<: *external_defaults
         title: Check International Phone Number
         code: VET360_PHON208
-        detail: International phone number must have 12 characters or less.
+        detail: International phone number must have 12 characters or less
         status: 400
       VET360_PHON209:
         <<: *external_defaults
         title: Check Phone Domestic Number Indicator
         code: VET360_PHON209
-        detail: Domestic numbers must have an area code and country code must be 1.
+        detail: Domestic numbers must have an area code and country code must be 1
         status: 400
       VET360_PHON210:
         <<: *external_defaults
         title: Check Phone International Number Indicator
         code: VET360_PHON210
         detail: International numbers must have a valid country code that is not 1, and
-          no area code.
+          no area code
         status: 400
       VET360_PHON300:
         <<: *external_defaults
         title: Phone Inactive
         code: VET360_PHON300
-        detail: Cannot modify an existing inactive record.
+        detail: Cannot modify an existing inactive record
         status: 400
       VET360_PHON301:
         <<: *external_defaults
         title: Telephone Type
         code: VET360_PHON301
-        detail: Can not insert a record for a phone type that already exists.
+        detail: Can not insert a record for a phone type that already exists
         status: 400
       VET360_PHON302:
         <<: *external_defaults
@@ -1550,13 +1550,13 @@ en:
         title: Check Phone End Date
         code: VET360_PHON303
         detail: EffectiveEndDate cannot be present when adding a non temporary phone,
-          and must be present for a temporary phone.
+          and must be present for a temporary phone
         status: 400
       VET360_PHON304:
         <<: *external_defaults
         title: Duplicate Telephone Type
         code: VET360_PHON304
-        detail: Cannot accept a request with multiple phones of the same type.
+        detail: Cannot accept a request with multiple phones of the same type
         status: 400
       VET360_PHON305:
         <<: *external_defaults
@@ -1638,7 +1638,7 @@ en:
       pif_in_use:
         <<: *defaults
         title: PIF in use
-        detail: 'Claim could not be established. Contact the BDN team and have them run the WIPP process to delete Cancelled/Cleared PIFs'
+        detail: 'Claim could not be established, contact the BDN team and have them run the WIPP process to delete Cancelled/Cleared PIFs'
         code: 127
         status: 409
     unmapped_service_exception:

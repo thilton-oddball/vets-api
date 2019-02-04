@@ -25,7 +25,7 @@ describe Benchmark::Performance do
         it 'raises a Common::Exceptions::ParameterMissing error', :aggregate_failures do
           expect { Benchmark::Performance.track(nil, 100, tags: [page_id]) }.to raise_error do |error|
             expect(error).to be_a Common::Exceptions::ParameterMissing
-            expect(error.message).to eq 'Missing parameter'
+            expect(error.message).to eq 'Missing parameter: Metric :name is required. (108)'
             expect(error.status_code).to eq 400
           end
         end
@@ -35,7 +35,7 @@ describe Benchmark::Performance do
         it 'raises a Common::Exceptions::ParameterMissing error', :aggregate_failures do
           expect { Benchmark::Performance.track(stats_d_key, nil, tags: [page_id]) }.to raise_error do |error|
             expect(error).to be_a Common::Exceptions::ParameterMissing
-            expect(error.message).to eq 'Missing parameter'
+            expect(error.message).to eq 'Missing parameter: A value is required for metric type :ms. (108)'
             expect(error.status_code).to eq 400
           end
         end
@@ -48,7 +48,7 @@ describe Benchmark::Performance do
 
         expect { Benchmark::Performance.track(stats_d_key, 100, tags: [bad_tag]) }.to raise_error do |error|
           expect(error).to be_a Common::Exceptions::Forbidden
-          expect(error.message).to eq 'Forbidden'
+          expect(error.message).to eq "Forbidden: Page at #{bad_tag} is not whitelisted for performance monitoring (403)"
           expect(error.status_code).to eq 403
         end
       end
@@ -71,7 +71,7 @@ describe Benchmark::Performance do
       it 'raises a Common::Exceptions::ParameterMissing error', :aggregate_failures do
         expect { Benchmark::Performance.by_page_and_metric(nil, 100, page_id) }.to raise_error do |error|
           expect(error).to be_a Common::Exceptions::ParameterMissing
-          expect(error.message).to eq 'Missing parameter'
+          expect(error.message).to eq 'Missing parameter: A value for metric is required (108)'
           expect(error.status_code).to eq 400
         end
       end
@@ -121,7 +121,7 @@ describe Benchmark::Performance do
 
           expect { Benchmark::Performance.metrics_for_page(page_id, data_missing_metric) }.to raise_error do |error|
             expect(error).to be_a Common::Exceptions::ParameterMissing
-            expect(error.message).to eq 'Missing parameter'
+            expect(error.message).to eq 'Missing parameter: A value for metric is required (108)'
             expect(error.status_code).to eq 400
           end
         end
@@ -136,7 +136,7 @@ describe Benchmark::Performance do
 
           expect { Benchmark::Performance.metrics_for_page(page_id, data_missing_duration) }.to raise_error do |error|
             expect(error).to be_a Common::Exceptions::ParameterMissing
-            expect(error.message).to eq 'Missing parameter'
+            expect(error.message).to eq 'Missing parameter: A value is required for metric type :ms. (108)'
             expect(error.status_code).to eq 400
           end
         end
