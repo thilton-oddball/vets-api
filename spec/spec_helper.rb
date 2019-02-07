@@ -38,6 +38,7 @@ unless ENV['NOCOVERAGE']
     add_filter 'lib/gibft/configuration.rb'
     add_filter 'lib/vet360/response.rb'
     add_filter 'lib/vet360/exceptions/builder.rb'
+    add_filter 'lib/facilities/ppms_client'
     # TODO: Remove once IHub is ready to merge into master
     add_filter 'lib/ihub'
     add_filter 'modules/adal'
