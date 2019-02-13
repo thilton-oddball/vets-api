@@ -34,7 +34,7 @@ class FeedbackSubmissionMailer < ApplicationMailer
   end
 
   def subject_line
-    subject = "#{@github_issue_number}: Vets.gov Feedback Received"
+    subject = "#{@github_issue_number}: VA.gov Feedback Received"
     subject += ' - Response Requested' if @feedback.owner_email.present?
     subject
   end

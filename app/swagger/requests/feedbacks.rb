@@ -24,7 +24,7 @@ module Swagger
               property :target_page do
                 key :type, :string
                 key :example, '/some/page.html'
-                key :description, 'The Vets.gov webpage the user is currently on'
+                key :description, 'The VA.gov webpage the user is currently on'
               end
               property :description do
                 key :type, :string

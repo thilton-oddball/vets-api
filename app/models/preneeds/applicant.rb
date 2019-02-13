@@ -7,7 +7,7 @@ module Preneeds
     attribute :applicant_email, String
     attribute :applicant_phone_number, String
     attribute :applicant_relationship_to_claimant, String
-    attribute :completing_reason, String, default: 'vets.gov application'
+    attribute :completing_reason, String, default: 'va.gov application'
 
     attribute :mailing_address, Preneeds::Address
     attribute :name, Preneeds::FullName
