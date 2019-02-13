@@ -5,6 +5,7 @@ module HCA
 
       def lookup_user(icn)
         response = perform(:post, '', build_lookup_user_xml(icn)).body
+        binding.pry; fail
 
         {
           enrollment_status: get_xpath(response, 'env:Envelope/env:Body/getEESummaryResponse/summary/enrollmentDeterminationInfo/enrollmentStatus'),
