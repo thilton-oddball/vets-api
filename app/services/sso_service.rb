@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'saml/auth_fail_handler'
 require 'sentry_logging'
 
 class SSOService
@@ -13,7 +12,7 @@ class SSOService
     raise 'SAML Response is not a SAML::Response' unless response.is_a?(SAML::Response)
     @saml_response = response
 
-    if saml_response.is_valid?(true)
+    if saml_response.valid?
       @saml_attributes = SAML::User.new(@saml_response)
       @existing_user = User.find(saml_attributes.user_attributes.uuid)
       @new_user_identity = UserIdentity.new(saml_attributes.to_hash)
@@ -83,14 +82,12 @@ class SSOService
   end
 
   def composite_validations
-    if saml_response.is_valid?
+    if saml_response.valid?
       errors.add(:new_session, :invalid) unless new_session.valid?
       errors.add(:new_user, :invalid) unless new_user.valid?
       errors.add(:new_user_identity, :invalid) unless new_user_identity.valid?
     else
-      saml_response.errors.each do |error|
-        errors.add(:base, error)
-      end
+
     end
   end
 
@@ -111,17 +108,17 @@ class SSOService
 
   # TODO: Eventually some of this needs to just be instrumentation and not a custom sentry error
   def invalid_saml_response_handler
-    return if saml_response.is_valid?
-    fail_handler = SAML::AuthFailHandler.new(saml_response)
-    if fail_handler.errors?
-      @auth_error_code = fail_handler.context[:saml_response][:code]
-      @failure_instrumentation_tag = "error:#{fail_handler.error}"
-      log_message_to_sentry(fail_handler.message, fail_handler.level, fail_handler.context)
-    else
-      @auth_error_code = '007'
-      @failure_instrumentation_tag = 'error:unknown'
-      log_message_to_sentry('Unknown SAML Login Error', :error, error_context)
-    end
+    # return if saml_response.is_valid?
+    # fail_handler = SAML::AuthFailHandler.new(saml_response)
+    # if fail_handler.errors?
+    #   @auth_error_code = fail_handler.context[:saml_response][:code]
+    #   @failure_instrumentation_tag = "error:#{fail_handler.error}"
+    #   log_message_to_sentry(fail_handler.message, fail_handler.level, fail_handler.context)
+    # else
+    #   @auth_error_code = '007'
+    #   @failure_instrumentation_tag = 'error:unknown'
+    #   log_message_to_sentry('Unknown SAML Login Error', :error, error_context)
+    # end
   end
 
   def error_context

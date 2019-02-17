@@ -64,7 +64,7 @@ module SAML
       instance_double(SAML::Response, attributes: attributes,
                                                     decrypted_document: document_partial(authn_context),
                                                     is_a?: true,
-                                                    is_valid?: true,
+                                                    valid?: true,
                                                     response: 'mock-response')
     end
     # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
