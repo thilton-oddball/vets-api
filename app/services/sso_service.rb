@@ -81,11 +81,12 @@ class SSOService
   end
 
   def handle_error_reporting_and_instrumentation
-    if saml_response.normalized_errors
+    if saml_response.normalized_errors.present?
       saml_error = saml_response.normalized_errors.last
       @auth_error_code = saml_error[:code]
       @failure_instrumentation_tag = "error:#{saml_error[:tag]}"
-      log_message_to_sentry(saml_error[:short_message], saml_error[:level], saml_response.normalized_errors)
+      message = 'Login Fail! ' + saml_error[:short_message]
+      log_message_to_sentry(message, saml_error[:level], saml_response.normalized_errors)
     else
       @failure_instrumentation_tag = 'error:validations_failed'
       @auth_error_code = '004' # This could be any of the three failing validation

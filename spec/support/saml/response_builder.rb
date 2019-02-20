@@ -61,20 +61,20 @@ module SAML
         level_of_assurance: verifying ? ['3'] : level_of_assurance,
         multifactor: multifactor
       )
-
       saml_response = SAML::Response.new(document_partial(authn_context).to_s)
-      saml_response.stub(:attributes) { attributes }
-      saml_response.stub(:is_valid?) { true }
-      saml_response.stub(:decrypted_document) { document_partial(authn_context) }
+      allow(saml_response).to receive(:attributes).and_return(attributes)
+      allow(saml_response).to receive(:is_valid?).and_return(true)
+      allow(saml_response).to receive(:decrypted_document).and_return(document_partial(authn_context))
       saml_response
     end
     # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     def build_invalid_saml_response(in_response_to:, decrypted_document:, errors:)
       saml_response = SAML::Response.new(decrypted_document.to_s)
-      saml_response.stub(:is_valid?) { false }
-      saml_response.stub(:errors) { errors }
-      saml_response.stub(:decrypted_document) { decrypted_document }
+      allow(saml_response).to receive(:is_valid?).and_return(false)
+      allow(saml_response).to receive(:errors).and_return(errors)
+      allow(saml_response).to receive(:in_response_to).and_return(in_response_to)
+      allow(saml_response).to receive(:decrypted_document).and_return(decrypted_document)
       saml_response
     end
 
@@ -87,7 +87,7 @@ module SAML
       build_invalid_saml_response(
         in_response_to: uuid,
         decrypted_document: nil,
-        errors: ['Subject did not consent to attribute release'],
+        errors: ['Subject did not consent to attribute release']
       )
     end
 

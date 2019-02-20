@@ -9,14 +9,14 @@ module SAML
                auth_too_late:  { code: '002',
                                  tag: :auth_too_late,
                                  short_message: 'Current time is on or after NotOnOrAfter condition',
-                                 level: :error },
+                                 level: :warn },
                auth_too_early: { code: '003',
                                  tag: :auth_too_early,
                                  short_message: 'Current time is earlier than NotBefore condition',
                                  level: :error },
                multiple:       { code: '007',
                                  tag: :multiple,
-                                 short_message: 'todo',
+                                 short_message: 'Multiple SAML Errors',
                                  level: :error },
                blank:           { code: '007',
                                   tag: :blank,
@@ -32,7 +32,6 @@ module SAML
     end
 
     def valid?
-      binding.pry
       @normalized_errors = []
       # passing true collects all validation errors
       is_valid_result = is_valid?(true)
