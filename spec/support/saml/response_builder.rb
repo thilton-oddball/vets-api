@@ -61,17 +61,21 @@ module SAML
         level_of_assurance: verifying ? ['3'] : level_of_assurance,
         multifactor: multifactor
       )
-      instance_double(SAML::Response, attributes: attributes,
-                                                    decrypted_document: document_partial(authn_context),
-                                                    is_a?: true,
-                                                    valid?: true,
-                                                    response: 'mock-response')
+
+      saml_response = SAML::Response.new(document_partial(authn_context).to_s)
+      saml_response.stub(:attributes) { attributes }
+      saml_response.stub(:is_valid?) { true }
+      saml_response.stub(:decrypted_document) { document_partial(authn_context) }
+      saml_response
     end
     # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
-    def build_invalid_saml_response(options)
-      options = options.reverse_merge(is_valid?: false, is_a?: true)
-      instance_double(SAML::Response, options)
+    def build_invalid_saml_response(in_response_to:, decrypted_document:, errors:)
+      saml_response = SAML::Response.new(decrypted_document.to_s)
+      saml_response.stub(:is_valid?) { false }
+      saml_response.stub(:errors) { errors }
+      saml_response.stub(:decrypted_document) { decrypted_document }
+      saml_response
     end
 
     def invalid_saml_response
@@ -83,14 +87,12 @@ module SAML
       build_invalid_saml_response(
         in_response_to: uuid,
         decrypted_document: nil,
-        errors: ['ruh roh'],
-        status_message: 'Subject did not consent to attribute release'
+        errors: ['Subject did not consent to attribute release'],
       )
     end
 
     def saml_response_too_late
       build_invalid_saml_response(
-        status_message: nil,
         in_response_to: uuid,
         decrypted_document: document_partial,
         errors: [
@@ -101,7 +103,6 @@ module SAML
 
     def saml_response_too_early
       build_invalid_saml_response(
-        status_message: nil,
         in_response_to: uuid,
         decrypted_document: document_partial,
         errors: [
@@ -112,7 +113,7 @@ module SAML
 
     def saml_response_unknown_error
       build_invalid_saml_response(
-        status_message: SSOService::DEFAULT_ERROR_MESSAGE, in_response_to: uuid,
+        in_response_to: uuid,
         decrypted_document: document_partial,
         errors: [
           'The status code of the Response was not Success, was Requester => NoAuthnContext -> AuthnRequest without ' \
@@ -123,7 +124,7 @@ module SAML
 
     def saml_response_multi_error
       build_invalid_saml_response(
-        status_message: 'Subject did not consent to attribute release', in_response_to: uuid,
+        in_response_to: uuid,
         decrypted_document: document_partial,
         errors: ['Subject did not consent to attribute release', 'Other random error']
       )
@@ -183,7 +184,7 @@ module SAML
           'dslogon_assurance' => [account_type],
           'dslogon_gender' => ['M'],
           'dslogon_deceased' => ['false'],
-          'dslogon_idauthn_context' => ['ssn'],
+          'dslogon_idtype' => ['ssn'],
           'uuid' => ['0e1bb5723d7c4f0686f46ca4505642ad'],
           'dslogon_uuid' => ['1606997570'],
           'email' => ['kam+tristanmhv@adhocteam.us'],

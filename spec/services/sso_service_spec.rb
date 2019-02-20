@@ -199,7 +199,7 @@ RSpec.describe SSOService do
 
     it 'has Blank response error' do
       expect(sso_service.valid?).to be_falsey
-      expect(sso_service.errors.full_messages).to eq(['Blank response'])
+      expect(sso_service.errors.full_messages).to eq(['is invalid'])
     end
 
     it '#persist_authentication! handles saml response errors' do

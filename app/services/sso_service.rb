@@ -11,7 +11,6 @@ class SSOService
   def initialize(response)
     raise 'SAML Response is not a SAML::Response' unless response.is_a?(SAML::Response)
     @saml_response = response
-
     if saml_response.valid?
       @saml_attributes = SAML::User.new(@saml_response)
       @existing_user = User.find(saml_attributes.user_attributes.uuid)
@@ -38,7 +37,6 @@ class SSOService
           new_user_identity.send(attribute + '=', existing_user.identity.send(attribute))
         end
       end
-
       return new_session.save && new_user.save && new_user_identity.save
     else
       handle_error_reporting_and_instrumentation
@@ -56,15 +54,6 @@ class SSOService
 
   def new_login?
     existing_user.present?
-  end
-
-  def authn_context
-    if saml_response.decrypted_document
-      REXML::XPath.first(saml_response.decrypted_document, '//saml:AuthnContextClassRef')&.text ||
-        SAML::User::UNKNOWN_AUTHN_CONTEXT
-    else
-      SAML::User::UNKNOWN_AUTHN_CONTEXT
-    end
   end
 
   private
@@ -87,38 +76,21 @@ class SSOService
       errors.add(:new_user, :invalid) unless new_user.valid?
       errors.add(:new_user_identity, :invalid) unless new_user_identity.valid?
     else
-
+      errors.add(:base, :invalid)
     end
   end
 
   def handle_error_reporting_and_instrumentation
-    if errors.keys.include?(:base)
-      invalid_saml_response_handler
+    if saml_response.normalized_errors
+      saml_error = saml_response.normalized_errors.last
+      @auth_error_code = saml_error[:code]
+      @failure_instrumentation_tag = "error:#{saml_error[:tag]}"
+      log_message_to_sentry(saml_error[:short_message], saml_error[:level], saml_response.normalized_errors)
     else
-      invalid_persistence_handler
+      @failure_instrumentation_tag = 'error:validations_failed'
+      @auth_error_code = '004' # This could be any of the three failing validation
+      log_message_to_sentry('Login Fail! on User/Session Validation', :error, error_context)
     end
-  end
-
-  def invalid_persistence_handler
-    return if new_session.valid? && new_user.valid? && new_user_identity.valid?
-    @failure_instrumentation_tag = 'error:validations_failed'
-    @auth_error_code = '004' # This could be any of the three failing validation
-    log_message_to_sentry('Login Fail! on User/Session Validation', :error, error_context)
-  end
-
-  # TODO: Eventually some of this needs to just be instrumentation and not a custom sentry error
-  def invalid_saml_response_handler
-    # return if saml_response.is_valid?
-    # fail_handler = SAML::AuthFailHandler.new(saml_response)
-    # if fail_handler.errors?
-    #   @auth_error_code = fail_handler.context[:saml_response][:code]
-    #   @failure_instrumentation_tag = "error:#{fail_handler.error}"
-    #   log_message_to_sentry(fail_handler.message, fail_handler.level, fail_handler.context)
-    # else
-    #   @auth_error_code = '007'
-    #   @failure_instrumentation_tag = 'error:unknown'
-    #   log_message_to_sentry('Unknown SAML Login Error', :error, error_context)
-    # end
   end
 
   def error_context

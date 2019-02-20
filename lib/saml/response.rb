@@ -1,106 +1,67 @@
- module SAML
+# frozen_string_literal: true
+
+module SAML
   class Response < OneLogin::RubySaml::Response
-    # caution,
-    alias_method :onelogin_errors, :errors
-    alias_method :onelogin_validate, :validate
-    include ActiveModel::Validations
+    ERRORS = { clicked_deny:   { code: '001',
+                                 tag: :clicked_deny,
+                                 short_message: 'Subject did not consent to attribute release',
+                                 level: :warn },
+               auth_too_late:  { code: '002',
+                                 tag: :auth_too_late,
+                                 short_message: 'Current time is on or after NotOnOrAfter condition',
+                                 level: :error },
+               auth_too_early: { code: '003',
+                                 tag: :auth_too_early,
+                                 short_message: 'Current time is earlier than NotBefore condition',
+                                 level: :error },
+               multiple:       { code: '007',
+                                 tag: :multiple,
+                                 short_message: 'todo',
+                                 level: :error },
+               blank:           { code: '007',
+                                  tag: :blank,
+                                  short_message: 'Blank response',
+                                  level: :error },
+               unknown:         { code: '007',
+                                  tag: :unknown,
+                                  short_message: 'Other SAML Response Error(s)',
+                                  level: :error } }.freeze
 
-    CLICKED_DENY_MSG = 'Subject did not consent to attribute release'
-    TOO_LATE_MSG     = 'Current time is on or after NotOnOrAfter condition'
-    TOO_EARLY_MSG    = 'Current time is earlier than NotBefore condition'
-
-    ERROR_INFO = {CLICKED_DENY_MSG => {code: '001', name: :clicked_deny},
-                  TOO_LATE_MSG => {code: '002', name: :auth_too_late},
-                  TOO_EARLY_MSG => {code: '003', name: :auth_too_early},
-                  'unknown' => {code: '007', name: :unknown}
-    }
-   #'multiple'
-
-    KNOWN_ERRORS = ERROR_INFO.values.collect{ |e| e[:name] }
-
-    validate :onlelogin_rubysaml_validate
-
-    def onlelogin_rubysaml_validate
-      # passing true collects all validation errors
-
-      is_valid_result = onelogin_validate(true)
-
-
+    def normalized_errors
+      @normalized_errors ||= []
     end
 
-      # errors.each do |error|
-      #     errors.add(:base, error)
-      #   end
+    def valid?
+      binding.pry
+      @normalized_errors = []
+      # passing true collects all validation errors
+      is_valid_result = is_valid?(true)
+      errors.each do |error_message|
+        normalized_errors << normalize_error(error_message)
+      end.compact
+      normalized_errors << ERRORS[:multiple] if normalized_errors.length > 1
+      is_valid_result
+    end
 
+    def normalize_error(error_message)
+      error_hash = ERRORS[:unknown]
+      ERRORS.each_key do |key|
+        if error_message.include?(ERRORS[key][:short_message])
+          error_hash = ERRORS[key]
+          break
+        end
+      end
+      error_hash[:full_message] = error_message
+      error_hash
+    end
 
+    def authn_context
+      if decrypted_document
+        REXML::XPath.first(decrypted_document, '//saml:AuthnContextClassRef')&.text ||
+          SAML::User::UNKNOWN_AUTHN_CONTEXT
+      else
+        SAML::User::UNKNOWN_AUTHN_CONTEXT
+      end
+    end
   end
 end
-
-# # frozen_string_literal: true
-
-# module SAML
-#   class AuthFailHandler
-#     attr_accessor :message, :level, :context
-
-
-
-#     def error
-#       KNOWN_ERRORS.each do |known_error|
-#         return known_error if send("#{known_error}?")
-#       end
-
-#       only_one_error? ? 'unknown' : 'multiple'
-#     end
-
-#     def errors?
-#       !@message.nil? && !@level.nil?
-#     end
-
-#     private
-
-#     def initialize_errors!
-#       @code = '007'
-#       KNOWN_ERRORS.each do |known_error|
-#         break if send("#{known_error}?")
-#       end
-
-#       generic_error_message
-#     end
-
-#     def generic_error_message
-#       context = {
-#         saml_response: {
-#           status_message: @saml_response.status_message,
-#           errors: @saml_response.errors,
-#           code: @code
-#         }
-#       }
-#       set_sentry_params('Other SAML Response Error(s)', :error, context)
-#     end
-
-#     def clicked_deny?
-#       return false unless only_one_error? && @saml_response.status_message == CLICKED_DENY_MSG
-#       set_sentry_params(CLICKED_DENY_MSG, :warn)
-#     end
-
-#     def auth_too_late?
-#       return false unless only_one_error? && @saml_response.errors[0].include?(TOO_LATE_MSG)
-#       set_sentry_params(TOO_LATE_MSG, :warn, @saml_response.errors[0])
-#     end
-
-#     def auth_too_early?
-#       return false unless only_one_error? && @saml_response.errors[0].include?(TOO_EARLY_MSG)
-#       set_sentry_params(TOO_EARLY_MSG, :error, @saml_response.errors[0])
-#     end
-
-#     def only_one_error?
-#       @saml_response.errors.size == 1
-#     end
-
-#     def set_sentry_params(msg, level, ctx = {})
-#       @message = 'Login Fail! ' + msg
-#       @level   = level
-#       @context = ctx
-#     end
-#   end
-# end
