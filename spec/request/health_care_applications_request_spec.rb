@@ -45,6 +45,19 @@ RSpec.describe 'Health Care Application Integration', type: %i[request serialize
           '123'
         ).and_return(success_response)
         binding.pry; fail
+        user_attributes = HealthCareApplication.user_attributes({"veteranFullName"=>{"first"=>"WESLEY", "last"=>"FORD"},
+ "veteranDateOfBirth"=>"1986-05-06",
+ "veteranSocialSecurityNumber"=>"796-04-3735",
+ "gender"=>"M"})
+
+        MVI::AttrService.new.find_profile(user_attributes)
+        {
+          userAttributes: {"veteranFullName"=>{"first"=>"WESLEY", "last"=>"FORD"},
+ "veteranDateOfBirth"=>"1986-05-06",
+ "veteranSocialSecurityNumber"=>"796-04-3735",
+ "gender"=>"M"}
+        }
+        
 
         get(
           enrollment_status_v0_health_care_applications_path,
