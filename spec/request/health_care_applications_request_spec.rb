@@ -44,6 +44,7 @@ RSpec.describe 'Health Care Application Integration', type: %i[request serialize
         expect(HealthCareApplication).to receive(:enrollment_status).with(
           '123'
         ).and_return(success_response)
+        binding.pry; fail
 
         get(
           enrollment_status_v0_health_care_applications_path,

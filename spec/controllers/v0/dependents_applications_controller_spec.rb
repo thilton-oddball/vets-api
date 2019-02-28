@@ -6,6 +6,7 @@ RSpec.describe V0::DependentsApplicationsController do
   let(:user) { create(:evss_user) }
 
   before do
+    binding.pry; fail
     sign_in_as(user)
   end
 
