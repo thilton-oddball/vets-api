@@ -41,9 +41,7 @@ module MVI
     def find_profile(user)
       with_monitoring do
         measure_info(user) do
-          binding.pry; fail
           raw_response = perform(:post, '', create_profile_message(user), soapaction: OPERATIONS[:find_profile])
-          binding.pry; fail
           MVI::Responses::FindProfileResponse.with_parsed_response(raw_response)
         end
       end
