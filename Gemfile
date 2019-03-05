@@ -50,7 +50,7 @@ gem 'liquid'
 gem 'memoist'
 gem 'mini_magick'
 gem 'net-sftp'
-gem 'nokogiri', '1.8.5'
+gem 'nokogiri'
 gem 'octokit'
 gem 'oj' # Amazon Linux `json` gem causes conflicts, but `multi_json` will prefer `oj` if installed
 gem 'olive_branch'
