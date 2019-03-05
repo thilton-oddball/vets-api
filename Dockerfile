@@ -23,4 +23,6 @@ ADD Gemfile $APP_PATH
 ADD Gemfile.lock $APP_PATH
 ADD . /src/vets-api
 
+RUN gem install nokogiri -v '1.8.5'
+
 RUN bundle install
