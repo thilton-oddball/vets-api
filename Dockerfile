@@ -7,16 +7,22 @@ ENV EXCLUDE_SIDEKIQ_ENTERPRISE=$exclude_sidekiq_ent
 ENV APP_PATH /src/vets-api
 
 RUN groupadd -r vets-api && \
-useradd -r -g vets-api vets-api && \
-apt-get update -qq && \
-apt-get install -y build-essential \
+useradd -r -g vets-api vets-api
+
+RUN apt-get update -qq && \
+apt-get install -y --no-install-recommends \
+build-essential \
 git \
 libpq-dev \
 clamav \
 imagemagick \
 pdftk \
-poppler-utils && \
-freshclam
+poppler-utils \
+libgmp-dev && \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
+
+RUN freshclam
 
 WORKDIR $APP_PATH
 ADD Gemfile $APP_PATH
