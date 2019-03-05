@@ -17,8 +17,7 @@ libpq-dev \
 clamav \
 imagemagick \
 pdftk \
-poppler-utils \
-patch ruby-dev zlib1g-dev liblzma-dev && \
+poppler-utils && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
