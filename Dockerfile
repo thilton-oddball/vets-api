@@ -16,7 +16,8 @@ clamav \
 imagemagick \
 pdftk \
 poppler-utils && \
-freshclam
+freshclam \
+libgmp-dev
 
 WORKDIR $APP_PATH
 ADD Gemfile $APP_PATH
