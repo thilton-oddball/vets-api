@@ -35,17 +35,13 @@ module MVI
 
     # Given a user queries MVI and returns their VA profile.
     #
-    # @param user [UserIdentity] the user to query MVI for
+    # @param user [User] the user to query MVI for
     # @return [MVI::Responses::FindProfileResponse] the parsed response from MVI.
     # rubocop:disable Metrics/MethodLength
-    def find_profile(user_identity)
+    def find_profile(user)
       with_monitoring do
-        measure_info(user_identity) do
-          raw_response = perform(
-            :post, '',
-            create_profile_message(user_identity),
-            soapaction: OPERATIONS[:find_profile]
-          )
+        measure_info(user) do
+          raw_response = perform(:post, '', create_profile_message(user), soapaction: OPERATIONS[:find_profile])
           MVI::Responses::FindProfileResponse.with_parsed_response(raw_response)
         end
       end
@@ -60,7 +56,7 @@ module MVI
       log_console_and_sentry("MVI find_profile error: #{e.message}", :error)
       mvi_profile_exception_response_for('MVI_504', e)
     rescue MVI::Errors::Base => e
-      mvi_error_handler(user_identity, e)
+      mvi_error_handler(user, e)
       if e.is_a?(MVI::Errors::RecordNotFound)
         mvi_profile_exception_response_for('MVI_404', e, type: 'not_found')
       else
@@ -71,8 +67,8 @@ module MVI
 
     private
 
-    def measure_info(user_identity)
-      Rails.logger.measure_info('Performed MVI Query', payload: logging_context(user_identity)) { yield }
+    def measure_info(user)
+      Rails.logger.measure_info('Performed MVI Query', payload: logging_context(user)) { yield }
     end
 
     def mvi_profile_exception_response_for(key, error, type: SERVER_ERROR)
@@ -94,7 +90,7 @@ module MVI
       )
     end
 
-    def mvi_error_handler(user_identity, e)
+    def mvi_error_handler(user, e)
       case e
       when MVI::Errors::DuplicateRecords
         log_console_and_sentry('MVI Duplicate Record', :warn)
@@ -102,7 +98,7 @@ module MVI
         log_console_and_sentry('MVI Record Not Found')
       when MVI::Errors::InvalidRequestError
         # NOTE: ICN based lookups do not return RecordNotFound. They return InvalidRequestError
-        if user_identity.mhv_icn.present?
+        if user.mhv_icn.present?
           log_console_and_sentry('MVI Invalid Request (Possible RecordNotFound)', :error)
         else
           log_console_and_sentry('MVI Invalid Request', :error)
@@ -117,21 +113,19 @@ module MVI
       log_message_to_sentry(message, sentry_classification) if sentry_classification.present?
     end
 
-    def logging_context(user_identity)
+    def logging_context(user)
       {
-        uuid: user_identity.uuid,
-        authn_context: user_identity.authn_context
+        uuid: user.uuid,
+        authn_context: user.authn_context
       }
     end
 
-    # rubocop:disable Metrics/LineLength
-    def create_profile_message(user_identity)
-      return message_icn(user_identity) if user_identity.mhv_icn.present? # from SAML::UserAttributes::MHV::BasicLOA3User
-      return message_edipi(user_identity) if user_identity.dslogon_edipi.present? && Settings.mvi.edipi_search
-      raise Common::Exceptions::ValidationErrors, user_identity unless user_identity.valid?
-      message_user_attributes(user_identity)
+    def create_profile_message(user)
+      return message_icn(user) if user.mhv_icn.present? # from SAML::UserAttributes::MHV::BasicLOA3User
+      return message_edipi(user) if user.dslogon_edipi.present? && Settings.mvi.edipi_search
+      raise Common::Exceptions::ValidationErrors, user unless user.valid?(:loa3_user)
+      message_user_attributes(user)
     end
-    # rubocop:enable Metrics/LineLength
 
     def message_icn(user)
       MVI::Messages::FindProfileMessageIcn.new(user.mhv_icn).to_xml
