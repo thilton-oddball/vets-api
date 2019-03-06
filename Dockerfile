@@ -14,6 +14,7 @@ apt-get install -y --no-install-recommends \
 build-essential \
 git \
 libpq-dev \
+libgmp-dev \
 clamav \
 imagemagick \
 pdftk \
