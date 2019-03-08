@@ -15,6 +15,7 @@ module Common
               end
               env.body = doc
             else
+              binding.pry; fail
               log_error_details(env)
               raise Common::Client::Errors::HTTPError.new('SOAP HTTP call failed', env.status)
             end
