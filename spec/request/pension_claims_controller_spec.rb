@@ -34,7 +34,7 @@ RSpec.describe 'Pension Claim Integration', type: %i[request serializer] do
       it 'should show the validation errors' do
         subject
         expect(response.code).to eq('422')
-        puts JSON.parse(response.body)['errors'][0]['detail']
+        
         expect(
           JSON.parse(response.body)['errors'][0]['detail'].include?(
             "The property '#/bankAccount' of type string"

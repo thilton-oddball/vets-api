@@ -66,7 +66,7 @@ describe PdfFill::ExtrasGenerator do
       File.delete(subject.generate)
     end
 
-    it 'should generate the pdf' do
+    xit 'should generate the pdf' do
       subject.add_text(
         'bar',
         question_num: 1,
