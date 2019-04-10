@@ -9,6 +9,7 @@ RSpec.describe V0::Preneeds::PreneedAttachmentsController, type: :controller do
              file_data: fixture_file_upload('pdf_fill/extras.pdf')
            } })
 
+      binding.pry
       expect(JSON.parse(response.body)['data']['attributes']['guid']).to eq Preneeds::PreneedAttachment.last.guid
     end
   end

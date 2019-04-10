@@ -13,6 +13,7 @@ apt-get install -y build-essential \
 git \
 libpq-dev \
 libgmp-dev \
+libreadline-dev \
 clamav \
 imagemagick \
 pdftk \

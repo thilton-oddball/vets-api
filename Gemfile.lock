@@ -90,7 +90,7 @@ PATH
   remote: modules/veteran
   specs:
     veteran (0.0.1)
-      rails (~> 4.2.11.1)
+      rails (~> 5.0.7.1)
 
 GEM
   remote: https://rubygems.org/
@@ -913,15 +913,10 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-<<<<<<< HEAD
-    pry-nav (0.2.4)
-      pry (>= 0.9.10, < 0.11.0)
-    public_suffix (3.0.3)
-=======
     pry-byebug (3.3.0)
       byebug (~> 8.0)
       pry (~> 0.10)
->>>>>>> master
+    public_suffix (3.0.3)
     puma (3.12.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)

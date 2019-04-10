@@ -98,12 +98,12 @@ ActiveRecord::Schema.define(version: 20190408160432) do
     t.string   "md5"
   end
 
-  create_table "claims_api_supporting_documents", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "claims_api_supporting_documents", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "encrypted_file_data",       null: false
     t.string   "encrypted_file_data_iv",    null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.uuid     "auto_established_claim_id", null: false
+    t.uuid     "auto_established_claim_id"
   end
 
   create_table "disability_compensation_job_statuses", force: :cascade do |t|
@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 20190408160432) do
     t.string   "status",                                null: false
     t.string   "error_message"
     t.datetime "updated_at",                            null: false
-    t.index ["disability_compensation_submission_id"], name: "index_disability_compensation_job_statuses_on_dsc_id", using: :btree
+    t.index ["disability_compensation_submission_id"], name: "index_disability_compensation_job_statuses_on_dcs_id", using: :btree
     t.index ["job_id"], name: "index_disability_compensation_job_statuses_on_job_id", unique: true, using: :btree
   end
 
