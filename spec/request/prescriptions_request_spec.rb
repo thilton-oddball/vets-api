@@ -11,7 +11,9 @@ RSpec.describe 'prescriptions', type: :request do
   include SchemaMatchers
 
   let(:va_patient) { true }
-  let(:current_user) { build(:user, :mhv, va_patient: va_patient, mhv_account_type: mhv_account_type) }
+  let(:current_user) do
+    build(:user, :mhv, authn_context: LOA::IDME_LOA3, va_patient: va_patient, mhv_account_type: mhv_account_type)
+  end
 
   before(:each) do
     allow(Rx::Client).to receive(:new).and_return(authenticated_client)
@@ -129,7 +131,7 @@ RSpec.describe 'prescriptions', type: :request do
           VCR.use_cassette('rx_client/preferences/sets_rx_preferences', record: :none) do
             params = { email_address: 'kamyar.karshenas@va.gov',
                        rx_flag: false }
-            put '/v0/prescriptions/preferences', params
+            put '/v0/prescriptions/preferences', params: params
           end
 
           expect(response).to have_http_status(200)
@@ -142,7 +144,7 @@ RSpec.describe 'prescriptions', type: :request do
         it 'requires all parameters for update' do
           VCR.use_cassette('rx_client/preferences/sets_rx_preferences', record: :none) do
             params = { email_address: 'kamyar.karshenas@va.gov' }
-            put '/v0/prescriptions/preferences', params
+            put '/v0/prescriptions/preferences', params: params
           end
 
           expect(response).to have_http_status(:unprocessable_entity)
@@ -152,7 +154,7 @@ RSpec.describe 'prescriptions', type: :request do
           VCR.use_cassette('rx_client/preferences/raises_a_backend_service_exception_when_email_includes_spaces') do
             params = { email_address: 'kamyar karshenas@va.gov',
                        rx_flag: false }
-            put '/v0/prescriptions/preferences', params
+            put '/v0/prescriptions/preferences', params: params
           end
 
           expect(response).to have_http_status(:unprocessable_entity)

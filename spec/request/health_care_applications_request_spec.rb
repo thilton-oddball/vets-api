@@ -30,14 +30,87 @@ RSpec.describe 'Health Care Application Integration', type: %i[request serialize
     end
   end
 
+  describe 'GET enrollment_status' do
+    let(:success_response) do
+      { application_date: '2018-01-24T00:00:00.000-06:00',
+        enrollment_date: nil,
+        preferred_facility: '987 - CHEY6',
+        parsed_status: :inelig_character_of_discharge }
+    end
+    let(:loa1_response) do
+      { parsed_status: :login_required }
+    end
+
+    context 'with user attributes' do
+      let(:user_attributes) do
+        {
+          userAttributes: build(:health_care_application).parsed_form.slice(
+            'veteranFullName', 'veteranDateOfBirth',
+            'veteranSocialSecurityNumber', 'gender'
+          )
+        }
+      end
+
+      it 'should return the enrollment status data' do
+        expect(HealthCareApplication).to receive(:user_icn).and_return('123')
+        expect(HealthCareApplication).to receive(:enrollment_status).with(
+          '123', nil
+        ).and_return(loa1_response)
+
+        get(enrollment_status_v0_health_care_applications_path, params: user_attributes)
+
+        expect(response.body).to eq(loa1_response.to_json)
+      end
+
+      context 'when the request is rate limited' do
+        it 'should return 429' do
+          expect(HCA::RateLimitedSearch).to receive(
+            :create_rate_limited_searches
+          ).and_raise(RateLimitedSearch::RateLimitedError)
+
+          get(enrollment_status_v0_health_care_applications_path, params: user_attributes)
+          expect(response.status).to eq(429)
+        end
+      end
+    end
+
+    context 'with a signed in user' do
+      let(:current_user) { build(:user, :loa3) }
+
+      before do
+        sign_in_as(current_user)
+      end
+
+      context 'with a user with no icn' do
+        before do
+          allow_any_instance_of(User).to receive(:icn).and_return(nil)
+        end
+
+        it 'should return 404' do
+          get(enrollment_status_v0_health_care_applications_path,
+              params: { userAttributes: build(:health_care_application).parsed_form })
+          expect(response.status).to eq(404)
+        end
+      end
+
+      it 'should return the enrollment status data' do
+        expect(HealthCareApplication).to receive(:enrollment_status).with(
+          current_user.icn, true
+        ).and_return(success_response)
+
+        get(enrollment_status_v0_health_care_applications_path,
+            params: { userAttributes: build(:health_care_application).parsed_form })
+
+        expect(response.body).to eq(success_response.to_json)
+      end
+    end
+  end
+
   describe 'POST create' do
     subject do
-      post(
-        v0_health_care_applications_path,
-        params.to_json,
-        'CONTENT_TYPE' => 'application/json',
-        'HTTP_X_KEY_INFLECTION' => 'camel'
-      )
+      post(v0_health_care_applications_path,
+           params: params.to_json,
+           headers: { 'CONTENT_TYPE' => 'application/json', 'HTTP_X_KEY_INFLECTION' => 'camel' })
     end
 
     context 'with invalid params' do

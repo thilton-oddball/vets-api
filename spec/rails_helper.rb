@@ -3,7 +3,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
 ENV['RACK_ENV'] ||= 'test' # Shrine uses this to determine log levels
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'spec_helper'
@@ -50,21 +50,6 @@ def with_settings(settings, temp_values)
   end
 end
 
-def with_okta_configured(&block)
-  with_settings(
-    Settings.oidc,
-    auth_server_metadata_url: 'https://example.com/oauth2/default/.well-known/openid-configuration',
-    issuer: 'https://example.com/oauth2/default',
-    audience: 'api://default',
-    base_api_url: 'https://example.com/',
-    base_api_token: 'token'
-  ) do
-    VCR.use_cassette('okta/metadata') do
-      yield block
-    end
-  end
-end
-
 VCR::MATCH_EVERYTHING = { match_requests_on: %i[method uri headers body] }.freeze
 
 VCR.configure do |c|
@@ -83,6 +68,7 @@ VCR.configure do |c|
   c.filter_sensitive_data('<PRENEEDS_HOST>') { Settings.preneeds.host }
   c.filter_sensitive_data('<PD_TOKEN>') { Settings.maintenance.pagerduty_api_token }
   c.filter_sensitive_data('<OKTA_TOKEN>') { Settings.oidc.base_api_token }
+  c.filter_sensitive_data('<EE_PASS>') { Settings.hca.ee.pass }
   c.before_record do |i|
     %i[response request].each do |env|
       next unless i.send(env).headers.keys.include?('Token')

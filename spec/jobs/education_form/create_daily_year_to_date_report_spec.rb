@@ -41,6 +41,8 @@ RSpec.describe EducationForm::CreateDailyYearToDateReport, type: :aws_helpers do
         create(:education_benefits_submission, form_type: form_type, created_at: date)
       end
       create(:education_benefits_submission, form_type: '0993', created_at: date, region: :western)
+      create(:education_benefits_submission, form_type: '0994',
+                                             created_at: date, region: :eastern, vettec: true, chapter33: false)
     end
 
     context 'with the date variable set' do
@@ -94,6 +96,9 @@ RSpec.describe EducationForm::CreateDailyYearToDateReport, type: :aws_helpers do
     end
 
     describe '#perform' do
+      before do
+        expect(FeatureFlipper).to receive(:send_edu_report_email?).once.and_return(true)
+      end
       after do
         File.delete(filename)
       end

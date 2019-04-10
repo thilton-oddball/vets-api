@@ -276,6 +276,22 @@ module PdfFill
         incident['incidentOverflow'] = PdfFill::FormValue.new('', incident_overflow.compact.join("\n\n"))
       end
 
+      def combine_full_address(address)
+        return '' if address.blank?
+        combine_hash(
+          address,
+          %w[
+            addressLine1
+            addressLine2
+            city
+            state
+            zipCode
+            country
+          ],
+          ', '
+        )
+      end
+
       def expand_incidents(incidents)
         return if incidents.blank?
         incidents.each_with_index do |incident, index|

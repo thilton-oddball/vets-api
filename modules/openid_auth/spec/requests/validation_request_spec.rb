@@ -16,6 +16,7 @@ RSpec.describe 'Validated Token API endpoint', type: :request, skip_emis: true d
       'exp' => Time.current.utc.to_i + 3600,
       'cid' => '0oa1c01m77heEXUZt2p7',
       'uid' => '00u1zlqhuo3yLa2Xs2p7',
+      'icn' => '73806470379396828',
       'scp' => %w[profile email openid veteran_status.read],
       'sub' => 'ae9ff5f4e4b741389904087d94cd19b2'
     }, {
@@ -52,18 +53,18 @@ RSpec.describe 'Validated Token API endpoint', type: :request, skip_emis: true d
     }
   end
   let(:auth_header) { { 'Authorization' => "Bearer #{token}" } }
-  let(:user) { build(:user, :loa3) }
+  let(:user) { OpenidUser.new(build(:user_identity_attrs, :loa3)) }
 
   context 'with valid responses' do
     before(:each) do
       allow(JWT).to receive(:decode).and_return(jwt)
-      Session.create(uuid: user.uuid, token: token)
-      User.create(user)
+      Session.create(token: token, uuid: user.uuid)
+      user.save
     end
 
     it 'should return true if the user is a veteran' do
       with_okta_configured do
-        get '/internal/auth/v0/validation', nil, auth_header
+        get '/internal/auth/v0/validation', params: nil, headers: auth_header
         expect(response).to have_http_status(:ok)
         expect(response.body).to be_a(String)
         expect(JSON.parse(response.body)['data']['attributes'].keys).to eq(json_api_response['data']['attributes'].keys)
@@ -74,7 +75,7 @@ RSpec.describe 'Validated Token API endpoint', type: :request, skip_emis: true d
   context 'when token is unauthorized' do
     it 'should return an unauthorized for bad token', :aggregate_failures do
       with_okta_configured do
-        get '/internal/auth/v0/validation', nil, auth_header
+        get '/internal/auth/v0/validation', params: nil, headers: auth_header
 
         expect(response).to have_http_status(:unauthorized)
         expect(JSON.parse(response.body)['errors'].first['code']).to eq '401'
@@ -86,13 +87,13 @@ RSpec.describe 'Validated Token API endpoint', type: :request, skip_emis: true d
     before(:each) do
       allow(JWT).to receive(:decode).and_return(jwt)
       Session.create(uuid: user.uuid, token: token)
-      User.create(user)
+      user.save
     end
 
     it 'should return a server error if serialization fails', :aggregate_failures do
       allow_any_instance_of(OpenidAuth::ValidationSerializer).to receive(:attributes).and_raise(StandardError, 'random')
       with_okta_configured do
-        get '/internal/auth/v0/validation', nil, auth_header
+        get '/internal/auth/v0/validation', params: nil, headers: auth_header
 
         expect(response).to have_http_status(:internal_server_error)
         expect(JSON.parse(response.body)['errors'].first['code']).to eq '500'
@@ -100,9 +101,9 @@ RSpec.describe 'Validated Token API endpoint', type: :request, skip_emis: true d
     end
 
     it 'should return a not found when va profile returns not found', :aggregate_failures do
-      allow_any_instance_of(User).to receive(:va_profile_status).and_return('NOT_FOUND')
+      allow_any_instance_of(OpenidUser).to receive(:va_profile_status).and_return('NOT_FOUND')
       with_okta_configured do
-        get '/internal/auth/v0/validation', nil, auth_header
+        get '/internal/auth/v0/validation', params: nil, headers: auth_header
 
         expect(response).to have_http_status(:not_found)
         expect(JSON.parse(response.body)['errors'].first['code']).to eq '404'
@@ -110,9 +111,9 @@ RSpec.describe 'Validated Token API endpoint', type: :request, skip_emis: true d
     end
 
     it 'should return a server error when va profile returns server error', :aggregate_failures do
-      allow_any_instance_of(User).to receive(:va_profile_status).and_return('SERVER_ERROR')
+      allow_any_instance_of(OpenidUser).to receive(:va_profile_status).and_return('SERVER_ERROR')
       with_okta_configured do
-        get '/internal/auth/v0/validation', nil, auth_header
+        get '/internal/auth/v0/validation', params: nil, headers: auth_header
 
         expect(response).to have_http_status(:bad_gateway)
         expect(JSON.parse(response.body)['errors'].first['code']).to eq '502'

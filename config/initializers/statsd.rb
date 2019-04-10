@@ -16,17 +16,17 @@ StatsD.backend = if host.present? && port.present?
 StatsD.increment(V0::SessionsController::STATSD_SSO_CALLBACK_TOTAL_KEY, 0)
 StatsD.increment(V0::SessionsController::STATSD_LOGIN_NEW_USER_KEY, 0)
 
-SAML::AuthFailHandler::KNOWN_ERRORS.each do |known_error|
-  StatsD.increment(V0::SessionsController::STATSD_SSO_CALLBACK_FAILED_KEY, 0, tags: ["error:#{known_error}"])
+SAML::Response::ERRORS.merge(SSOService::ERRORS).each_value do |known_error|
+  StatsD.increment(V0::SessionsController::STATSD_SSO_CALLBACK_FAILED_KEY, 0, tags: ["error:#{known_error[:tag]}"])
 end
-StatsD.increment(V0::SessionsController::STATSD_SSO_CALLBACK_FAILED_KEY, 0, tags: ['error:multiple'])
-StatsD.increment(V0::SessionsController::STATSD_SSO_CALLBACK_FAILED_KEY, 0, tags: ['error:unknown'])
-StatsD.increment(V0::SessionsController::STATSD_SSO_CALLBACK_FAILED_KEY, 0, tags: ['error:validations_failed'])
 
 %w[success failure].each do |s|
-  StatsD.increment(V0::SessionsController::STATSD_SSO_CALLBACK_KEY, 0, tags: ["status:#{s}", 'context:unknown'])
-  SAML::User::CONTEXT_MAP.each_value do |ctx|
-    StatsD.increment(V0::SessionsController::STATSD_SSO_CALLBACK_KEY, 0, tags: ["status:#{s}", "context:#{ctx}"])
+  (SAML::User::AUTHN_CONTEXTS.keys + [SAML::User::UNKNOWN_AUTHN_CONTEXT]).each do |ctx|
+    StatsD.increment(
+      V0::SessionsController::STATSD_SSO_CALLBACK_KEY,
+      0,
+      tags: ["status:#{s}", "context:#{ctx}"]
+    )
   end
 end
 

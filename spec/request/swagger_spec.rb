@@ -8,6 +8,7 @@ require 'rx/client'
 require 'support/rx_client_helpers'
 require 'bb/client'
 require 'support/bb_client_helpers'
+require 'support/pagerduty/services/spec_setup'
 
 RSpec.describe 'API doc validations', type: :request do
   context 'json validation' do
@@ -34,37 +35,37 @@ RSpec.describe 'the API documentation', type: %i[apivore request], order: :defin
 
   context 'has valid paths' do
     let(:headers) { { '_headers' => { 'Cookie' => sign_in(mhv_user, nil, true) } } }
-    context 'for authentication' do
-      it 'supports session mhv url' do
-        expect(subject).to validate(:get, '/sessions/mhv/new', 200)
+
+    describe 'backend statuses' do
+      describe '/v0/backend_statuses/{service}' do
+        it 'supports getting backend service status' do
+          expect(subject).to validate(:get, '/v0/backend_statuses/{service}', 200, headers.merge('service' => 'gibs'))
+        end
       end
 
-      it 'supports session dslogon urs' do
-        expect(subject).to validate(:get, '/sessions/dslogon/new', 200)
-      end
+      describe '/v0/backend_statuses' do
+        context 'without a signed in user' do
+          it 'returns a 401' do
+            expect(subject).to validate(:get, '/v0/backend_statuses', 401)
+          end
+        end
 
-      it 'supports session idme url' do
-        expect(subject).to validate(:get, '/sessions/idme/new', 200)
-      end
+        context 'when successful' do
+          include_context 'simulating Redis caching of PagerDuty#get_services'
 
-      it 'supports session mfa url' do
-        expect(subject).to validate(:get, '/sessions/mfa/new', 200, headers)
-        expect(subject).to validate(:get, '/sessions/mfa/new', 401)
-      end
+          it 'supports getting external services status data' do
+            expect(subject).to validate(:get, '/v0/backend_statuses', 200, headers)
+          end
+        end
 
-      it 'supports session verify url' do
-        expect(subject).to validate(:get, '/sessions/verify/new', 200, headers)
-        expect(subject).to validate(:get, '/sessions/verify/new', 401)
+        context 'when the PagerDuty API rate limit has been exceeded' do
+          it 'returns a 429 with error details' do
+            VCR.use_cassette('pagerduty/external_services/get_services_429') do
+              expect(subject).to validate(:get, '/v0/backend_statuses', 429, headers)
+            end
+          end
+        end
       end
-
-      it 'supports session slo url' do
-        expect(subject).to validate(:get, '/sessions/slo/new', 200, headers)
-        expect(subject).to validate(:get, '/sessions/slo/new', 401)
-      end
-    end
-
-    it 'supports getting backend service status' do
-      expect(subject).to validate(:get, '/v0/backend_statuses/{service}', 200, headers.merge('service' => 'gibs'))
     end
 
     it 'supports listing in-progress forms' do
@@ -223,6 +224,30 @@ RSpec.describe 'the API documentation', type: %i[apivore request], order: :defin
         )
       end
 
+      it 'supports getting the hca enrollment status' do
+        expect(HealthCareApplication).to receive(:user_icn).and_return('123')
+        expect(HealthCareApplication).to receive(:enrollment_status).with(
+          '123', nil
+        ).and_return(parsed_status: :login_required)
+
+        expect(subject).to validate(
+          :get,
+          '/v0/health_care_applications/enrollment_status',
+          200,
+          '_query_string' => {
+            userAttributes: {
+              veteranFullName: {
+                first: 'First',
+                last: 'last'
+              },
+              veteranDateOfBirth: '1923-01-02',
+              veteranSocialSecurityNumber: '111-11-1234',
+              gender: 'F'
+            }
+          }.to_query
+        )
+      end
+
       it 'supports getting the hca health check' do
         VCR.use_cassette('hca/health_check', match_requests_on: [:body]) do
           expect(subject).to validate(
@@ -233,13 +258,13 @@ RSpec.describe 'the API documentation', type: %i[apivore request], order: :defin
         end
       end
 
-      it 'supports submitting a hca dd214' do
+      it 'supports submitting a hca attachment' do
         expect(subject).to validate(
           :post,
-          '/v0/hca_dd214_attachments',
+          '/v0/hca_attachments',
           200,
           '_data' => {
-            'hca_dd214_attachment' => {
+            'hca_attachment' => {
               file_data: Rack::Test::UploadedFile.new(
                 Rails.root.join('spec', 'fixtures', 'pdf_fill', 'extras.pdf'), 'application/pdf'
               )
@@ -367,6 +392,12 @@ RSpec.describe 'the API documentation', type: %i[apivore request], order: :defin
         )
       end
 
+      let(:form526v2) do
+        File.read(
+          Rails.root.join('spec', 'support', 'disability_compensation_form', 'all_claims_fe_submission.json')
+        )
+      end
+
       it 'supports getting rated disabilities' do
         expect(subject).to validate(:get, '/v0/disability_compensation_form/rated_disabilities', 401)
         VCR.use_cassette('evss/disability_compensation_form/rated_disabilities') do
@@ -404,6 +435,28 @@ RSpec.describe 'the API documentation', type: %i[apivore request], order: :defin
                   200,
                   headers.update(
                     '_data' => form526
+                  )
+                )
+              end
+            end
+          end
+        end
+      end
+
+      it 'supports submitting the v2 form' do
+        allow(EVSS::DisabilityCompensationForm::SubmitForm526)
+          .to receive(:perform_async).and_return('57ca1a62c75e551fd2051ae9')
+        expect(subject).to validate(:post, '/v0/disability_compensation_form/submit_all_claim', 401)
+        VCR.use_cassette('evss/ppiu/payment_information') do
+          VCR.use_cassette('evss/intent_to_file/active_compensation') do
+            VCR.use_cassette('emis/get_military_service_episodes/valid', allow_playback_repeats: true) do
+              VCR.use_cassette('evss/disability_compensation_form/submit_form_v2') do
+                expect(subject).to validate(
+                  :post,
+                  '/v0/disability_compensation_form/submit_all_claim',
+                  200,
+                  headers.update(
+                    '_data' => form526v2
                   )
                 )
               end
@@ -476,23 +529,17 @@ RSpec.describe 'the API documentation', type: %i[apivore request], order: :defin
     end
 
     describe 'supporting evidence upload' do
-      let(:form_attachment) do
-        {
-          id: 272,
-          created_at: Time.now.utc,
-          updated_at: Time.now.utc,
-          guid: '1e4d33f4-2bf7-44b9-ba2c-121d9a794d87',
-          ecrypted_file_data: 'WVTedVIfvkqLePMMGNUrrtRvLPXiURrJS8ZuEvQ//Lim',
-          encrypted_file_data: 'ayqrfIpruCPtLGnA'
-        }
-      end
-
       it 'supports uploading a file' do
-        allow_any_instance_of(FormAttachmentCreate)
-          .to receive(:create)
-          .and_return(form_attachment)
-        expect(subject).to validate(:post, '/v0/upload_supporting_evidence', 200,
-                                    'supporting_evidence_attachment' => { 'file_data' => 'foo.pdf' })
+        expect(subject).to validate(
+          :post,
+          '/v0/upload_supporting_evidence',
+          200,
+          '_data' => {
+            'supporting_evidence_attachment' => {
+              'file_data' => fixture_file_upload('spec/fixtures/pdf_fill/extras.pdf')
+            }
+          }
+        )
       end
 
       it 'returns a 500 if no attachment data is given' do
@@ -863,7 +910,7 @@ RSpec.describe 'the API documentation', type: %i[apivore request], order: :defin
                   headers.merge('_data' => {
                                   'from_date' => 10.years.ago.iso8601.to_json,
                                   'to_date' => Time.now.iso8601.to_json,
-                                  'data_classes' => BB::GenerateReportRequestForm::ELIGIBLE_DATA_CLASSES.to_json
+                                  'data_classes' => BB::GenerateReportRequestForm::ELIGIBLE_DATA_CLASSES
                                 })
                 )
               end
@@ -1072,6 +1119,15 @@ RSpec.describe 'the API documentation', type: %i[apivore request], order: :defin
     it 'supports getting the user data' do
       expect(subject).to validate(:get, '/v0/user', 200, headers)
       expect(subject).to validate(:get, '/v0/user', 401)
+    end
+
+    context '/v0/user endpoint with some external service errors' do
+      let(:user) { build(:user) }
+      let(:headers) { { '_headers' => { 'Cookie' => sign_in(user, nil, true) } } }
+
+      it 'supports getting user with some external errors', skip_mvi: true do
+        expect(subject).to validate(:get, '/v0/user', 296, headers)
+      end
     end
 
     context '#feedback' do

@@ -36,9 +36,7 @@ class User < Common::RedisStore
   attribute :last_signed_in, Common::UTCTime # vaafi attributes
   attribute :mhv_last_signed_in, Common::UTCTime # MHV audit logging
 
-  # identity attributes, some of these will be overridden by MVI.
   delegate :email, to: :identity, allow_nil: true
-  delegate :first_name, to: :identity, allow_nil: true
 
   # This delegated method is called with #account_uuid
   delegate :uuid, to: :account, prefix: true, allow_nil: true
@@ -144,6 +142,10 @@ class User < Common::RedisStore
     mvi.status
   end
 
+  def va_profile_error
+    mvi.error
+  end
+
   # LOA1 no longer just means ID.me LOA1.
   # It could also be DSLogon or MHV NON PREMIUM users who have not yet done ID.me FICAM LOA3.
   # See also lib/saml/user_attributes/dslogon.rb
@@ -184,14 +186,6 @@ class User < Common::RedisStore
       Settings.mhv.facility_range.any? { |range| f.to_i.between?(*range) } ||
         Settings.mhv.facility_specific.include?(f)
     end
-  end
-
-  def can_save_partial_forms?
-    true
-  end
-
-  def can_access_prefill_data?
-    true
   end
 
   def can_access_id_card?

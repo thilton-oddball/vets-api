@@ -22,6 +22,24 @@ module V0
       render(json: result)
     end
 
+    def enrollment_status
+      validate_session
+      loa3 = current_user&.loa3?
+
+      icn =
+        if loa3
+          current_user.icn
+        else
+          HealthCareApplication.user_icn(
+            HealthCareApplication.user_attributes(params[:userAttributes])
+          )
+        end
+
+      raise Common::Exceptions::RecordNotFound, nil if icn.blank?
+
+      render(json: HealthCareApplication.enrollment_status(icn, loa3))
+    end
+
     def healthcheck
       render(json: HCA::Service.new.health_check)
     end

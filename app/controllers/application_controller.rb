@@ -20,7 +20,7 @@ class ApplicationController < ActionController::API
   ].freeze
 
   prepend_before_action :block_unknown_hosts, :set_app_info_headers
-  # See Also AuthenticationAndSSOConcerns for more before filters
+  # Also see AuthenticationAndSSOConcerns for more before filters
   skip_before_action :authenticate, only: %i[cors_preflight routing_error]
   before_action :set_tags_and_extra_context
 
@@ -124,8 +124,17 @@ class ApplicationController < ActionController::API
   def tags_context
     {
       controller_name: controller_name,
-      sign_in_method: current_user.present? ? current_user.authn_context || 'idme' : 'not-signed-in'
+      sign_in_method: sign_in_method_for_tag
     }
+  end
+
+  def sign_in_method_for_tag
+    if current_user.present?
+      # account_type is filtered by sentry, becasue in other contexts it refers to a bank account type
+      current_user.identity.sign_in.merge(acct_type: current_user.identity.sign_in[:account_type])
+    else
+      'not-signed-in'
+    end
   end
 
   def set_app_info_headers

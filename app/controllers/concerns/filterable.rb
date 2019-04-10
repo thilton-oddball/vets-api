@@ -26,4 +26,8 @@ module Filterable
   def valid_filters?
     filter_query.map { |a| a.gsub('filter', '') }.all? { |s| s =~ /\A\[\[.+\]\[.+\]\]=.+\z/ }
   end
+
+  def filter_params
+    params.require(:filter).permit(Prescription.filterable_attributes.merge(Message.filterable_attributes))
+  end
 end

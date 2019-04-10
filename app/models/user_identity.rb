@@ -4,6 +4,8 @@ require 'common/models/base'
 require 'common/models/redis_store'
 require 'saml/user'
 
+# Stores attributes used to identify a user. Serves as a set of inputs to an MVI lookup. Also serves
+# as the receiver of identity attributes received from alternative sources during the SSO flow.
 class UserIdentity < Common::RedisStore
   redis_store REDIS_CONFIG['user_identity_store']['namespace']
   redis_ttl REDIS_CONFIG['user_identity_store']['each_ttl']
@@ -26,7 +28,7 @@ class UserIdentity < Common::RedisStore
   attribute :mhv_correlation_id # this is the cannonical version of MHV Correlation ID, provided by MHV sign-in users
   attribute :mhv_account_type # this is only available for MHV sign-in users
   attribute :dslogon_edipi # this is only available for dslogon users
-  attribute :sign_in, Hash, default: :default_sign_in # original sign_in (see sso_service#mergable_identity_attributes)
+  attribute :sign_in, Hash # original sign_in (see sso_service#mergable_identity_attributes)
 
   validates :uuid, presence: true
   validates :email, presence: true
@@ -37,9 +39,5 @@ class UserIdentity < Common::RedisStore
 
   def loa_highest_present
     errors.add(:loa, 'loa[:highest] is not present!') if loa[:highest].blank?
-  end
-
-  def default_sign_in
-    { service_name: (authn_context || 'idme') }
   end
 end

@@ -7,16 +7,22 @@ class SpoolSubmissionsReportMailer < ApplicationMailer
     dana.kuykendall@va.gov
     Jennifer.Waltz2@va.gov
     shay.norton@va.gov
-    DONALD.NOBLE2@va.gov
+    Darla.VanNieukerk@va.gov
+  ].freeze
+  STAGING_RECIPIENTS = %w[
+    lihan@adhocteam.us
+    Turner_Desiree@bah.com
+    Delli-Gatti_Michael@bah.com
   ].freeze
 
   def build(report_file)
     url = Reports::Uploader.get_s3_link(report_file)
 
     opt = {}
+
     opt[:to] =
       if FeatureFlipper.staging_email?
-        'lihan@adhocteam.us'
+        STAGING_RECIPIENTS.clone
       else
         RECIPIENTS.clone
       end

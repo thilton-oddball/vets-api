@@ -60,6 +60,11 @@ FailedClaimsReport:
   class: EVSS::FailedClaimsReport
   description: "Notify developers about EVSS claims which could not be uploaded"
 
+PreneedsReport:
+  cron: "30 5 * * MON America/New_York"
+  class: Preneeds::SubmissionsReport
+  description: "Notify stakeholders about PreNeed submission stats"
+
 FacilityAccessBulkUpdate:
   cron: "30 4 * * * America/New_York"
   class: Facilities::AccessDataDownload
@@ -115,3 +120,7 @@ DeleteOldTransactionsJob:
 MHV::AccountStatisticsJob:
   cron: "0 */4 * * * America/New_York"
   description: "Log MHV Account Statistics"
+
+ExternalServicesStatusJob:
+  every: '1m'
+  description: "Checks the current status of all external services through PagerDuty's API"

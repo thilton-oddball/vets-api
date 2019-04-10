@@ -57,10 +57,11 @@ Rails.application.routes.draw do
     resource :health_care_applications, only: [:create] do
       collection do
         get(:healthcheck)
+        get(:enrollment_status)
       end
     end
 
-    resource :hca_dd214_attachments, only: :create
+    resource :hca_attachments, only: :create
 
     resources :dependents_applications, only: %i[create show] do
       collection do
@@ -221,7 +222,7 @@ Rails.application.routes.draw do
     get 'profile/mailing_address', to: 'addresses#show'
     put 'profile/mailing_address', to: 'addresses#update'
 
-    resources :backend_statuses, param: :service, only: [:show]
+    resources :backend_statuses, param: :service, only: %i[index show]
 
     resources :apidocs, only: [:index]
 
@@ -242,6 +243,7 @@ Rails.application.routes.draw do
       'profile',
       'dashboard',
       'veteran_id_card',
+      'all_claims',
       FormProfile::EMIS_PREFILL_KEY
     ].each do |feature|
       resource(
@@ -264,6 +266,7 @@ Rails.application.routes.draw do
     mount AppealsApi::Engine, at: '/appeals'
     mount ClaimsApi::Engine, at: '/claims'
     mount VaFacilities::Engine, at: '/va_facilities'
+    mount Veteran::Engine, at: '/veteran'
     mount VeteranVerification::Engine, at: '/veteran_verification'
   end
 

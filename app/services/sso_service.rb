@@ -1,23 +1,21 @@
 # frozen_string_literal: true
 
-require 'saml/auth_fail_handler'
 require 'sentry_logging'
 
 class SSOService
   include SentryLogging
   include ActiveModel::Validations
-  attr_reader :auth_error_code
+
   DEFAULT_ERROR_MESSAGE = 'Default generic identity provider error'
-  AUTH_ERRORS = { 'Subject did not consent to attribute release' => '001',
-                  'Current time is on or after NotOnOrAfter condition' => '002',
-                  'Current time is earlier than NotBefore condition' => '003',
-                  # 004, 005 and 006 are user persistence errors
-                  DEFAULT_ERROR_MESSAGE => '007' }.freeze
+  ERRORS = { validations_failed: { code: '004',
+                                   tag: :validations_failed,
+                                   short_message: 'on User/Session Validation',
+                                   level: :error } }.freeze
+
   def initialize(response)
-    raise 'SAML Response is not a OneLogin::RubySaml::Response' unless response.is_a?(OneLogin::RubySaml::Response)
+    raise 'SAML Response is not a SAML::Response' unless response.is_a?(SAML::Response)
     @saml_response = response
-    Raven.tags_context(sso_authn_context: context_key)
-    if saml_response.is_valid?(true)
+    if saml_response.valid?
       @saml_attributes = SAML::User.new(@saml_response)
       @existing_user = User.find(saml_attributes.user_attributes.uuid)
       @new_user_identity = UserIdentity.new(saml_attributes.to_hash)
@@ -27,7 +25,7 @@ class SSOService
   end
 
   attr_reader :new_session, :new_user, :new_user_identity, :saml_attributes, :saml_response, :existing_user,
-              :failure_instrumentation_tag
+              :failure_instrumentation_tag, :auth_error_code
 
   validate :composite_validations
 
@@ -35,15 +33,6 @@ class SSOService
     existing_user.destroy if new_login?
 
     if valid?
-      if new_login?
-        # FIXME: possibly revisit this. Is there a possibility that different sign-in contexts could get
-        # merged? MHV LOA1 -> IDME LOA3 is ok, DS Logon LOA1 -> IDME LOA3 is ok, everything else is not.
-        # because user, session, user_identity all have the same TTL, this is probably not a problem.
-        mergable_identity_attributes.each do |attribute|
-          new_user_identity.send(attribute + '=', existing_user.identity.send(attribute))
-        end
-      end
-
       return new_session.save && new_user.save && new_user_identity.save
     else
       handle_error_reporting_and_instrumentation
@@ -51,32 +40,15 @@ class SSOService
     end
   end
 
-  def mergable_identity_attributes
-    # We don't want to persist the mhv_account_type because then we would have to change it when we
-    # upgrade the account to 'Premium' and we want to keep UserIdentity pristine, based on the current
-    # signed in session.
-    # Also we want the original sign-in, NOT the one from ID.me LOA3
-    %w[mhv_correlation_id mhv_icn dslogon_edipi sign_in]
-  end
-
   def new_login?
     existing_user.present?
-  end
-
-  def real_authn_context
-    REXML::XPath.first(saml_response.decrypted_document, '//saml:AuthnContextClassRef')&.text
-  end
-
-  def context_key
-    SAML::User.context_key(real_authn_context) || SAML::User::UNKNOWN_CONTEXT
-  rescue StandardError
-    SAML::User::UNKNOWN_CONTEXT
   end
 
   private
 
   def init_new_user(user_identity, existing_user = nil, multifactor_change = false)
-    new_user = User.new(user_identity.attributes)
+    new_user = User.new(uuid: user_identity.attributes[:uuid])
+    new_user.instance_variable_set(:@identity, @new_user_identity)
     if multifactor_change
       new_user.mhv_last_signed_in = existing_user.last_signed_in
       new_user.last_signed_in = existing_user.last_signed_in
@@ -87,7 +59,7 @@ class SSOService
   end
 
   def composite_validations
-    if saml_response.is_valid?
+    if saml_response.valid?
       errors.add(:new_session, :invalid) unless new_session.valid?
       errors.add(:new_user, :invalid) unless new_user.valid?
       errors.add(:new_user_identity, :invalid) unless new_user_identity.valid?
@@ -99,36 +71,23 @@ class SSOService
   end
 
   def handle_error_reporting_and_instrumentation
-    if errors.keys.include?(:base)
-      invalid_saml_response_handler
+    message = 'Login Fail! '
+    if saml_response.normalized_errors.present?
+      error_hash = saml_response.normalized_errors.first
+      error_context = saml_response.normalized_errors
+      message += error_hash[:short_message]
+      message += ' Multiple SAML Errors' if saml_response.normalized_errors.count > 1
     else
-      invalid_persistence_handler
+      error_hash = ERRORS[:validations_failed]
+      error_context = validation_error_context
+      message += error_hash[:short_message]
     end
+    @auth_error_code = error_hash[:code]
+    @failure_instrumentation_tag = "error:#{error_hash[:tag]}"
+    log_message_to_sentry(message, error_hash[:level], error_context)
   end
 
-  def invalid_persistence_handler
-    return if new_session.valid? && new_user.valid? && new_user_identity.valid?
-    @failure_instrumentation_tag = 'error:validations_failed'
-    @auth_error_code = '004' # This could be any of the three failing validation
-    log_message_to_sentry('Login Fail! on User/Session Validation', :error, error_context)
-  end
-
-  # TODO: Eventually some of this needs to just be instrumentation and not a custom sentry error
-  def invalid_saml_response_handler
-    return if saml_response.is_valid?
-    fail_handler = SAML::AuthFailHandler.new(saml_response)
-    @auth_error_code = AUTH_ERRORS[DEFAULT_ERROR_MESSAGE]
-    if fail_handler.errors?
-      @auth_error_code = AUTH_ERRORS[fail_handler.context[:saml_response][:status_message]]
-      @failure_instrumentation_tag = "error:#{fail_handler.error}"
-      log_message_to_sentry(fail_handler.message, fail_handler.level, fail_handler.context)
-    else
-      @failure_instrumentation_tag = 'error:unknown'
-      log_message_to_sentry('Unknown SAML Login Error', :error, error_context)
-    end
-  end
-
-  def error_context
+  def validation_error_context
     {
       uuid: new_user.uuid,
       user:   {
@@ -145,7 +104,6 @@ class SSOService
         authn_context: new_user_identity&.authn_context,
         loa: new_user_identity&.loa
       }
-
     }
   end
 end

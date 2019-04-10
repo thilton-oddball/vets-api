@@ -24,15 +24,14 @@ class Provider < Common::Base
     provider = Provider.new(prov_loc)
     provider.Name = prov_loc['ProviderName']
     provider.IsAcceptingNewPatients = prov_loc['ProviderAcceptingNewPatients']
-    provider.AddressStreet = prov_loc['CareSiteAddress']
+    provider.AddressStreet = prov_loc['CareSiteAddressStreet']
+    provider.AddressCity = prov_loc['CareSiteAddressCity']
+    provider.AddressStateProvince = prov_loc['CareSiteAddressState']
+    provider.AddressPostalCode = prov_loc['CareSiteAddressZipCode']
     provider
   end
 
   def add_details(prov_info)
-    self.AddressStreet = prov_info['AddressStreet'] unless prov_info['AddressStreet'].nil?
-    self.AddressCity = prov_info['AddressCity']
-    self.AddressStateProvince = prov_info['AddressStateProvince']
-    self.AddressPostalCode = prov_info['AddressPostalCode']
     self.Email = prov_info['Email']
     self.MainPhone = prov_info['MainPhone']
     self.OrganizationFax = prov_info['OrganizationFax']
@@ -40,12 +39,12 @@ class Provider < Common::Base
     self.ProviderSpecialties = prov_info['ProviderSpecialties']
   end
 
-  def add_caresite(caresite)
-    self.AddressStreet = caresite['Street']
-    self.AddressCity = caresite['City']
-    self.AddressPostalCode = caresite['ZipCode']
-    self.AddressStateProvince = caresite['State']
-    self.Longitude = caresite['Longitude']
-    self.Latitude = caresite['Latitude']
+  def add_provider_service(provider_service)
+    self.AddressStreet = provider_service['CareSiteAddressStreet']
+    self.AddressCity = provider_service['CareSiteAddressCity']
+    self.AddressPostalCode = provider_service['CareSiteAddressZipCode']
+    self.AddressStateProvince = provider_service['CareSiteAddressState']
+    self.Longitude = provider_service['Longitude']
+    self.Latitude = provider_service['Latitude']
   end
 end
