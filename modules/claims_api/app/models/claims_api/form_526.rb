@@ -1,9 +1,24 @@
 # frozen_string_literal: true
 
+require 'claims_api/concerns/form_validatable'
+require 'claims_api/form_field'
+
 module ClaimsApi
   class Form526
     include ActiveModel::Validations
     include ActiveModel::Conversion
+
+    FORM_FIELDS = [
+      ClaimsApi::FormFields::Veteran,
+      ClaimsApi::FormFields::ServiceInformation,
+      ClaimsApi::FormFields::Disabilities,
+      ClaimsApi::FormFields::DirectDeposit,
+      ClaimsApi::FormFields::ServicePay,
+      ClaimsApi::FormFields::Treatments,
+      ClaimsApi::FormField.new(key: :applicationExpirationDate, required: true)
+    ].freeze
+
+    include ClaimsApi::FormValidatable
     extend ActiveModel::Naming
 
     REQUIRED_FIELDS = %i[
