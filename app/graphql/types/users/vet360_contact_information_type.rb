@@ -11,7 +11,7 @@ module Types
       field :work_phone, Types::Users::PhoneType, null: true
       field :temporary_phone, Types::Users::PhoneType, null: true
       field :fax_number, Types::Users::PhoneType, null: true
-      field :errors, Types::ErrorType, null: true
+      field :errors, Types::Errors::StandardType, null: true
 
       def email
         person&.email

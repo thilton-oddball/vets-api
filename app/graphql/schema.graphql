@@ -1,6 +1,6 @@
 type Account {
   accountUuid: String
-  errors: Error
+  errors: Standard
 }
 
 type Address {
@@ -39,11 +39,6 @@ type Email {
   transactionId: String
   updatedAt: String
   vet360Id: String
-}
-
-type Error {
-  message: String
-  type: String
 }
 
 type Loa {
@@ -116,9 +111,22 @@ type SignIn {
   serviceName: String
 }
 
+type Standard {
+  message: String
+  type: String
+}
+
+type UserExternalService {
+  description: String
+  endTime: String
+  externalService: String!
+  startTime: String!
+  status: String
+}
+
 type VaProfile {
   birthDate: String
-  errors: Error
+  errors: UserExternalService
   familyName: String
   gender: String
   givenNames: [String!]
@@ -127,7 +135,7 @@ type VaProfile {
 
 type Vet360ContactInformation {
   email: Email
-  errors: Error
+  errors: Standard
   faxNumber: Phone
   homePhone: Phone
   mailingAddress: Address

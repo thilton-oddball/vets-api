@@ -7,7 +7,7 @@ module Types
     #
     class AccountType < Types::BaseObject
       field :account_uuid, String, null: true
-      field :errors, Types::ErrorType, null: true
+      field :errors, Types::Errors::StandardType, null: true
 
       def account_uuid
         account&.uuid
