@@ -8,7 +8,7 @@ module Types
       field :family_name, String, null: true
       field :gender, String, null: true
       field :given_names, [String], null: true
-      field :errors, Types::ErrorType, null: true
+      field :errors, Types::Errors::UserExternalServiceType, null: true
 
       def status
         object.dig(:status)
@@ -31,7 +31,7 @@ module Types
       end
 
       def errors
-        error_details object.dig(:errors)
+        object.dig(:errors).presence
       end
 
       private

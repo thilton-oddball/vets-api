@@ -10,27 +10,28 @@ module Queries
       type Types::Users::VaProfileType, null: false
 
       def resolve
-        current_user = context[:current_user]
-        status       = current_user.va_profile_status
-        va_profile   = va_profile_for(current_user, status)
+        user   = context[:current_user]
+        status = user.va_profile_status
 
-        va_profile_response status, va_profile
-      rescue StandardError => e
-        va_profile_response status, va_profile, e
+        if status == RESPONSE_STATUS[:ok]
+          va_profile_response(status, va_profile: user.va_profile)
+        else
+          va_profile_response(status, errors: error(user))
+        end
       end
 
       private
 
-      def va_profile_for(current_user, status)
-        status == RESPONSE_STATUS[:ok] ? current_user.va_profile : nil
-      end
-
-      def va_profile_response(status, va_profile = nil, errors = nil)
+      def va_profile_response(status, va_profile: nil, errors: nil)
         {
           status: status,
           va_profile: va_profile,
           errors: errors
         }
+      end
+
+      def error(user)
+        ::Users::ExceptionHandler.new(user.va_profile_error, 'MVI').serialize_error
       end
     end
   end

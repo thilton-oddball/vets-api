@@ -14,8 +14,11 @@ RSpec.describe Queries::Users::VaProfileQuery do
           gender
           givenNames
           errors {
-            type
-            message
+            externalService
+            startTime
+            endTime
+            description
+            status
           }
         }
       }
@@ -48,41 +51,29 @@ RSpec.describe Queries::Users::VaProfileQuery do
   end
 
   context 'with a non-OK status' do
-    let(:server_error) { 'SERVER_ERROR' }
-
-    before do
-      allow(user).to receive(:va_profile_status).and_return(server_error)
-    end
-
+    let(:user) { build :user }
     let(:response) { VetsAPISchema.execute(query, context: { current_user: user }) }
     let(:results) { response.dig('data', 'userVaProfile') }
 
+    it 'returns error details', :aggregate_failures do
+      response = VetsAPISchema.execute(query, context: { current_user: user })
+      errors   = results.dig('errors')
+
+      expect(errors.dig('status')).to eq '401'
+      expect(errors.dig('externalService')).to eq 'MVI'
+      expect(errors.dig('startTime')).to be_present
+      expect(errors.dig('endTime')).to be_nil
+      expect(errors.dig('description')).to include 'Not authorized'
+    end
+
     it 'returns the non-OK status' do
-      expect(results['status']).to eq server_error
+      expect(results['status']).to eq 'NOT_AUTHORIZED'
     end
 
     it 'sets all of the va_profile fields to nil', :aggregate_failures do
       fields.each do |field|
         expect(results[field]).to be_nil
       end
-    end
-
-    it 'returns no errors' do
-      expect(results['errors']).to be_nil
-    end
-  end
-
-  context 'with an error' do
-    before do
-      allow(user).to receive(:va_profile).and_raise(StandardError, 'some error')
-    end
-
-    it 'returns error details', :aggregate_failures do
-      response = VetsAPISchema.execute(query, context: { current_user: user })
-      errors   = response.dig('data', 'userVaProfile', 'errors')
-
-      expect(errors.dig('type')).to eq 'StandardError'
-      expect(errors.dig('message')).to eq 'some error'
     end
   end
 end
