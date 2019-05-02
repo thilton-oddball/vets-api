@@ -23,6 +23,10 @@ RSpec.describe Queries::Users::ProfileQuery do
           multifactor
           verified
           authnContext
+          signIn {
+            accountType
+            serviceName
+          }
         }
       }
     GRAPHQL
@@ -40,7 +44,6 @@ RSpec.describe Queries::Users::ProfileQuery do
       gender
       zip
       multifactor
-      authnContext
     ]
   end
 
@@ -55,6 +58,13 @@ RSpec.describe Queries::Users::ProfileQuery do
 
     expect(loa['current']).to eq user.loa.dig :current
     expect(loa['highest']).to eq user.loa.dig :highest
+  end
+
+  it 'returns the users sign_in details', :aggregate_failures do
+    sign_in = results.dig('signIn')
+
+    expect(sign_in['accountType']).to eq user.identity.sign_in.dig :account_type
+    expect(sign_in['serviceName']).to eq user.identity.sign_in.dig :service_name
   end
 
   it 'returns the users last_signed_in datetime' do

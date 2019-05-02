@@ -17,10 +17,19 @@ module Types
       field :loa, Types::Users::LoaType, null: false
       field :multifactor, Boolean, null: true
       field :verified, Boolean, null: true
+      field :sign_in, Types::Users::SignInType, null: false
       field :authn_context, String, null: true
 
       def verified
         object.loa3?
+      end
+
+      def sign_in
+        object.identity.sign_in
+      end
+
+      def authn_context
+        object.authn_context.scan(/(myhealthevet|dslogon)/).flatten[0]
       end
     end
   end

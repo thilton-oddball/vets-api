@@ -84,6 +84,7 @@ type Profile {
   loa: Loa!
   middleName: String
   multifactor: Boolean
+  signIn: SignIn!
   verified: Boolean
   zip: String
 }
@@ -108,6 +109,11 @@ type Query {
   The user's Vet360 contact information details
   """
   userVet360ContactInformation: Vet360ContactInformation!
+}
+
+type SignIn {
+  accountType: String
+  serviceName: String
 }
 
 type VaProfile {
