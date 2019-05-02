@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe do
+RSpec.describe 'schema.graphql' do
   it 'has an up-to-date schema.graphql file' do
     current_defn  = VetsAPISchema.to_definition
     printout_defn = File.read(Rails.root.join('app/graphql/schema.graphql'))

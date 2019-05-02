@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class BaseObject < GraphQL::Schema::Object
     def error_details(errors)
