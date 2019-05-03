@@ -12,9 +12,9 @@ module Queries
         person = user.vet360_contact_info
 
         raise_exception_if_no_person!(person)
-        vet360_response person
+        vet360_response(person)
       rescue StandardError => e
-        vet360_response person, error(e)
+        vet360_response(person, error(e))
       end
 
       private

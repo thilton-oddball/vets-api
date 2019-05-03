@@ -104,6 +104,11 @@ type Query {
   The user's Vet360 contact information details
   """
   userVet360ContactInformation: Vet360ContactInformation!
+
+  """
+  The user's veteran status details
+  """
+  userVeteranStatus: VeteranStatus!
 }
 
 type SignIn {
@@ -143,4 +148,36 @@ type Vet360ContactInformation {
   residentialAddress: Address
   temporaryPhone: Phone
   workPhone: Phone
+}
+
+type VeteranStatus {
+  errors: UserExternalService
+  isVeteran: Boolean
+  servedInMilitary: Boolean
+  status: VeteranStatusEnum
+}
+
+"""
+The enum of potential veteran statuses
+"""
+enum VeteranStatusEnum {
+  """
+  Not authorized to check status per EMIS
+  """
+  NOT_AUTHORIZED
+
+  """
+  Could not find information on the veteran status in EMIS
+  """
+  NOT_FOUND
+
+  """
+  No issues when checking veteran status in EMIS
+  """
+  OK
+
+  """
+  Experienced a server error when checking the veteran status through EMIS
+  """
+  SERVER_ERROR
 }

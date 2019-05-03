@@ -64,6 +64,10 @@ Metrics/LineLength:
 Rails:
   Enabled: true
 
+Rails/FilePath:
+  Exclude:
+    - 'spec/graphql/app_schema_spec.rb'
+
 Rails/Output:
   Exclude:
     - 'lib/tasks/**/*'

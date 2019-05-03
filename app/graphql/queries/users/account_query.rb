@@ -11,9 +11,9 @@ module Queries
         user    = context[:current_user]
         account = user.account
 
-        account_response account
+        account_response(account)
       rescue StandardError => e
-        account_response account, e
+        account_response(account, e)
       end
 
       private
