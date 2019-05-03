@@ -8,8 +8,8 @@ module Queries
       type Types::Users::AccountType, null: false
 
       def resolve
-        current_user = context[:current_user]
-        account      = current_user.account
+        user    = context[:current_user]
+        account = user.account
 
         account_response account
       rescue StandardError => e

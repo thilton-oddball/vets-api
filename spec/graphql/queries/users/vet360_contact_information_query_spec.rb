@@ -22,8 +22,11 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
               vet360Id
             }
             errors {
-              type
-              message
+              externalService
+              startTime
+              endTime
+              description
+              status
             }
           }
         }
@@ -53,7 +56,7 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     end
 
     it 'returns no errors' do
-      expect(response.dig('data', 'errors')).to be_nil
+      expect(results.dig('errors')).to be_nil
     end
   end
 
@@ -88,8 +91,11 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
               zipCodeSuffix
             }
             errors {
-              type
-              message
+              externalService
+              startTime
+              endTime
+              description
+              status
             }
           }
         }
@@ -126,7 +132,7 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     end
 
     it 'returns no errors' do
-      expect(response.dig('data', 'errors')).to be_nil
+      expect(results.dig('errors')).to be_nil
     end
   end
 
@@ -154,8 +160,11 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
               effectiveStartDate
             }
             errors {
-              type
-              message
+              externalService
+              startTime
+              endTime
+              description
+              status
             }
           }
         }
@@ -191,7 +200,7 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     end
 
     it 'returns no errors' do
-      expect(response.dig('data', 'errors')).to be_nil
+      expect(results.dig('errors')).to be_nil
     end
   end
 
@@ -225,8 +234,11 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
               phoneNumber
             }
             errors {
-              type
-              message
+              externalService
+              startTime
+              endTime
+              description
+              status
             }
           }
         }
@@ -255,11 +267,12 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     end
 
     it 'returns no errors' do
-      expect(response.dig('data', 'errors')).to be_nil
+      expect(results.dig('errors')).to be_nil
     end
   end
 
-  context 'with an error' do
+  context 'with an loa1 user' do
+    let(:user) { build(:user, :loa1) }
     let(:query) do
       <<-GRAPHQL
         query {
@@ -268,8 +281,51 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
               emailAddress
             }
             errors {
-              type
-              message
+              externalService
+              startTime
+              endTime
+              description
+              status
+            }
+          }
+        }
+      GRAPHQL
+    end
+
+    let(:response) { VetsAPISchema.execute(query, context: { current_user: user }) }
+    let(:results) { response.dig('data', 'userVet360ContactInformation') }
+
+    it 'returns error details', :aggregate_failures do
+      errors = results.dig('errors')
+
+      expect(errors.dig('status')).to eq '400'
+      expect(errors.dig('externalService')).to eq 'Vet360'
+      expect(errors.dig('startTime')).to be_present
+      expect(errors.dig('endTime')).to be_nil
+      expect(errors.dig('description')).to include 'The Vet360 id could not be found'
+    end
+
+    it 'sets all of the requested email field to nil' do
+      expect(results['email']).to be_nil
+    end
+  end
+
+  context 'with an error' do
+    let(:message) { 'the server responded with status 503' }
+    let(:error_body) { { 'status' => 'some service unavailable status' } }
+    let(:query) do
+      <<-GRAPHQL
+        query {
+          userVet360ContactInformation {
+            email {
+              emailAddress
+            }
+            errors {
+              externalService
+              startTime
+              endTime
+              description
+              status
             }
           }
         }
@@ -277,15 +333,26 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     end
 
     before do
-      allow(user).to receive(:vet360_contact_info).and_raise(StandardError, 'some error')
+      allow_any_instance_of(User).to receive(:vet360_contact_info).and_raise(
+        Common::Client::Errors::ClientError.new(message, 503, error_body)
+      )
     end
 
-    it 'returns error details', :aggregate_failures do
-      response = VetsAPISchema.execute(query, context: { current_user: user })
-      errors   = response.dig('data', 'userVet360ContactInformation', 'errors')
+    let(:response) { VetsAPISchema.execute(query, context: { current_user: user }) }
+    let(:results) { response.dig('data', 'userVet360ContactInformation') }
 
-      expect(errors.dig('type')).to eq 'StandardError'
-      expect(errors.dig('message')).to eq 'some error'
+    it 'returns error details', :aggregate_failures do
+      errors = results.dig('errors')
+
+      expect(errors.dig('status')).to eq '503'
+      expect(errors.dig('externalService')).to eq 'Vet360'
+      expect(errors.dig('startTime')).to be_present
+      expect(errors.dig('endTime')).to be_nil
+      expect(errors.dig('description')).to include 'Common::Client::Errors::ClientError'
+    end
+
+    it 'sets all of the requested email field to nil' do
+      expect(results['email']).to be_nil
     end
   end
 end

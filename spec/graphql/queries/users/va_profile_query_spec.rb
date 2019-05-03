@@ -47,7 +47,7 @@ RSpec.describe Queries::Users::VaProfileQuery do
   end
 
   it 'returns no errors' do
-    expect(response.dig('data', 'errors')).to be_nil
+    expect(results.dig('errors')).to be_nil
   end
 
   context 'with a non-OK status' do
@@ -56,8 +56,7 @@ RSpec.describe Queries::Users::VaProfileQuery do
     let(:results) { response.dig('data', 'userVaProfile') }
 
     it 'returns error details', :aggregate_failures do
-      response = VetsAPISchema.execute(query, context: { current_user: user })
-      errors   = results.dig('errors')
+      errors = results.dig('errors')
 
       expect(errors.dig('status')).to eq '401'
       expect(errors.dig('externalService')).to eq 'MVI'

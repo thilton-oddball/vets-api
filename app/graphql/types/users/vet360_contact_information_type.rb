@@ -11,7 +11,7 @@ module Types
       field :work_phone, Types::Users::PhoneType, null: true
       field :temporary_phone, Types::Users::PhoneType, null: true
       field :fax_number, Types::Users::PhoneType, null: true
-      field :errors, Types::Errors::StandardType, null: true
+      field :errors, Types::Errors::UserExternalServiceType, null: true
 
       def email
         person&.email
@@ -46,7 +46,7 @@ module Types
       end
 
       def errors
-        error_details object.dig(:errors)
+        object.dig(:errors).presence
       end
 
       private

@@ -135,7 +135,7 @@ type VaProfile {
 
 type Vet360ContactInformation {
   email: Email
-  errors: Standard
+  errors: UserExternalService
   faxNumber: Phone
   homePhone: Phone
   mailingAddress: Address
