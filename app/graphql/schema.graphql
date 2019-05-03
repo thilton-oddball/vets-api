@@ -96,6 +96,11 @@ type Query {
   userProfile: Profile!
 
   """
+  The list of services available to the user
+  """
+  userServices: Services!
+
+  """
   The user's VA Profile details
   """
   userVaProfile: VaProfile!
@@ -109,6 +114,11 @@ type Query {
   The user's veteran status details
   """
   userVeteranStatus: VeteranStatus!
+}
+
+type Services {
+  errors: Standard
+  services: [String!]!
 }
 
 type SignIn {

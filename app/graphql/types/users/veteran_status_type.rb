@@ -12,9 +12,11 @@ module Types
         veteran_status.dig(:status)
       end
 
+      # rubocop:disable Naming/PredicateName
       def is_veteran
         veteran_status.dig(:is_veteran)
       end
+      # rubocop:enable Naming/PredicateName
 
       def served_in_military
         veteran_status.dig(:served_in_military)
