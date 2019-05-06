@@ -10,10 +10,6 @@ RSpec.describe Queries::Users::AccountQuery do
       query {
         userAccount {
           accountUuid
-          errors {
-            type
-            message
-          }
         }
       }
     GRAPHQL
@@ -24,23 +20,5 @@ RSpec.describe Queries::Users::AccountQuery do
 
   it 'returns the users#account_uuid' do
     expect(results.dig('accountUuid')).to eq account_uuid
-  end
-
-  it 'returns no errors' do
-    expect(response.dig('data', 'errors')).to be_nil
-  end
-
-  context 'with an error' do
-    before do
-      allow(user).to receive(:account).and_raise(StandardError, 'some error')
-    end
-
-    it 'returns error details', :aggregate_failures do
-      response = VetsAPISchema.execute(query, context: { current_user: user })
-      errors   = response.dig('data', 'userAccount', 'errors')
-
-      expect(errors.dig('type')).to eq 'StandardError'
-      expect(errors.dig('message')).to eq 'some error'
-    end
   end
 end

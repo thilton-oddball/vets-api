@@ -1,6 +1,5 @@
 type Account {
   accountUuid: String
-  errors: Standard
 }
 
 type Address {
@@ -104,7 +103,7 @@ type Query {
   userAccount: Account!
 
   """
-  The list of in progres forms available to the user
+  The list of in progress forms available to the user
   """
   userInProgressForms: [InProgressForm!]!
 
@@ -121,7 +120,7 @@ type Query {
   """
   The list of services available to the user
   """
-  userServices: Services!
+  userServices: [String!]!
 
   """
   The user's VA Profile details
@@ -139,19 +138,9 @@ type Query {
   userVeteranStatus: VeteranStatus!
 }
 
-type Services {
-  errors: Standard
-  services: [String!]!
-}
-
 type SignIn {
   accountType: String
   serviceName: String
-}
-
-type Standard {
-  message: String
-  type: String
 }
 
 type UserExternalService {

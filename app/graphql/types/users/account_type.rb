@@ -7,20 +7,9 @@ module Types
     #
     class AccountType < Types::BaseObject
       field :account_uuid, String, null: true
-      field :errors, Types::Errors::StandardType, null: true
 
       def account_uuid
-        account&.uuid
-      end
-
-      def errors
-        error_details object.dig(:errors)
-      end
-
-      private
-
-      def account
-        object.dig(:account)
+        object&.uuid
       end
     end
   end
