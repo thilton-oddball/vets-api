@@ -41,6 +41,19 @@ type Email {
   vet360Id: String
 }
 
+type InProgressForm {
+  form: String
+  lastUpdated: Int
+  metadata: InProgressFormMetadata
+}
+
+type InProgressFormMetadata {
+  expiresAt: Int
+  lastUpdated: Int
+  returnUrl: String
+  version: Int
+}
+
 type Loa {
   current: Int!
   highest: Int!
@@ -89,6 +102,16 @@ type Query {
   The user's Account details
   """
   userAccount: Account!
+
+  """
+  The list of in progres forms available to the user
+  """
+  userInProgressForms: [InProgressForm!]!
+
+  """
+  The user's available prefills
+  """
+  userPrefillsAvailable: [String!]
 
   """
   The user's profile details

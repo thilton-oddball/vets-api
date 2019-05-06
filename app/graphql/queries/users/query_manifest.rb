@@ -12,6 +12,7 @@ module Queries
 
       included do
         field :user_account, resolver: Queries::Users::AccountQuery
+        field :user_in_progress_forms, resolver: Queries::Users::InProgressFormsQuery
         field :user_prefills_available, resolver: Queries::Users::PrefillsAvailableQuery
         field :user_profile, resolver: Queries::Users::ProfileQuery
         field :user_services, resolver: Queries::Users::ServicesQuery
