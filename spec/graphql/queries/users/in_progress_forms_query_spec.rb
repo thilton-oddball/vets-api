@@ -34,7 +34,7 @@ RSpec.describe Queries::Users::InProgressFormsQuery do
     end
 
     it 'returns the expected metadata' do
-      metadata = first_form.dig('metadata').transform_keys { |key| key.underscore }
+      metadata = first_form.dig('metadata').transform_keys(&:underscore)
 
       expect(metadata).to eq in_progress_form.metadata
     end

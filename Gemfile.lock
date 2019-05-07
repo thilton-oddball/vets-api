@@ -733,4 +733,5 @@ DEPENDENCIES
   yard
   zero_downtime_migrations
 
+BUNDLED WITH
    1.17.3

@@ -11,13 +11,8 @@ module Queries
 
       def resolve
         user = context[:current_user]
-        veteran_status = {
-          status: RESPONSE_STATUS[:ok],
-          is_veteran: user.veteran?,
-          served_in_military: user.served_in_military?
-        }
 
-        veteran_status_response(veteran_status: veteran_status)
+        veteran_status_response(veteran_status: veteran_status_for(user))
       rescue StandardError => e
         veteran_status_response(errors: error(e))
       end
@@ -28,6 +23,14 @@ module Queries
         {
           veteran_status: veteran_status,
           errors: errors
+        }
+      end
+
+      def veteran_status_for(user)
+        {
+          status: RESPONSE_STATUS[:ok],
+          is_veteran: user.veteran?,
+          served_in_military: user.served_in_military?
         }
       end
 
