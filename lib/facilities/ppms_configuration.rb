@@ -35,7 +35,7 @@ module Facilities
         # conn.request(:curl, ::Logger.new(STDOUT), :warn) unless Rails.env.production?
         # conn.response(:logger, ::Logger.new(STDOUT), bodies: true) unless Rails.env.production?
 
-        conn.request :logger
+        conn.response :logger
 
         conn.response :raise_error, error_prefix: service_name
         conn.response :ppms_parser
