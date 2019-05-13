@@ -8,11 +8,13 @@ RSpec.describe Queries::Users::VaProfileQuery do
     <<-GRAPHQL
       query {
         userVaProfile {
-          status
-          birthDate
-          familyName
-          gender
-          givenNames
+          vaProfile {
+            status
+            birthDate
+            familyName
+            gender
+            givenNames
+          }
           errors {
             externalService
             startTime
@@ -37,12 +39,12 @@ RSpec.describe Queries::Users::VaProfileQuery do
   end
 
   it 'returns a status of OK' do
-    expect(results['status']).to eq 'OK'
+    expect(results.dig('vaProfile', 'status')).to eq 'OK'
   end
 
   it 'returns the expected VA profile data', :aggregate_failures do
     fields.each do |field|
-      expect(results[field]).to eq user.va_profile.send(field.underscore)
+      expect(results.dig('vaProfile', field)).to eq user.va_profile.send(field.underscore)
     end
   end
 
@@ -56,17 +58,17 @@ RSpec.describe Queries::Users::VaProfileQuery do
     let(:results) { response.dig('data', 'userVaProfile') }
 
     it 'returns error details', :aggregate_failures do
-      errors = results.dig('errors')
+      error = results.dig('errors')
 
-      expect(errors.dig('status')).to eq '401'
-      expect(errors.dig('externalService')).to eq 'MVI'
-      expect(errors.dig('startTime')).to be_present
-      expect(errors.dig('endTime')).to be_nil
-      expect(errors.dig('description')).to include 'Not authorized'
+      expect(error.dig('status')).to eq '401'
+      expect(error.dig('externalService')).to eq 'MVI'
+      expect(error.dig('startTime')).to be_present
+      expect(error.dig('endTime')).to be_nil
+      expect(error.dig('description')).to include 'Not authorized'
     end
 
     it 'returns the non-OK status' do
-      expect(results['status']).to eq 'NOT_AUTHORIZED'
+      expect(results.dig('vaProfile', 'status')).to eq 'NOT_AUTHORIZED'
     end
 
     it 'sets all of the va_profile fields to nil', :aggregate_failures do

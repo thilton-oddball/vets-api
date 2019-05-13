@@ -10,16 +10,18 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
       <<-GRAPHQL
         query {
           userVet360ContactInformation {
-            email {
-              createdAt
-              effectiveEndDate
-              effectiveStartDate
-              emailAddress
-              id
-              sourceDate
-              transactionId
-              updatedAt
-              vet360Id
+            person {
+              email {
+                createdAt
+                effectiveEndDate
+                effectiveStartDate
+                emailAddress
+                id
+                sourceDate
+                transactionId
+                updatedAt
+                vet360Id
+              }
             }
             errors {
               externalService
@@ -48,7 +50,7 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     end
 
     it 'returns the expected email data', :aggregate_failures do
-      email = results.dig('email')
+      email = results.dig('person', 'email')
 
       fields.each do |field|
         expect(email[field]).to be_present
@@ -65,30 +67,32 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
       <<-GRAPHQL
         query {
           userVet360ContactInformation {
-            residentialAddress {
-              addressLine1
-              addressLine2
-              addressLine3
-              addressPou
-              addressType
-              city
-              countryName
-              countryCodeIso2
-              countryCodeIso3
-              countyCode
-              countyName
-              createdAt
-              effectiveEndDate
-              effectiveStartDate
-              id
-              internationalPostalCode
-              sourceDate
-              stateCode
-              transactionId
-              updatedAt
-              vet360Id
-              zipCode
-              zipCodeSuffix
+            person {
+              residentialAddress {
+                addressLine1
+                addressLine2
+                addressLine3
+                addressPou
+                addressType
+                city
+                countryName
+                countryCodeIso2
+                countryCodeIso3
+                countyCode
+                countyName
+                createdAt
+                effectiveEndDate
+                effectiveStartDate
+                id
+                internationalPostalCode
+                sourceDate
+                stateCode
+                transactionId
+                updatedAt
+                vet360Id
+                zipCode
+                zipCodeSuffix
+              }
             }
             errors {
               externalService
@@ -124,7 +128,7 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     end
 
     it 'returns the expected address data', :aggregate_failures do
-      residential_address = results.dig('residentialAddress')
+      residential_address = results.dig('person', 'residentialAddress')
 
       fields.each do |field|
         expect(residential_address[field]).to be_present
@@ -141,23 +145,25 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
       <<-GRAPHQL
         query {
           userVet360ContactInformation {
-            mobilePhone {
-              areaCode
-              countryCode
-              createdAt
-              extension
-              id
-              isInternational
-              isVoicemailable
-              phoneNumber
-              phoneType
-              sourceDate
-              transactionId
-              isTty
-              updatedAt
-              vet360Id
-              effectiveEndDate
-              effectiveStartDate
+            person {
+              mobilePhone {
+                areaCode
+                countryCode
+                createdAt
+                extension
+                id
+                isInternational
+                isVoicemailable
+                phoneNumber
+                phoneType
+                sourceDate
+                transactionId
+                isTty
+                updatedAt
+                vet360Id
+                effectiveEndDate
+                effectiveStartDate
+              }
             }
             errors {
               externalService
@@ -192,7 +198,7 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     end
 
     it 'returns the expected phone data', :aggregate_failures do
-      mobile_phone = results.dig('mobilePhone')
+      mobile_phone = results.dig('person', 'mobilePhone')
 
       fields.each do |field|
         expect(mobile_phone[field]).to_not be_nil
@@ -209,29 +215,31 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
       <<-GRAPHQL
         query {
           userVet360ContactInformation {
-            email {
-              emailAddress
-            }
-            residentialAddress {
-              addressLine1
-            }
-            mailingAddress {
-              addressLine1
-            }
-            mobilePhone {
-              phoneNumber
-            }
-            homePhone {
-              phoneNumber
-            }
-            workPhone {
-              phoneNumber
-            }
-            temporaryPhone {
-              phoneNumber
-            }
-            faxNumber {
-              phoneNumber
+            person {
+              email {
+                emailAddress
+              }
+              residentialAddress {
+                addressLine1
+              }
+              mailingAddress {
+                addressLine1
+              }
+              mobilePhone {
+                phoneNumber
+              }
+              homePhone {
+                phoneNumber
+              }
+              workPhone {
+                phoneNumber
+              }
+              temporaryPhone {
+                phoneNumber
+              }
+              faxNumber {
+                phoneNumber
+              }
             }
             errors {
               externalService
@@ -262,7 +270,7 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
 
     it 'returns the expected Vet360 data', :aggregate_failures do
       fields.each do |field|
-        expect(results[field]).to be_present
+        expect(results.dig('person', field)).to be_present
       end
     end
 
@@ -277,8 +285,10 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
       <<-GRAPHQL
         query {
           userVet360ContactInformation {
-            email {
-              emailAddress
+            person {
+              email {
+                emailAddress
+              }
             }
             errors {
               externalService
@@ -296,17 +306,17 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     let(:results) { response.dig('data', 'userVet360ContactInformation') }
 
     it 'returns error details', :aggregate_failures do
-      errors = results.dig('errors')
+      error = results.dig('errors')
 
-      expect(errors.dig('status')).to eq '400'
-      expect(errors.dig('externalService')).to eq 'Vet360'
-      expect(errors.dig('startTime')).to be_present
-      expect(errors.dig('endTime')).to be_nil
-      expect(errors.dig('description')).to include 'The Vet360 id could not be found'
+      expect(error.dig('status')).to eq '400'
+      expect(error.dig('externalService')).to eq 'Vet360'
+      expect(error.dig('startTime')).to be_present
+      expect(error.dig('endTime')).to be_nil
+      expect(error.dig('description')).to include 'The Vet360 id could not be found'
     end
 
     it 'sets all of the requested email field to nil' do
-      expect(results['email']).to be_nil
+      expect(results.dig('person', 'email')).to be_nil
     end
   end
 
@@ -317,8 +327,10 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
       <<-GRAPHQL
         query {
           userVet360ContactInformation {
-            email {
-              emailAddress
+            person {
+              email {
+                emailAddress
+              }
             }
             errors {
               externalService
@@ -342,17 +354,17 @@ RSpec.describe Queries::Users::Vet360ContactInformationQuery do
     let(:results) { response.dig('data', 'userVet360ContactInformation') }
 
     it 'returns error details', :aggregate_failures do
-      errors = results.dig('errors')
+      error = results.dig('errors')
 
-      expect(errors.dig('status')).to eq '503'
-      expect(errors.dig('externalService')).to eq 'Vet360'
-      expect(errors.dig('startTime')).to be_present
-      expect(errors.dig('endTime')).to be_nil
-      expect(errors.dig('description')).to include 'Common::Client::Errors::ClientError'
+      expect(error.dig('status')).to eq '503'
+      expect(error.dig('externalService')).to eq 'Vet360'
+      expect(error.dig('startTime')).to be_present
+      expect(error.dig('endTime')).to be_nil
+      expect(error.dig('description')).to include 'Common::Client::Errors::ClientError'
     end
 
     it 'sets all of the requested email field to nil' do
-      expect(results['email']).to be_nil
+      expect(results.dig('person', 'email')).to be_nil
     end
   end
 end

@@ -6,30 +6,19 @@ module Types
       field :status, Types::Users::UsersVeteranStatusEnumType, null: true
       field :is_veteran, Boolean, null: true
       field :served_in_military, Boolean, null: true
-      field :errors, Types::Errors::ErrorsUserExternalServiceType, null: true
 
       def status
-        veteran_status.dig(:status)
+        object.dig(:status)
       end
 
       # rubocop:disable Naming/PredicateName
       def is_veteran
-        veteran_status.dig(:is_veteran)
+        object.dig(:is_veteran)
       end
       # rubocop:enable Naming/PredicateName
 
       def served_in_military
-        veteran_status.dig(:served_in_military)
-      end
-
-      def errors
-        object.dig(:errors).presence
-      end
-
-      private
-
-      def veteran_status
-        object.dig(:veteran_status)
+        object.dig(:served_in_military)
       end
     end
   end

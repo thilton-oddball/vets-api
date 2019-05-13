@@ -7,7 +7,7 @@ module Queries
 
       description "The user's VA Profile details"
 
-      type Types::Users::UsersVaProfileType, null: false
+      type Types::Users::UsersVaProfilePayloadType, null: false
 
       def resolve
         user   = context[:current_user]
@@ -24,8 +24,10 @@ module Queries
 
       def va_profile_response(status, va_profile: nil, errors: nil)
         {
-          status: status,
-          va_profile: va_profile,
+          profile: {
+            status: status,
+            va_profile: va_profile
+          },
           errors: errors
         }
       end

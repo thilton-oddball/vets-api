@@ -8,9 +8,11 @@ RSpec.describe Queries::Users::VeteranStatusQuery do
     <<-GRAPHQL
       query {
         userVeteranStatus {
-          status
-          isVeteran
-          servedInMilitary
+          veteranStatus {
+            status
+            isVeteran
+            servedInMilitary
+          }
           errors {
             externalService
             startTime
@@ -24,7 +26,7 @@ RSpec.describe Queries::Users::VeteranStatusQuery do
   end
 
   let(:response) { VetsAPISchema.execute(query, context: { current_user: user }) }
-  let(:results) { response.dig('data', 'userVeteranStatus') }
+  let(:results) { response.dig('data', 'userVeteranStatus', 'veteranStatus') }
 
   it 'returns a status of OK' do
     expect(results['status']).to eq 'OK'
@@ -36,7 +38,7 @@ RSpec.describe Queries::Users::VeteranStatusQuery do
   end
 
   it 'returns no errors' do
-    expect(results.dig('errors')).to be_nil
+    expect(response.dig('data', 'userVeteranStatus', 'errors')).to be_nil
   end
 
   context 'with a non-OK status' do
@@ -47,16 +49,16 @@ RSpec.describe Queries::Users::VeteranStatusQuery do
     end
 
     let(:response) { VetsAPISchema.execute(query, context: { current_user: user }) }
-    let(:results) { response.dig('data', 'userVeteranStatus') }
+    let(:results) { response.dig('data', 'userVeteranStatus', 'veteranStatus') }
 
     it 'returns error details', :aggregate_failures do
-      errors = results.dig('errors')
+      error = response.dig('data', 'userVeteranStatus', 'errors')
 
-      expect(errors.dig('status')).to eq '404'
-      expect(errors.dig('externalService')).to eq 'EMIS'
-      expect(errors.dig('startTime')).to be_present
-      expect(errors.dig('endTime')).to be_nil
-      expect(errors.dig('description')).to include 'NOT_FOUND'
+      expect(error.dig('status')).to eq '404'
+      expect(error.dig('externalService')).to eq 'EMIS'
+      expect(error.dig('startTime')).to be_present
+      expect(error.dig('endTime')).to be_nil
+      expect(error.dig('description')).to include 'NOT_FOUND'
     end
 
     it 'sets all of the veteran status fields to nil', :aggregate_failures do

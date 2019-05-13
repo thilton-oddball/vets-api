@@ -38,17 +38,17 @@ type Query {
   """
   The user's VA Profile details
   """
-  userVaProfile: UsersVaProfile!
+  userVaProfile: UsersVaProfilePayload!
 
   """
   The user's Vet360 contact information details
   """
-  userVet360ContactInformation: UsersVet360ContactInformation!
+  userVet360ContactInformation: UsersVet360ContactInformationPayload!
 
   """
   The user's veteran status details
   """
-  userVeteranStatus: UsersVeteranStatus!
+  userVeteranStatus: UsersVeteranStatusPayload!
 }
 
 type UsersAccount {
@@ -153,16 +153,19 @@ type UsersSignIn {
 
 type UsersVaProfile {
   birthDate: String
-  errors: ErrorsUserExternalService
   familyName: String
   gender: String
   givenNames: [String!]
   status: String
 }
 
+type UsersVaProfilePayload {
+  errors: ErrorsUserExternalService
+  vaProfile: UsersVaProfile
+}
+
 type UsersVet360ContactInformation {
   email: UsersEmail
-  errors: ErrorsUserExternalService
   faxNumber: UsersPhone
   homePhone: UsersPhone
   mailingAddress: UsersAddress
@@ -172,8 +175,12 @@ type UsersVet360ContactInformation {
   workPhone: UsersPhone
 }
 
-type UsersVeteranStatus {
+type UsersVet360ContactInformationPayload {
   errors: ErrorsUserExternalService
+  person: UsersVet360ContactInformation
+}
+
+type UsersVeteranStatus {
   isVeteran: Boolean
   servedInMilitary: Boolean
   status: UsersVeteranStatusEnum
@@ -202,4 +209,9 @@ enum UsersVeteranStatusEnum {
   Experienced a server error when checking the veteran status through EMIS
   """
   SERVER_ERROR
+}
+
+type UsersVeteranStatusPayload {
+  errors: ErrorsUserExternalService
+  veteranStatus: UsersVeteranStatus
 }

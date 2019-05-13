@@ -5,7 +5,7 @@ module Queries
     class Vet360ContactInformationQuery < Queries::BaseQuery
       description "The user's Vet360 contact information details"
 
-      type Types::Users::UsersVet360ContactInformationType, null: false
+      type Types::Users::UsersVet360ContactInformationPayloadType, null: false
 
       def resolve
         user   = context[:current_user]

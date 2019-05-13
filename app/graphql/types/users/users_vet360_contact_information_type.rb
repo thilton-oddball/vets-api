@@ -11,49 +11,6 @@ module Types
       field :work_phone, Types::Users::UsersPhoneType, null: true
       field :temporary_phone, Types::Users::UsersPhoneType, null: true
       field :fax_number, Types::Users::UsersPhoneType, null: true
-      field :errors, Types::Errors::ErrorsUserExternalServiceType, null: true
-
-      def email
-        person&.email
-      end
-
-      def residential_address
-        person&.residential_address
-      end
-
-      def mailing_address
-        person&.mailing_address
-      end
-
-      def mobile_phone
-        person&.mobile_phone
-      end
-
-      def home_phone
-        person&.home_phone
-      end
-
-      def work_phone
-        person&.work_phone
-      end
-
-      def temporary_phone
-        person&.temporary_phone
-      end
-
-      def fax_number
-        person&.fax_number
-      end
-
-      def errors
-        object.dig(:errors).presence
-      end
-
-      private
-
-      def person
-        object.dig(:person)
-      end
     end
   end
 end
