@@ -2,7 +2,7 @@
 
 module Types
   module Users
-    class VeteranStatusEnumType < BaseEnum
+    class UsersVeteranStatusEnumType < BaseEnum
       include Common::Client::ServiceStatus
 
       description 'The enum of potential veteran statuses'

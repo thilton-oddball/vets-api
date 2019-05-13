@@ -1,8 +1,61 @@
-type Account {
+type ErrorsUserExternalService {
+  description: String
+  endTime: String
+  externalService: String!
+  startTime: String!
+  status: String
+}
+
+type Mutation {
+}
+
+type Query {
+  """
+  The user's Account details
+  """
+  userAccount: UsersAccount!
+
+  """
+  The list of in progress forms available to the user
+  """
+  userInProgressForms: [UsersInProgressForm!]!
+
+  """
+  The user's available prefills
+  """
+  userPrefillsAvailable: [String!]
+
+  """
+  The user's profile details
+  """
+  userProfile: UsersProfile!
+
+  """
+  The list of services available to the user
+  """
+  userServices: [String!]!
+
+  """
+  The user's VA Profile details
+  """
+  userVaProfile: UsersVaProfile!
+
+  """
+  The user's Vet360 contact information details
+  """
+  userVet360ContactInformation: UsersVet360ContactInformation!
+
+  """
+  The user's veteran status details
+  """
+  userVeteranStatus: UsersVeteranStatus!
+}
+
+type UsersAccount {
   accountUuid: String
 }
 
-type Address {
+type UsersAddress {
   addressLine1: String!
   addressLine2: String
   addressLine3: String
@@ -28,7 +81,7 @@ type Address {
   zipCodeSuffix: String
 }
 
-type Email {
+type UsersEmail {
   createdAt: String
   effectiveEndDate: String
   effectiveStartDate: String
@@ -40,28 +93,25 @@ type Email {
   vet360Id: String
 }
 
-type InProgressForm {
+type UsersInProgressForm {
   form: String
   lastUpdated: Int
-  metadata: InProgressFormMetadata
+  metadata: UsersInProgressFormMetadata
 }
 
-type InProgressFormMetadata {
+type UsersInProgressFormMetadata {
   expiresAt: Int
   lastUpdated: Int
   returnUrl: String
   version: Int
 }
 
-type Loa {
+type UsersLoa {
   current: Int!
   highest: Int!
 }
 
-type Mutation {
-}
-
-type Phone {
+type UsersPhone {
   areaCode: String!
   countryCode: String!
   createdAt: String
@@ -80,7 +130,7 @@ type Phone {
   vet360Id: String
 }
 
-type Profile {
+type UsersProfile {
   authnContext: String
   birthDate: String
   email: String!
@@ -88,101 +138,51 @@ type Profile {
   gender: String
   lastName: String
   lastSignedIn: String
-  loa: Loa!
+  loa: UsersLoa!
   middleName: String
   multifactor: Boolean
-  signIn: SignIn!
+  signIn: UsersSignIn!
   verified: Boolean
   zip: String
 }
 
-type Query {
-  """
-  The user's Account details
-  """
-  userAccount: Account!
-
-  """
-  The list of in progress forms available to the user
-  """
-  userInProgressForms: [InProgressForm!]!
-
-  """
-  The user's available prefills
-  """
-  userPrefillsAvailable: [String!]
-
-  """
-  The user's profile details
-  """
-  userProfile: Profile!
-
-  """
-  The list of services available to the user
-  """
-  userServices: [String!]!
-
-  """
-  The user's VA Profile details
-  """
-  userVaProfile: VaProfile!
-
-  """
-  The user's Vet360 contact information details
-  """
-  userVet360ContactInformation: Vet360ContactInformation!
-
-  """
-  The user's veteran status details
-  """
-  userVeteranStatus: VeteranStatus!
-}
-
-type SignIn {
+type UsersSignIn {
   accountType: String
   serviceName: String
 }
 
-type UserExternalService {
-  description: String
-  endTime: String
-  externalService: String!
-  startTime: String!
-  status: String
-}
-
-type VaProfile {
+type UsersVaProfile {
   birthDate: String
-  errors: UserExternalService
+  errors: ErrorsUserExternalService
   familyName: String
   gender: String
   givenNames: [String!]
   status: String
 }
 
-type Vet360ContactInformation {
-  email: Email
-  errors: UserExternalService
-  faxNumber: Phone
-  homePhone: Phone
-  mailingAddress: Address
-  mobilePhone: Phone
-  residentialAddress: Address
-  temporaryPhone: Phone
-  workPhone: Phone
+type UsersVet360ContactInformation {
+  email: UsersEmail
+  errors: ErrorsUserExternalService
+  faxNumber: UsersPhone
+  homePhone: UsersPhone
+  mailingAddress: UsersAddress
+  mobilePhone: UsersPhone
+  residentialAddress: UsersAddress
+  temporaryPhone: UsersPhone
+  workPhone: UsersPhone
 }
 
-type VeteranStatus {
-  errors: UserExternalService
+type UsersVeteranStatus {
+  errors: ErrorsUserExternalService
   isVeteran: Boolean
   servedInMilitary: Boolean
-  status: VeteranStatusEnum
+  status: UsersVeteranStatusEnum
 }
 
 """
 The enum of potential veteran statuses
 """
-enum VeteranStatusEnum {
+enum UsersVeteranStatusEnum {
   """
   Not authorized to check status per EMIS
   """

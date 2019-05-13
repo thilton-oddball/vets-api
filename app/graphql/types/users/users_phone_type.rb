@@ -2,7 +2,7 @@
 
 module Types
   module Users
-    class PhoneType < Types::BaseObject
+    class UsersPhoneType < Types::BaseObject
       field :area_code, String, null: false
       field :country_code, String, null: false
       field :created_at, String, null: true

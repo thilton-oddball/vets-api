@@ -5,7 +5,7 @@ module Queries
     class AccountQuery < Queries::BaseQuery
       description "The user's Account details"
 
-      type Types::Users::AccountType, null: false
+      type Types::Users::UsersAccountType, null: false
 
       def resolve
         context[:current_user]&.account

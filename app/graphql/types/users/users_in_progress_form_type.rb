@@ -2,9 +2,9 @@
 
 module Types
   module Users
-    class InProgressFormType < Types::BaseObject
+    class UsersInProgressFormType < Types::BaseObject
       field :form, String, null: true
-      field :metadata, Types::Users::InProgressFormMetadataType, null: true
+      field :metadata, Types::Users::UsersInProgressFormMetadataType, null: true
       field :last_updated, Integer, null: true
     end
   end

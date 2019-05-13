@@ -2,7 +2,7 @@
 
 module Types
   module Users
-    class InProgressFormMetadataType < Types::BaseObject
+    class UsersInProgressFormMetadataType < Types::BaseObject
       field :version, Integer, null: true
       field :return_url, String, null: true
       field :expires_at, Integer, null: true

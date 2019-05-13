@@ -2,7 +2,7 @@
 
 module Types
   module Users
-    class AddressType < Types::BaseObject
+    class UsersAddressType < Types::BaseObject
       field :address_line1, String, null: false
       field :address_line2, String, null: true
       field :address_line3, String, null: true

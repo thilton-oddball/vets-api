@@ -5,7 +5,7 @@ module Types
     # Defines the fields on Account. Fields expose the data that may
     # be queried, and validated.
     #
-    class AccountType < Types::BaseObject
+    class UsersAccountType < Types::BaseObject
       field :account_uuid, String, null: true
 
       def account_uuid

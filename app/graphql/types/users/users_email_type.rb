@@ -2,7 +2,7 @@
 
 module Types
   module Users
-    class EmailType < Types::BaseObject
+    class UsersEmailType < Types::BaseObject
       field :created_at, String, null: true
       field :email_address, String, null: false
       field :effective_end_date, String, null: true

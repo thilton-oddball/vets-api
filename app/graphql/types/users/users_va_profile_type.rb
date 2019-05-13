@@ -2,13 +2,13 @@
 
 module Types
   module Users
-    class VaProfileType < Types::BaseObject
+    class UsersVaProfileType < Types::BaseObject
       field :status, String, null: true
       field :birth_date, String, null: true
       field :family_name, String, null: true
       field :gender, String, null: true
       field :given_names, [String], null: true
-      field :errors, Types::Errors::UserExternalServiceType, null: true
+      field :errors, Types::Errors::ErrorsUserExternalServiceType, null: true
 
       def status
         object.dig(:status)

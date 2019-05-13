@@ -7,7 +7,7 @@ module Queries
 
       description "The user's VA Profile details"
 
-      type Types::Users::VaProfileType, null: false
+      type Types::Users::UsersVaProfileType, null: false
 
       def resolve
         user   = context[:current_user]

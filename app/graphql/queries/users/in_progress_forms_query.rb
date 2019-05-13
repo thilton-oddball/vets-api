@@ -5,7 +5,7 @@ module Queries
     class InProgressFormsQuery < Queries::BaseQuery
       description 'The list of in progress forms available to the user'
 
-      type [Types::Users::InProgressFormType], null: false
+      type [Types::Users::UsersInProgressFormType], null: false
 
       def resolve
         user = context[:current_user]

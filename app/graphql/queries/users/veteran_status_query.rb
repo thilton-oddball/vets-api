@@ -7,7 +7,7 @@ module Queries
 
       description "The user's veteran status details"
 
-      type Types::Users::VeteranStatusType, null: false
+      type Types::Users::UsersVeteranStatusType, null: false
 
       def resolve
         user = context[:current_user]

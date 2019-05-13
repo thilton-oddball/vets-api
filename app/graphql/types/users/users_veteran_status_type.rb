@@ -2,11 +2,11 @@
 
 module Types
   module Users
-    class VeteranStatusType < Types::BaseObject
-      field :status, Types::Users::VeteranStatusEnumType, null: true
+    class UsersVeteranStatusType < Types::BaseObject
+      field :status, Types::Users::UsersVeteranStatusEnumType, null: true
       field :is_veteran, Boolean, null: true
       field :served_in_military, Boolean, null: true
-      field :errors, Types::Errors::UserExternalServiceType, null: true
+      field :errors, Types::Errors::ErrorsUserExternalServiceType, null: true
 
       def status
         veteran_status.dig(:status)

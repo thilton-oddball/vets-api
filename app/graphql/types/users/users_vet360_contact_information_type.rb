@@ -2,16 +2,16 @@
 
 module Types
   module Users
-    class Vet360ContactInformationType < Types::BaseObject
-      field :email, Types::Users::EmailType, null: true
-      field :residential_address, Types::Users::AddressType, null: true
-      field :mailing_address, Types::Users::AddressType, null: true
-      field :mobile_phone, Types::Users::PhoneType, null: true
-      field :home_phone, Types::Users::PhoneType, null: true
-      field :work_phone, Types::Users::PhoneType, null: true
-      field :temporary_phone, Types::Users::PhoneType, null: true
-      field :fax_number, Types::Users::PhoneType, null: true
-      field :errors, Types::Errors::UserExternalServiceType, null: true
+    class UsersVet360ContactInformationType < Types::BaseObject
+      field :email, Types::Users::UsersEmailType, null: true
+      field :residential_address, Types::Users::UsersAddressType, null: true
+      field :mailing_address, Types::Users::UsersAddressType, null: true
+      field :mobile_phone, Types::Users::UsersPhoneType, null: true
+      field :home_phone, Types::Users::UsersPhoneType, null: true
+      field :work_phone, Types::Users::UsersPhoneType, null: true
+      field :temporary_phone, Types::Users::UsersPhoneType, null: true
+      field :fax_number, Types::Users::UsersPhoneType, null: true
+      field :errors, Types::Errors::ErrorsUserExternalServiceType, null: true
 
       def email
         person&.email

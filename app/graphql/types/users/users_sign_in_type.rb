@@ -2,7 +2,7 @@
 
 module Types
   module Users
-    class SignInType < Types::BaseObject
+    class UsersSignInType < Types::BaseObject
       field :account_type, String, null: true
       field :service_name, String, null: true
     end

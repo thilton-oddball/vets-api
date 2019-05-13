@@ -2,7 +2,7 @@
 
 module Types
   module Users
-    class LoaType < Types::BaseObject
+    class UsersLoaType < Types::BaseObject
       field :current, Integer, null: false
       field :highest, Integer, null: false
     end
