@@ -8,7 +8,9 @@ module Queries
       type Types::Users::UsersAccountType, null: false
 
       def resolve
-        context[:current_user]&.account
+        user = context[:current_user]
+
+        Account.cache_or_create_by!(user)
       end
     end
   end
