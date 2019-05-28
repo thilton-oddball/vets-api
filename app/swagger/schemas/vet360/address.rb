@@ -5,6 +5,8 @@ module Swagger
     module Vet360
       class Address
         include Swagger::Blocks
+        ALPHA_REGEX = Regexp.new(::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect).to_js
+        NUMERIC_REGEX = Regexp.new(::Vet360::Models::Address::VALID_NUMERIC_REGEX.inspect).to_js
 
         swagger_schema :PostVet360DomesticAddress do
           key :required, %i[
@@ -34,18 +36,18 @@ module Swagger
           property :country_name,
                    type: :string,
                    example: 'United States',
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :state_code,
                    type: :string,
                    example: 'MS',
                    minLength: 2,
                    maxLength: 2,
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :zip_code,
                    type: :string,
                    example: '38843',
                    maxLength: 5,
-                   pattern: ::Vet360::Models::Address::VALID_NUMERIC_REGEX.inspect
+                   pattern: NUMERIC_REGEX
         end
 
         swagger_schema :PutVet360DomesticAddress do
@@ -78,18 +80,18 @@ module Swagger
           property :country_name,
                    type: :string,
                    example: 'United States',
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :state_code,
                    type: :string,
                    example: 'MS',
                    minLength: 2,
                    maxLength: 2,
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :zip_code,
                    type: :string,
                    example: '38843',
                    maxLength: 5,
-                   pattern: ::Vet360::Models::Address::VALID_NUMERIC_REGEX.inspect
+                   pattern: NUMERIC_REGEX
         end
 
         swagger_schema :PostVet360InternationalAddress do
@@ -119,7 +121,7 @@ module Swagger
           property :country_name,
                    type: :string,
                    example: 'Italy',
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :international_postal_code, type: :string, example: '12345'
         end
 
@@ -152,7 +154,7 @@ module Swagger
           property :country_name,
                    type: :string,
                    example: 'Italy',
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :international_postal_code, type: :string, example: '12345'
         end
 
@@ -184,18 +186,18 @@ module Swagger
           property :country_name,
                    type: :string,
                    example: 'United States',
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :state_code,
                    type: :string,
                    example: 'MS',
                    minLength: 2,
                    maxLength: 2,
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :zip_code,
                    type: :string,
                    example: '38843',
                    maxLength: 5,
-                   pattern: ::Vet360::Models::Address::VALID_NUMERIC_REGEX.inspect
+                   pattern: NUMERIC_REGEX
         end
 
         swagger_schema :PutVet360MilitaryOverseasAddress do
@@ -228,18 +230,18 @@ module Swagger
           property :country_name,
                    type: :string,
                    example: 'United States',
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :state_code,
                    type: :string,
                    example: 'MS',
                    minLength: 2,
                    maxLength: 2,
-                   pattern: ::Vet360::Models::Address::VALID_ALPHA_REGEX.inspect
+                   pattern: ALPHA_REGEX
           property :zip_code,
                    type: :string,
                    example: '38843',
                    maxLength: 5,
-                   pattern: ::Vet360::Models::Address::VALID_NUMERIC_REGEX.inspect
+                   pattern: NUMERIC_REGEX
         end
       end
     end

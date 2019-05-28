@@ -8,6 +8,7 @@ module Swagger
 
         DATE_PATTERN = /^(\\d{4}|XXXX)-(0[1-9]|1[0-2]|XX)-(0[1-9]|[1-2][0-9]|3[0-1]|XX)$/
         ADDRESS_PATTERN = /^([-a-zA-Z0-9'.,&#]([-a-zA-Z0-9'.,&# ])?)+$/
+        PHONE_PATTERN = Regexp.new("/^\\d{10}$/").to_js
 
         swagger_schema :Form526SubmitV2 do
           key :required, [:form526]
@@ -36,7 +37,7 @@ module Swagger
                 Saving
               ]
             property :bankName, type: :string, maxLength: 35
-            property :bankRoutingNumber, type: :string, pattern: /^\d{9}$/
+            property :bankRoutingNumber, type: :string, pattern: Regexp.new("/^\d{9}$/").to_js
             property :completedFormAttachments, type: :array do
               items type: :object do
                 key :required, %i[name attachmentId]
@@ -89,10 +90,10 @@ module Swagger
                        type: :string,
                        minLength: 1,
                        maxLength: 100,
-                       pattern: %r{^([a-zA-Z0-9\-/']+( ?))*$}
+                       pattern: Regexp.new("^([a-zA-Z0-9\-/']+( ?))*$/").to_js
               property :phoneNumber,
                        type: :string,
-                       pattern: /^\\d{10}$/
+                       pattern: PHONE_PATTERN
             end
             property :isVaEmployee, type: :boolean
             property :mailingAddress, type: :object do
@@ -129,12 +130,12 @@ module Swagger
 
               property :primaryPhone,
                        type: :string,
-                       pattern: /^\\d{10}$/
+                       pattern: PHONE_PATTERN
               property :emailAddress,
                        type: :string,
                        minLength: 6,
                        maxLength: 80,
-                       pattern: /^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$/
+                       pattern: Regexp.new("/^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$/").to_js
             end
             property :privateMedicalRecordAttachments, type: :array do
               items type: :object do
@@ -228,19 +229,19 @@ module Swagger
                    example: 'John',
                    minLength: 1,
                    maxLength: 14,
-                   pattern: %r{^([a-zA-Z0-9\-/']+( ?))+$}
+                   pattern: Regexp.new("/^([a-zA-Z0-9\-/']+( ?))+$/").to_js
           property :middle,
                    type: :string,
                    example: 'Jonny',
                    minLength: 1,
                    maxLength: 14,
-                   pattern: %r{^([a-zA-Z0-9\-/']+( ?))+$}
+                   pattern: Regexp.new("/^([a-zA-Z0-9\-/']+( ?))+$/").to_js
           property :last,
                    type: :string,
                    example: 'Johnson',
                    minLength: 1,
                    maxLength: 14,
-                   pattern: %r{^([a-zA-Z0-9\-/']+( ?))+$}
+                   pattern: Regexp.new("/^([a-zA-Z0-9\-/']+( ?))+$/").to_js
         end
 
         swagger_schema :ForwardingAddress do
@@ -250,25 +251,25 @@ module Swagger
           property :addressLine1,
                    type: :string,
                    maxLength: 35,
-                   pattern: ADDRESS_PATTERN
+                   pattern: Regexp.new(ADDRESS_PATTERN.inspect).to_js
           property :addressLine2,
                    type: :string,
                    maxLength: 35,
-                   pattern: ADDRESS_PATTERN
+                   pattern: Regexp.new(ADDRESS_PATTERN.inspect).to_js
           property :addressLine3,
                    type: :string,
                    maxLength: 35,
-                   pattern: ADDRESS_PATTERN
+                   pattern: Regexp.new(ADDRESS_PATTERN.inspect).to_js
           property :city,
                    type: :string,
                    maxLength: 30,
-                   pattern: /^([-a-zA-Z0-9'.#]([-a-zA-Z0-9'.# ])?)+$/
+                   pattern: Regexp.new("/^([-a-zA-Z0-9'.#]([-a-zA-Z0-9'.# ])?)+$/").to_js
           # See link for state enum
           # https://github.com/department-of-veterans-affairs/vets-json-schema/blob/76083e33f175fb00392e31f1f5f90654d05f1fd2/dist/21-526EZ-ALLCLAIMS-schema.json#L286-L353
           property :state, type: :string, example: 'OR'
           property :zipCode,
                    type: :string,
-                   pattern: /^\\d{5}(?:([-\\s]?)\\d{4})?$/
+                   pattern: Regexp.new("/^\\d{5}(?:([-\\s]?)\\d{4})?$/").to_js
           property :effectiveDate, type: :object do
             key :'$ref', :DateRange
           end
@@ -355,7 +356,7 @@ module Swagger
               property :unitName,
                        type: :string,
                        maxLength: 256,
-                       pattern: /^([a-zA-Z0-9\-'.#][a-zA-Z0-9\-'.# ]?)*$/
+                       pattern: Regexp.new("/^([a-zA-Z0-9\-'.#][a-zA-Z0-9\-'.# ]?)*$/").to_js
               property :obligationTermOfServiceDateRange, type: :array do
                 items do
                   key :'$ref', :DateRangeAllRequired
@@ -394,7 +395,7 @@ module Swagger
           property :treatmentCenterName,
                    type: :string,
                    maxLength: 100,
-                   pattern: /^([a-zA-Z0-9\-'.#]([a-zA-Z0-9\-'.# ])?)+$/
+                   pattern: Regexp.new("/^([a-zA-Z0-9\-'.#]([a-zA-Z0-9\-'.# ])?)+$/").to_js
           property :treatmentDateRange, type: :array do
             key :'$ref', :DateRangeFromRequired
           end
@@ -407,7 +408,7 @@ module Swagger
             property :city,
                      type: :string,
                      maxLength: 30,
-                     pattern: /^([-a-zA-Z0-9'.#]([-a-zA-Z0-9'.# ])?)+$/
+                     pattern: Regexp.new("/^([-a-zA-Z0-9'.#]([-a-zA-Z0-9'.# ])?)+$/").to_js
             # See link for state enum
             # https://github.com/department-of-veterans-affairs/vets-json-schema/blob/76083e33f175fb00392e31f1f5f90654d05f1fd2/dist/21-526EZ-ALLCLAIMS-schema.json#L286-L353
             property :state, type: :string, example: 'OR'

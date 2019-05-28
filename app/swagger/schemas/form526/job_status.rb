@@ -15,7 +15,11 @@ module Swagger
               property :job_id, type: :string
               property :submission_id, type: :integer
               property :status, type: :string
-              property :ancillary_item_statuses, type: :array
+              property :ancillary_item_statuses, type: :array do
+                items do
+                  # TODO: Added this block to suppress OAS2 warnings
+                end
+              end
             end
             property :id, type: :string
             property :type, type: :string

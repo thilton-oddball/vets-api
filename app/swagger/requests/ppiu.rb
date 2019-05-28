@@ -43,8 +43,8 @@ module Swagger
 
               property :account_type, type: :string, enum: %w[Checking Savings], example: 'Checking'
               property :financial_institution_name, type: :string, example: 'Bank Of America'
-              property :account_number, type: :string, pattern: /^\d*$/, example: '1234567890'
-              property :financial_institution_routing_number, type: :string, pattern: /^\d{9}$/, example: '123456789'
+              property :account_number, type: :string, pattern: Regexp.new("/^\d*$/").to_js, example: '1234567890'
+              property :financial_institution_routing_number, type: :string, pattern: Regexp.new("/^\d{9}$/").to_js, example: '123456789'
             end
           end
 

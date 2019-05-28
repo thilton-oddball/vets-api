@@ -38,7 +38,7 @@ module Swagger
                                enum: PagerDuty::Models::Service::STATUSES,
                                example: PagerDuty::Models::Service::ACTIVE
                       property :last_incident_timestamp,
-                               type: %i[string null],
+                               type: :string,
                                example: '2019-03-21T16:54:34.000Z'
                     end
                   end

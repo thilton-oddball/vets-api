@@ -70,42 +70,42 @@ module Swagger
                               enum: ['ojt', 'private', 'foreign', 'correspondence', 'flight', 'for profit', 'public']
               property :flight, type: :boolean
               property :correspondence, type: :boolean
-              property :cross, type: %i[null string]
-              property :ope, type: %i[null string]
-              property :ope6, type: %i[null string]
-              property :undergrad_enrollment, type: %i[null integer]
+              property :cross, type: :string
+              property :ope, type: :string
+              property :ope6, type: :string
+              property :undergrad_enrollment, type: :integer
               property :student_veteran, type: :boolean
-              property :student_veteran_link, type: %i[null string]
+              property :student_veteran_link, type: :string
               property :dodmou, type: :boolean
-              property :sec_702, type: %i[null boolean]
-              property :vet_success_name, type: %i[null string]
-              property :vet_success_email, type: %i[null string]
-              property :credit_for_mil_training, type: %i[null boolean]
-              property :vet_poc, type: %i[null boolean]
-              property :student_vet_grp_ipeds, type: %i[null boolean]
-              property :soc_member, type: %i[null boolean]
-              property :retention_rate_veteran_ba, type: %i[null number]
-              property :retention_all_students_ba, type: %i[null number]
-              property :retention_rate_veteran_otb, type: %i[null number]
-              property :retention_all_students_otb, type: %i[null number]
-              property :persistance_rate_veteran_ba, type: %i[null number]
-              property :persistance_rate_veteran_otb, type: %i[null number]
-              property :graduation_rate_veteran, type: %i[null number]
-              property :graduation_rate_all_students, type: %i[null number]
-              property :transfer_out_rate_veteran, type: %i[null number]
-              property :transfer_out_rate_all_students, type: %i[null number]
-              property :salary_all_students, type: %i[null number]
-              property :repayment_rate_all_students, type: %i[null number]
-              property :avg_stu_loan_debt, type: %i[null number]
-              property :calendar, type: %i[null string]
-              property :online_all, type: %i[null string]
+              property :sec_702, type: :boolean
+              property :vet_success_name, type: :string
+              property :vet_success_email, type: :string
+              property :credit_for_mil_training, type: :boolean
+              property :vet_poc, type: :boolean
+              property :student_vet_grp_ipeds, type: :boolean
+              property :soc_member, type: :boolean
+              property :retention_rate_veteran_ba, type: :number
+              property :retention_all_students_ba, type: :number
+              property :retention_rate_veteran_otb, type: :number
+              property :retention_all_students_otb, type: :number
+              property :persistance_rate_veteran_ba, type: :number
+              property :persistance_rate_veteran_otb, type: :number
+              property :graduation_rate_veteran, type: :number
+              property :graduation_rate_all_students, type: :number
+              property :transfer_out_rate_veteran, type: :number
+              property :transfer_out_rate_all_students, type: :number
+              property :salary_all_students, type: :number
+              property :repayment_rate_all_students, type: :number
+              property :avg_stu_loan_debt, type: :number
+              property :calendar, type: :string
+              property :online_all, type: :string
               property :p911_tuition_fees, type: :number
               property :p911_recipients, type: :integer
               property :p911_yellow_ribbon, type: :number
               property :p911_yr_recipients, type: :integer
               property :accredited, type: :boolean
-              property :accreditation_type, type: %i[null string]
-              property :accreditation_status, type: %i[null string]
+              property :accreditation_type, type: :string
+              property :accreditation_status, type: :string
               property :complaints, type: :object do
                 property :facility_code, type: :integer
                 property :financial_by_fac_code, type: :integer
@@ -224,8 +224,8 @@ module Swagger
 
           property :self, type: :string
           property :first, type: :string
-          property :prev, type: %i[null string]
-          property :next, type: %i[null string]
+          property :prev, type: :string
+          property :next, type: :string
           property :last, type: :string
         end
 
@@ -237,25 +237,26 @@ module Swagger
           ]
           property :name, type: :string
           property :facility_code, type: :string
-          property :city, type: %i[null string]
-          property :state, type: %i[null string]
-          property :zip, type: %i[null string]
-          property :country, type: %i[null string]
-          property :highest_degree, type: %i[null integer]
-          property :locale_type, type: %i[null string]
-          property :student_count, type: %i[null integer]
-          property :caution_flag, type: %i[null boolean]
-          property :caution_flag_reason, type: %i[null string]
+          property :type, type: :string # TODO: Check what this should be
+          property :city, type: :string
+          property :state, type: :string
+          property :zip, type: :string
+          property :country, type: :string
+          property :highest_degree, type: :integer
+          property :locale_type, type: :string
+          property :student_count, type: :integer
+          property :caution_flag, type: :boolean
+          property :caution_flag_reason, type: :string
           property :created_at, type: :string
           property :updated_at, type: :string
-          property :bah, type: %i[null number]
-          property :tuition_in_state, type: %i[null number]
-          property :tuition_out_of_state, type: %i[null number]
-          property :books, type: %i[null number]
-          property :student_veteran, type: %i[null boolean]
-          property :yr, type: %i[null boolean]
-          property :poe, type: %i[null boolean]
-          property :eight_keys, type: %i[null boolean]
+          property :bah, type: :number
+          property :tuition_in_state, type: :number
+          property :tuition_out_of_state, type: :number
+          property :books, type: :number
+          property :student_veteran, type: :boolean
+          property :yr, type: :boolean
+          property :poe, type: :boolean
+          property :eight_keys, type: :boolean
         end
 
         swagger_schema :GibctInstitutionsSelfLinks do
@@ -269,8 +270,8 @@ module Swagger
           key :type, :object
           key :required, %i[true false]
 
-          property :true, type: %i[null integer]
-          property :false, type: %i[null integer]
+          property :true, type: :integer
+          property :false, type: :integer
         end
       end
     end

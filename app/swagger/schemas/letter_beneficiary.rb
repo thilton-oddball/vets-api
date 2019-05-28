@@ -19,11 +19,11 @@ module Swagger
               property :monthly_award_amount, type: :number, example: 123.5
               property :service_connected_percentage, type: :integer, example: 2
               property :award_effective_date, type: :string, example: true
-              property :has_adapted_housing, type: %i[boolean null], example: true
-              property :has_chapter35_eligibility, type: %i[boolean null], example: true
-              property :has_death_result_of_disability, type: %i[boolean null], example: true
-              property :has_individual_unemployability_granted, type: %i[boolean null], example: true
-              property :has_special_monthly_compensation, type: %i[boolean null], example: true
+              property :has_adapted_housing, type: :boolean, example: true
+              property :has_chapter35_eligibility, type: :boolean, example: true
+              property :has_death_result_of_disability, type: :boolean, example: true
+              property :has_individual_unemployability_granted, type: :boolean, example: true
+              property :has_special_monthly_compensation, type: :boolean, example: true
             end
             property :military_service do
               items do

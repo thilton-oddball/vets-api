@@ -14,7 +14,11 @@ module Swagger
           property :attributes, type: :object do
             property :form, type: :string
             property :submitted_at, type: :string
-            property :regional_office, type: :array
+            property :regional_office, type: :array do
+              items do
+                # TODO: Added this block to suppress OAS2 warnings
+              end
+            end
             property :confirmation_number, type: :string
           end
         end

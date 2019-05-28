@@ -19,7 +19,7 @@ module Swagger
                 key :required, %i[name value]
 
                 property :name, type: :string
-                property :value, type: %i[null number string]
+                property :value, type: :string # %i[number string] # TODO: OAS2 doesn't support multiple types
               end
             end
           end
@@ -39,7 +39,7 @@ module Swagger
           key :type, :object
           key :required, [:version]
 
-          property :version, type: :null
+          property :version, type: :string # TODO: OAS2 doesn't support null
         end
       end
     end

@@ -18,39 +18,53 @@ module Swagger
           ]
 
           parameter :authorization
-
+          # TODO: OAS2 Doesn't support multiple body params
+          # so for now we refactor into a ref schema
           parameter do
-            key :name, :domestic_body
+            key :name, :profile_addresses
             key :in, :body
-            key :description, 'Attributes to create a domestic address.'
+            key :description, 'Profile addresses object'
             key :required, true
-
             schema do
+              # key :'$ref', :ProfileAddresses
               key :'$ref', :PostVet360DomesticAddress
-            end
-          end
-
-          parameter do
-            key :name, :international_body
-            key :in, :body
-            key :description, 'Attributes to create an international address.'
-            key :required, true
-
-            schema do
               key :'$ref', :PostVet360InternationalAddress
-            end
-          end
-
-          parameter do
-            key :name, :military_overseas_body
-            key :in, :body
-            key :description, 'Attributes to create a military overseas address.'
-            key :required, true
-
-            schema do
               key :'$ref', :PostVet360MilitaryOverseasAddress
             end
           end
+
+          # parameter do
+          #   key :name, :domestic_body
+          #   key :in, :body
+          #   key :description, 'Attributes to create a domestic address.'
+          #   key :required, true
+          #
+          #   schema do
+          #     key :'$ref', :PostVet360DomesticAddress
+          #   end
+          # end
+          #
+          # parameter do
+          #   key :name, :international_body
+          #   key :in, :body
+          #   key :description, 'Attributes to create an international address.'
+          #   key :required, true
+          #
+          #   schema do
+          #     key :'$ref', :PostVet360InternationalAddress
+          #   end
+          # end
+          #
+          # parameter do
+          #   key :name, :military_overseas_body
+          #   key :in, :body
+          #   key :description, 'Attributes to create a military overseas address.'
+          #   key :required, true
+          #
+          #   schema do
+          #     key :'$ref', :PostVet360MilitaryOverseasAddress
+          #   end
+          # end
 
           response 200 do
             key :description, 'Response is OK'
@@ -70,39 +84,52 @@ module Swagger
           ]
 
           parameter :authorization
-
+          # TODO: OAS2 Doesn't support multiple body params
+          # so for now we refactor into a ref schema
           parameter do
-            key :name, :domestic_body
+            key :name, :data
             key :in, :body
-            key :description, 'Attributes to update a domestic address.'
+            key :description, 'Profile addresses object'
             key :required, true
-
             schema do
-              key :'$ref', :PutVet360DomesticAddress
+              key :'$ref', :PostVet360DomesticAddress
+              key :'$ref', :PostVet360InternationalAddress
+              key :'$ref', :PostVet360MilitaryOverseasAddress
             end
           end
 
-          parameter do
-            key :name, :international_body
-            key :in, :body
-            key :description, 'Attributes to update an international address.'
-            key :required, true
-
-            schema do
-              key :'$ref', :PutVet360InternationalAddress
-            end
-          end
-
-          parameter do
-            key :name, :military_overseas_body
-            key :in, :body
-            key :description, 'Attributes to update a military overseas address.'
-            key :required, true
-
-            schema do
-              key :'$ref', :PutVet360MilitaryOverseasAddress
-            end
-          end
+          # parameter do
+          #   key :name, :domestic_body
+          #   key :in, :body
+          #   key :description, 'Attributes to update a domestic address.'
+          #   key :required, true
+          #
+          #   schema do
+          #     key :'$ref', :PutVet360DomesticAddress
+          #   end
+          # end
+          #
+          # parameter do
+          #   key :name, :international_body
+          #   key :in, :body
+          #   key :description, 'Attributes to update an international address.'
+          #   key :required, true
+          #
+          #   schema do
+          #     key :'$ref', :PutVet360InternationalAddress
+          #   end
+          # end
+          #
+          # parameter do
+          #   key :name, :military_overseas_body
+          #   key :in, :body
+          #   key :description, 'Attributes to update a military overseas address.'
+          #   key :required, true
+          #
+          #   schema do
+          #     key :'$ref', :PutVet360MilitaryOverseasAddress
+          #   end
+          # end
 
           response 200 do
             key :description, 'Response is OK'
@@ -122,39 +149,53 @@ module Swagger
           ]
 
           parameter :authorization
-
+          # TODO: OAS2 Doesn't support multiple body params
+          # so for now we refactor into a ref schema
           parameter do
-            key :name, :domestic_body
+            key :name, :data
             key :in, :body
-            key :description, 'Attributes of the domestic address.'
+            key :description, 'Profile addresses object'
             key :required, true
-
             schema do
-              key :'$ref', :PutVet360DomesticAddress
+              key :'$ref', :PostVet360DomesticAddress
+              key :'$ref', :PostVet360InternationalAddress
+              key :'$ref', :PostVet360MilitaryOverseasAddress
             end
           end
 
-          parameter do
-            key :name, :international_body
-            key :in, :body
-            key :description, 'Attributes of the international address.'
-            key :required, true
-
-            schema do
-              key :'$ref', :PutVet360InternationalAddress
-            end
-          end
-
-          parameter do
-            key :name, :military_overseas_body
-            key :in, :body
-            key :description, 'Attributes of the military overseas address.'
-            key :required, true
-
-            schema do
-              key :'$ref', :PutVet360MilitaryOverseasAddress
-            end
-          end
+          #
+          # parameter do
+          #   key :name, :domestic_body
+          #   key :in, :body
+          #   key :description, 'Attributes of the domestic address.'
+          #   key :required, true
+          #
+          #   schema do
+          #     key :'$ref', :PutVet360DomesticAddress
+          #   end
+          # end
+          #
+          # parameter do
+          #   key :name, :international_body
+          #   key :in, :body
+          #   key :description, 'Attributes of the international address.'
+          #   key :required, true
+          #
+          #   schema do
+          #     key :'$ref', :PutVet360InternationalAddress
+          #   end
+          # end
+          #
+          # parameter do
+          #   key :name, :military_overseas_body
+          #   key :in, :body
+          #   key :description, 'Attributes of the military overseas address.'
+          #   key :required, true
+          #
+          #   schema do
+          #     key :'$ref', :PutVet360MilitaryOverseasAddress
+          #   end
+          # end
 
           response 200 do
             key :description, 'Response is OK'

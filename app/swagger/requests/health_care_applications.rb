@@ -89,9 +89,9 @@ module Swagger
             key :description, 'enrollment_status response'
 
             schema do
-              property :application_date, type: %i[string null], example: '2018-12-27T00:00:00.000-06:00'
-              property :enrollment_date, type: %i[string null], example: '2018-12-27T17:15:39.000-06:00'
-              property :preferred_facility, type: %i[string null], example: '988 - DAYT20'
+              property :application_date, type: :string, example: '2018-12-27T00:00:00.000-06:00'
+              property :enrollment_date, type: :string, example: '2018-12-27T17:15:39.000-06:00'
+              property :preferred_facility, type: :string, example: '988 - DAYT20'
               property :parsed_status,
                        type: :string,
                        example: Notification::ENROLLED,

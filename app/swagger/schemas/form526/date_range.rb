@@ -6,14 +6,16 @@ module Swagger
       class DateRange
         include Swagger::Blocks
 
+        date_pattern = Regexp.new(Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN).to_js
+        
         swagger_schema :DateRange do
           property :from,
                    type: :string,
-                   pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN,
+                   pattern: date_pattern,
                    example: '2019-10-XX'
           property :to,
                    type: :string,
-                   pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN,
+                   pattern: date_pattern,
                    example: 'XXXX-12-31'
         end
 
@@ -22,11 +24,11 @@ module Swagger
 
           property :from,
                    type: :string,
-                   pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN,
+                   pattern: date_pattern,
                    example: '2019-10-XX'
           property :to,
                    type: :string,
-                   pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN,
+                   pattern: date_pattern,
                    example: 'XXXX-12-31'
         end
 
@@ -35,11 +37,11 @@ module Swagger
 
           property :from,
                    type: :string,
-                   pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN,
+                   pattern: date_pattern,
                    example: '2019-10-XX'
           property :to,
                    type: :string,
-                   pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN,
+                   pattern: date_pattern,
                    example: 'XXXX-12-31'
         end
       end

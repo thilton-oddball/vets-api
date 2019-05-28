@@ -5,7 +5,7 @@ module Swagger
     module Form526
       class Form8940
         include Swagger::Blocks
-
+        date_pattern = Regexp.new(Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN.inspect).to_js
         swagger_schema :Form8940 do
           property :unemployability, type: :object do
             property :mostIncome, type: :number
@@ -25,13 +25,13 @@ module Swagger
             end
             property :disabilityAffectedEmploymentFullTimeDate,
                      type: :string,
-                     pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN
+                     pattern: date_pattern
             property :lastWorkedFullTimeDate,
                      type: :string,
-                     pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN
+                     pattern: date_pattern
             property :becameTooDisabledToWorkDate,
                      type: :string,
-                     pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN
+                     pattern: date_pattern
             property :mostEarningsInAYear, type: :string
             property :yearOfMostEarnings, type: :string
             property :occupationDuringMostEarnings, type: :string
@@ -99,7 +99,7 @@ module Swagger
           end
           property :phone,
                    type: :string,
-                   pattern: /^\\d{10}$/
+                   pattern: Regexp.new("/^\\d{10}$/").to_js
           property :typeOfWork, type: :string
           property :hoursPerWeek, type: :number, minLength: 0, maxLength: 999
           property :dates, type: :object do
@@ -118,7 +118,7 @@ module Swagger
           property :workType, type: :string
           property :date,
                    type: :string,
-                   pattern: Swagger::Schemas::Form526::Form526SubmitV2::DATE_PATTERN
+                   pattern: date_pattern
         end
       end
     end

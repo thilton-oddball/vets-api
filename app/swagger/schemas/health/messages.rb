@@ -87,14 +87,14 @@ module Swagger
           property :message_id, type: :integer
           property :category, type: :string
           property :subject, type: :string
-          property :body, type: %i[null string]
+          property :body, type: :string
           property :attachment, type: :boolean
-          property :sent_date, type: %i[null string]
+          property :sent_date, type: :string
           property :sender_id, type: :integer
           property :sender_name, type: :string
           property :recipient_id, type: :integer
           property :recipient_name, type: :string
-          property :read_receipt, type: %i[null string]
+          property :read_receipt, type: :string
         end
 
         swagger_schema :Relationships do
@@ -148,6 +148,9 @@ module Swagger
 
         swagger_schema :AttachmentsInput do
           key :type, :array
+          items do
+            # TODO: This needs to be here for OAS2 validation
+          end
         end
       end
     end

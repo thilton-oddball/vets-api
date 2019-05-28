@@ -32,7 +32,7 @@ module Swagger
           swagger_path '/v0/messaging/health/message_drafts/{id}' do
             operation op do
               key :description, 'update a message draft'
-              key :operationId, 'messageDraftsUpdate'
+              key :operationId, "#{op}MessageDraftsUpdate"
               key :tags, %w[secure_messaging]
 
               parameter name: :id, in: :path, type: :integer, required: true, description: 'message draft id'

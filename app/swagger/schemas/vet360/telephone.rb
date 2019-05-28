@@ -21,13 +21,13 @@ module Swagger
                    example: '5551212',
                    minLength: 1,
                    maxLength: 14,
-                   pattern: ::Vet360::Models::Telephone::VALID_PHONE_NUMBER_REGEX.inspect
+                   pattern: Regexp.new(::Vet360::Models::Telephone::VALID_PHONE_NUMBER_REGEX.inspect).to_js
           property :area_code,
                    type: :string,
                    example: '303',
                    minLength: 3,
                    maxLength: 3,
-                   pattern: ::Vet360::Models::Telephone::VALID_AREA_CODE_REGEX.inspect
+                   pattern: Regexp.new(::Vet360::Models::Telephone::VALID_AREA_CODE_REGEX.inspect).to_js
           property :extension,
                    type: :string,
                    example: '101',
@@ -54,13 +54,13 @@ module Swagger
                    example: '5551212',
                    minLength: 1,
                    maxLength: 14,
-                   pattern: ::Vet360::Models::Telephone::VALID_PHONE_NUMBER_REGEX.inspect
+                   pattern: Regexp.new(::Vet360::Models::Telephone::VALID_PHONE_NUMBER_REGEX.inspect).to_js
           property :area_code,
                    type: :string,
                    example: '303',
                    minLength: 3,
                    maxLength: 3,
-                   pattern: ::Vet360::Models::Telephone::VALID_AREA_CODE_REGEX.inspect
+                   pattern: Regexp.new(::Vet360::Models::Telephone::VALID_AREA_CODE_REGEX.inspect).to_js
           property :extension,
                    type: :string,
                    example: '101',

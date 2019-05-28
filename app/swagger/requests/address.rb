@@ -73,7 +73,7 @@ module Swagger
           extend Swagger::Responses::AuthenticationError
 
           key :description, 'Updates a users corp address'
-          key :operationId, 'getAddress'
+          key :operationId, 'putAddress'
           key :tags, %w[
             benefits_info
           ]

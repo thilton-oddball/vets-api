@@ -28,7 +28,7 @@ module Swagger
               key :'$ref', :DateRangeAllRequired
             end
           end
-          property :providerFaciltiyAddress, type: :object do
+          property :providerFacilityAddress, type: :object do
             key :required, %i[
               street
               city
@@ -42,7 +42,7 @@ module Swagger
             property :city, type: :string, minLength: 1, maxLength: 30
             property :postalCode,
                      type: :string,
-                     pattern: /^\\d{5}(?:([-\\s]?)\\d{4})?$/
+                     pattern: Regexp.new("/^\\d{5}(?:([-\\s]?)\\d{4})?$/").to_js
             # See link for country enum
             # https://github.com/department-of-veterans-affairs/vets-json-schema/blob/76083e33f175fb00392e31f1f5f90654d05f1fd2/dist/21-526EZ-ALLCLAIMS-schema.json#L68-L285
             property :country,

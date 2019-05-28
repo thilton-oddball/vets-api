@@ -15,7 +15,7 @@ module Swagger
                      type: :string,
                      example: 'form_10_10ez',
                      enum: ::Notification.subjects.keys.sort
-            property :read_at, type: %i[string null], example: '2019-02-26T21:20:50.151Z'
+            property :read_at, type: :string, example: '2019-02-26T21:20:50.151Z'
           end
         end
       end

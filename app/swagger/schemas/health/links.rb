@@ -12,8 +12,8 @@ module Swagger
 
           property :self, type: :string
           property :first, type: :string
-          property :prev, type: %i[string null]
-          property :next, type: %i[string null]
+          property :prev, type: :string
+          property :next, type: :string
           property :last, type: :string
         end
 

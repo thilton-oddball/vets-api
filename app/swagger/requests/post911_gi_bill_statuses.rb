@@ -53,15 +53,15 @@ module Swagger
           property :attributes, type: :object do
             property :first_name, type: :string, example: 'Abraham'
             property :last_name, type: :string, example: 'Lincoln'
-            property :name_suffix, type: %i[string null], example: 'Jr'
-            property :date_of_birth, type: %i[string null], example: '1955-11-12T06:00:00.000+0000'
-            property :va_file_number, type: %i[string null], example: '123456789'
-            property :regional_processing_office, type: %i[string null], example: 'Central Office Washington, DC'
-            property :eligibility_date, type: %i[string null], example: '2004-10-01T04:00:00.000+0000'
-            property :delimiting_date, type: %i[string null], example: '2015-10-01T04:00:00.000+0000'
-            property :percentage_benefit, type: %i[integer null], example: 100
-            property :veteran_is_eligible, type: %i[boolean null], example: false
-            property :active_duty, type: %i[boolean null], example: false
+            property :name_suffix, type: :string, example: 'Jr'
+            property :date_of_birth, type: :string, example: '1955-11-12T06:00:00.000+0000'
+            property :va_file_number, type: :string, example: '123456789'
+            property :regional_processing_office, type: :string, example: 'Central Office Washington, DC'
+            property :eligibility_date, type: :string, example: '2004-10-01T04:00:00.000+0000'
+            property :delimiting_date, type: :string, example: '2015-10-01T04:00:00.000+0000'
+            property :percentage_benefit, type: :integer, example: 100
+            property :veteran_is_eligible, type: :boolean, example: false
+            property :active_duty, type: :boolean, example: false
             property :original_entitlement, type: :object do
               key :'$ref', :Entitlement
             end
@@ -84,20 +84,20 @@ module Swagger
       swagger_schema :Enrollment do
         key :required, [:begin_date]
         property :begin_date, type: :string, example: '2012-11-01T04:00:00.000+00:00' #
-        property :end_date, type: %i[string null], example: '2012-12-01T05:00:00.000+00:00'
-        property :facility_code, type: %i[string null], example: '12345678'
-        property :facility_name, type: %i[string null], example: 'Purdue University'
-        property :participant_id, type: %i[string null], example: '11170323'
-        property :training_type, type: %i[string null], example: 'UNDER_GRAD'
-        property :term_id, type: %i[string null], example: nil
-        property :hour_type, type: %i[string null], example: nil
-        property :full_time_hours, type: %i[integer null], example: 12
-        property :full_time_credit_hour_under_grad, type: %i[integer null], example: nil
-        property :vacation_day_count, type: %i[integer null], example: 0
-        property :on_campus_hours, type: %i[number null], example: 12
-        property :online_hours, type: %i[number null], example: 0
-        property :yellow_ribbon_amount, type: %i[number null], example: 0
-        property :status, type: %i[string null], example: 'Approved'
+        property :end_date, type: :string, example: '2012-12-01T05:00:00.000+00:00'
+        property :facility_code, type: :string, example: '12345678'
+        property :facility_name, type: :string, example: 'Purdue University'
+        property :participant_id, type: :string, example: '11170323'
+        property :training_type, type: :string, example: 'UNDER_GRAD'
+        property :term_id, type: :string, example: nil
+        property :hour_type, type: :string, example: nil
+        property :full_time_hours, type: :integer, example: 12
+        property :full_time_credit_hour_under_grad, type: :integer, example: nil
+        property :vacation_day_count, type: :integer, example: 0
+        property :on_campus_hours, type: :number, example: 12
+        property :online_hours, type: :number, example: 0
+        property :yellow_ribbon_amount, type: :number, example: 0
+        property :status, type: :string, example: 'Approved'
         property :amendments do
           key :type, :array
           items do
@@ -108,11 +108,11 @@ module Swagger
 
       swagger_schema :Amendment do
         key :required, [:type]
-        property :on_campus_hours, type: %i[number null]
-        property :online_hours, type: %i[number null]
-        property :yellow_ribbon_amount, type: %i[number null]
+        property :on_campus_hours, type: :number
+        property :online_hours, type: :number
+        property :yellow_ribbon_amount, type: :number
         property :type, type: :string
-        property :change_effective_date, type: %i[string null]
+        property :change_effective_date, type: :string
       end
 
       swagger_schema :Entitlement do

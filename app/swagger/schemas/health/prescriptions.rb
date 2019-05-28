@@ -52,14 +52,14 @@ module Swagger
             property :prescription_number, type: :string
             property :prescription_name, type: :string
             property :refill_status, type: :string
-            property :refill_submit_date, type: %i[string null], format: :date
+            property :refill_submit_date, type: :string, format: :date
             property :refill_date, type: :string, format: :date
             property :refill_remaining, type: :integer
             property :facility_name, type: :string
             property :ordered_date, type: :string, format: :date
             property :quantity, type: :integer
             property :expiration_date, type: :string, format: :date
-            property :dispensed_date, type: %i[string null], format: :date
+            property :dispensed_date, type: :string, format: :date
             property :station_number, type: :string
             property :is_refillable, type: :boolean
             property :is_trackable, type: :boolean

@@ -64,13 +64,14 @@ module Swagger
             key :operationId, 'messagesCreate'
             key :tags, %w[secure_messaging]
 
+            # TODO: OAS2 doesn't support multiple body params
             parameter name: :message, in: :body, required: true, description: 'body of message' do
               schema do
                 key :'$ref', :MessageInput
-              end
-            end
-            parameter name: :uploads, in: :body, required: false, description: 'attachments' do
-              schema do
+              # end
+            # end
+            # parameter name: :uploads, in: :body, required: false, description: 'attachments' do
+              # schema do
                 key :'$ref', :AttachmentsInput
               end
             end
@@ -163,14 +164,15 @@ module Swagger
             key :tags, %w[secure_messaging]
 
             parameter name: :id, in: :path, required: true, type: :integer, description: 'id of the message'
+            # TODO: OAS2 Doesn't support multiple body params
             parameter name: :message, in: :body, required: true, description: 'body of message reply' do
               schema do
                 key :'$ref', :MessageInput
-              end
-            end
-            parameter name: :uploads, in: :body, required: false, description: 'attachments' do
-              schema do
-                key :'$ref', :AttachmentsInput
+            #   end
+            # end
+            # parameter name: :uploads, in: :body, required: false, description: 'attachments' do
+            #   schema do
+            #     key :'$ref', :AttachmentsInput
               end
             end
 

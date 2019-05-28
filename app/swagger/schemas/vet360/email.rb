@@ -13,7 +13,7 @@ module Swagger
                    example: 'john@example.com',
                    minLength: 6,
                    maxLength: 255,
-                   pattern: EVSS::PCIU::EmailAddress::VALID_EMAIL_REGEX.inspect
+                   pattern: Regexp.new(EVSS::PCIU::EmailAddress::VALID_EMAIL_REGEX.inspect).to_js
         end
 
         swagger_schema :PutVet360Email do
@@ -24,7 +24,7 @@ module Swagger
                    example: 'john@example.com',
                    minLength: 6,
                    maxLength: 255,
-                   pattern: EVSS::PCIU::EmailAddress::VALID_EMAIL_REGEX.inspect
+                   pattern: Regexp.new(EVSS::PCIU::EmailAddress::VALID_EMAIL_REGEX.inspect).to_js
         end
       end
     end

@@ -44,7 +44,7 @@ module Swagger
                       property :total, type: :integer, description: 'Total number of results available.'
                       property :next_offset, type: :integer, description: 'Offset for the subsequent results.'
                       property :spelling_correction,
-                               type: %i[string null],
+                               type: :string,
                                description: 'Spelling correction for your search term.'
                       property :results do
                         key :type, :array
@@ -52,7 +52,7 @@ module Swagger
                           property :title, type: :string
                           property :url, type: :string
                           property :snippet, type: :string
-                          property :publication_date, type: %i[string null]
+                          property :publication_date, type: :string
                         end
                       end
                     end

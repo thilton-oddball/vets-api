@@ -40,9 +40,9 @@ module Swagger
                 key :required, %i[extract_type last_updated status created_on station_number]
 
                 property :extract_type, type: :string
-                property :last_updated, type: %i[null string]
-                property :status, type: %i[null string]
-                property :created_on, type: %i[null string]
+                property :last_updated, type: :string
+                property :status, type: :string
+                property :created_on, type: :string
                 property :station_number, type: :string
               end
             end
@@ -55,8 +55,8 @@ module Swagger
           key :type, :object
           key :required, %i[updated_at failed_station_list]
 
-          property :updated_at, type: %i[null string]
-          property :failed_station_list, type: %i[null string]
+          property :updated_at, type: :string
+          property :failed_station_list, type: :string
         end
       end
     end

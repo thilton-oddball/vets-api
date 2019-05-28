@@ -26,10 +26,10 @@ module Swagger
           key :required, %i[updated_at failed_station_list sort pagination]
 
           property :updated_at, type: :string
-          property :failed_station_list, type: %i[null string]
+          property :failed_station_list, type: :string
 
-          property :pagination, '$ref': :Filter
-          property :pagination, '$ref': :Sort
+          property :filter, '$ref': :Filter
+          property :sort, '$ref': :Sort
           property :pagination, '$ref': :Pagination
         end
 
@@ -37,8 +37,8 @@ module Swagger
           key :type, :object
           key :required, %i[filter sort pagination]
 
-          property :pagination, '$ref': :Filter
-          property :pagination, '$ref': :Sort
+          property :filter, '$ref': :Filter
+          property :sort, '$ref': :Sort
           property :pagination, '$ref': :Pagination
         end
 
@@ -46,7 +46,7 @@ module Swagger
           key :type, :object
           key :required, %i[sort pagination]
 
-          property :pagination, '$ref': :Sort
+          property :sort, '$ref': :Sort
           property :pagination, '$ref': :Pagination
         end
 
@@ -54,7 +54,7 @@ module Swagger
           key :type, :object
           key :required, %i[sort]
 
-          property :pagination, '$ref': :Sort
+          property :sort, '$ref': :Sort
         end
 
         swagger_schema :Filter do

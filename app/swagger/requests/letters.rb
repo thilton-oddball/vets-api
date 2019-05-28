@@ -53,6 +53,14 @@ module Swagger
 
           parameter :authorization
           parameter do
+            # TODO: OAS2 error on validate, this needs to be declared
+            key :name, :id
+            key :description, 'the id of the letter to lookup'
+            key :in, :path
+            key :required, true
+            key :type, :string
+          end
+          parameter do
             key :name, :body
             key :in, :body
             key :description, 'Options to include in generated PDF'
@@ -66,11 +74,11 @@ module Swagger
               property :monthlyAwardAmount, type: :number, example: true
               property :serviceConnectedPercentage, type: :integer, example: true
               property :awardEffectiveDate, type: :string, example: true
-              property :hasAdaptedHousing, type: %i[boolean null], example: true
-              property :hasChapter35Eligibility, type: %i[boolean null], example: true
-              property :hasDeathResultOfDisability, type: %i[boolean null], example: true
-              property :hasIndividualUnemployabilityGranted, type: %i[boolean null], example: true
-              property :hasSpecialMonthlyCompensation, type: %i[boolean null], example: true
+              property :hasAdaptedHousing, type: :boolean, example: true
+              property :hasChapter35Eligibility, type: :boolean, example: true
+              property :hasDeathResultOfDisability, type: :boolean, example: true
+              property :hasIndividualUnemployabilityGranted, type: :boolean, example: true
+              property :hasSpecialMonthlyCompensation, type: :boolean, example: true
             end
           end
 

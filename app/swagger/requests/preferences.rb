@@ -94,6 +94,14 @@ module Swagger
 
           parameter :authorization
 
+          parameter do
+            key :name, 'code'
+            key :in, :path
+            key :description, 'The code for the Preference'
+            key :required, true
+            key :type, :string
+          end
+
           response 200 do
             key :description, 'All UserPreference records for given code have been deleted'
             schema do
