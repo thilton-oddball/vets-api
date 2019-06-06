@@ -56,6 +56,7 @@ RSpec.describe('hca', type: :feature) do
   end
 
   it 'logged in application', js: true do
+    Settings.saml.callback_url = 'http://localhost:3000/auth/saml/callback'
     visit(DEFAULT_HOST)
     sleep(1)
     # close announcement
