@@ -22,6 +22,54 @@ pipeline {
       }
     }
 
+        stage('Create Changelog') {
+      steps {
+        script {
+          def changelogString = gitChangelog from: [type: 'COMMIT', value: env.GIT_PREVIOUS_COMMIT], returnType: 'STRING', template: 
+'''
+<h1> Git Changelog </h1>
+
+<p>
+Changelog:
+</p>
+
+{{#tags}}
+<h2> {{name}} </h2>
+ {{#issues}}
+  {{#hasIssue}}
+   {{#hasLink}}
+<h2> {{name}} <a href="{{link}}">{{issue}}</a> {{title}} </h2>
+   {{/hasLink}}
+   {{^hasLink}}
+<h2> {{name}} {{issue}} {{title}} </h2>
+   {{/hasLink}}
+  {{/hasIssue}}
+  {{^hasIssue}}
+<h2> {{name}} </h2>
+  {{/hasIssue}}
+
+
+   {{#commits}}
+<a href="https://github.com/tomasbjerre/git-changelog-lib/commit/{{hash}}">{{hash}}</a> {{authorName}} <i>{{commitTime}}</i>
+<p>
+<h3>{{{messageTitle}}}</h3>
+
+{{#messageBodyItems}}
+ <li> {{.}}</li> 
+{{/messageBodyItems}}
+</p>
+
+  {{/commits}}
+
+ {{/issues}}
+{{/tags}}
+''', 
+        to: [type: 'COMMIT', value: env.GIT_COMMIT]
+        currentBuild.description = changelogString
+        }
+      }
+    }
+
     stage('Run tests') {
       steps {
         withCredentials([string(credentialsId: 'sidekiq-enterprise-license', variable: 'BUNDLE_ENTERPRISE__CONTRIBSYS__COM')]) {
