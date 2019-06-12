@@ -69,6 +69,7 @@ module Common
       private
 
       def token_headers
+        binding.pry; fail
         config.base_request_headers.merge('Token' => session.token)
       end
 
