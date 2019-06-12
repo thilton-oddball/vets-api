@@ -54,6 +54,11 @@ describe 'RX Client' do
     let(:cache_keys) { ["#{client.session.user_id}:getactiverx", "#{client.session.user_id}:gethistoryrx"] }
 
     it 'gets a list of active prescriptions' do
+      VCR.config do |c|
+        c.allow_http_connections_when_no_cassette = true
+      end
+
+      binding.pry; fail
       VCR.use_cassette('rx_client/prescriptions/gets_a_list_of_active_prescriptions') do
         client_response = client.get_active_rxs
         expect(client_response).to be_a(Common::Collection)
