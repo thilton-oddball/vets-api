@@ -57,8 +57,8 @@ describe 'RX Client' do
       VCR.config do |c|
         c.allow_http_connections_when_no_cassette = true
       end
+      client_response = client.get_active_rxs
 
-      binding.pry; fail
       VCR.use_cassette('rx_client/prescriptions/gets_a_list_of_active_prescriptions') do
         client_response = client.get_active_rxs
         expect(client_response).to be_a(Common::Collection)
