@@ -89,10 +89,6 @@ module Common
       def request(method, path, params = {}, headers = {}, options = {}) # rubocop:disable Metrics/MethodLength
         sanitize_headers!(method, path, params, headers)
         raise_not_authenticated if headers.keys.include?('Token') && headers['Token'].nil?
-        if path.include?('prescription/getactiverx')
-          binding.pry; fail
-        end
-        
         connection.send(method.to_sym, path, params) do |request|
           request.headers.update(headers)
           options.each { |option, value| request.options.send("#{option}=", value) }
