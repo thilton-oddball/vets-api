@@ -81,15 +81,15 @@ PATH
       sidekiq
 
 PATH
-  remote: modules/veteran_verification
-  specs:
-    veteran_verification (0.0.1)
-      rails (~> 5.2.3)
-
-PATH
   remote: modules/veteran
   specs:
     veteran (0.0.1)
+      rails (~> 5.2.3)
+
+PATH
+  remote: modules/veteran_verification
+  specs:
+    veteran_verification (0.0.1)
       rails (~> 5.2.3)
 
 GEM
@@ -367,6 +367,8 @@ GEM
       iniparse (~> 1.4)
     ox (2.8.2)
     parallel (1.12.1)
+    parallel_tests (2.29.0)
+      parallel
     parser (2.4.0.2)
       ast (~> 2.3)
     pdf-core (0.7.0)
@@ -680,6 +682,7 @@ DEPENDENCIES
   openid_auth!
   overcommit
   ox
+  parallel_tests
   pdf-forms
   pdf-inspector
   pdf-reader
@@ -712,8 +715,8 @@ DEPENDENCIES
   sentry-raven (= 2.7.4)
   shrine
   shrine-memory
-  sidekiq-ent!
   sidekiq (~> 4.2)
+  sidekiq-ent!
   sidekiq-instrument
   sidekiq-pro!
   sidekiq-scheduler (~> 2.0)

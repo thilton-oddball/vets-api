@@ -135,6 +135,7 @@ group :development, :test do
   gem 'foreman'
   gem 'guard-rspec', '~> 4.7'
   gem 'overcommit'
+  gem 'parallel_tests'
   gem 'rack-test', require: 'rack/test'
   gem 'rack-vcr'
   gem 'rspec-rails', '~> 3.5'
