@@ -697,7 +697,7 @@ module HCA
       {
         'va:document' => {
           'va:name' => 'Attachment',
-          'va:format' => 'RTF',
+          'va:format' => 'WORD',
           'va:type' => is_dd214 ? '1' : '5',
           'va:content' => Base64.encode64(file.read)
         }
