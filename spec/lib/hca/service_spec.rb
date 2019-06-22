@@ -90,12 +90,11 @@ describe HCA::Service do
           health_care_application.send(:remove_instance_variable, :@parsed_form)
           health_care_application.save!
 
-          VCR.use_cassette(
-            'hca/submit_with_attachment_jpg',
-            record: :once
-          ) do
-            result = HCA::Service.new.submit_form(health_care_application.parsed_form)
+          VCR.configure do |c|
+            c.allow_http_connections_when_no_cassette = true
           end
+          result = HCA::Service.new.submit_form(health_care_application.parsed_form)
+          expect(result[:success]).to eq(true)
         end
       end
     end
