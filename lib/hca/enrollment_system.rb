@@ -697,7 +697,7 @@ module HCA
       {
         'va:document' => {
           'va:name' => 'Attachment',
-          'va:format' => MIME::Types[file.content_type].first.extensions[1].upcase,
+          'va:format' => 'DOC',
           'va:type' => is_dd214 ? '1' : '5',
           'va:content' => Base64.encode64(file.read)
         }
