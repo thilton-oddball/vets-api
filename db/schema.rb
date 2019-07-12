@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_03_154729) do
+ActiveRecord::Schema.define(version: 2019_07_11_215240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -134,6 +134,16 @@ ActiveRecord::Schema.define(version: 2019_06_03_154729) do
     t.index ["code"], name: "index_disability_contentions_on_code", unique: true
     t.index ["lay_term"], name: "index_disability_contentions_on_lay_term", using: :gin
     t.index ["medical_term"], name: "index_disability_contentions_on_medical_term", using: :gin
+  end
+
+  create_table "drivetime_bands", force: :cascade do |t|
+    t.string "name"
+    t.integer "value"
+    t.string "unit"
+    t.geography "polygon", limit: {:srid=>4326, :type=>"st_polygon", :geographic=>true}, null: false
+    t.string "vha_facility_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "education_benefits_claims", id: :serial, force: :cascade do |t|
