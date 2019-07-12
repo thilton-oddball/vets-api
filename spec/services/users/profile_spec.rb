@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe Users::Profile do
   let(:user) { build(:user, :accountable) }
-  let!(:in_progress_form) { create(:in_progress_form, user_uuid: user.uuid) }
 
   describe '.initialize' do
     let(:users_profile) { Users::Profile.new(user) }
@@ -48,6 +47,8 @@ RSpec.describe Users::Profile do
     end
 
     context '#in_progress_forms' do
+      let(:in_progress_form) { create(:in_progress_form, user_uuid: user.uuid) }
+
       it 'should include metadata' do
         expect(subject.in_progress_forms[0][:metadata]).to eq(in_progress_form.metadata)
       end
