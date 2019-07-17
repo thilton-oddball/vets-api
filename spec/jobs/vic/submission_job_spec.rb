@@ -36,6 +36,7 @@ RSpec.describe VIC::SubmissionJob do
       end
 
       context 'with a valid vic submission' do
+        before(:each) { Sidekiq::Worker.clear_all }
         before do
           expect(User).to receive(:find).with(user.uuid).and_return(user)
           expect_any_instance_of(VIC::Service).to receive(:submit).with(

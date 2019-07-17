@@ -77,7 +77,8 @@ VCR.configure do |c|
   end
 end
 
-ActiveRecord::Migration.maintain_test_schema!
+# Our config each env has only one database so this line is redundant and adds 5+ seconds to load time
+# ActiveRecord::Migration.maintain_test_schema!
 
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
@@ -156,24 +157,10 @@ RSpec.configure do |config|
     request.host = Settings.hostname
   end
 
-  config.before(:all) do
-    unless defined?(Sidekiq::Batch)
-      Sidekiq::Batch = Class.new do
-        def on(_callback, _klass, _options) end
-
-        def jobs
-          yield
-        end
-      end
-    end
-  end
-
   config.before(:each) do |example|
     stub_mvi unless example.metadata[:skip_mvi]
     stub_emis unless example.metadata[:skip_emis]
     stub_vet360 unless example.metadata[:skip_vet360]
-
-    Sidekiq::Worker.clear_all
   end
 
   # clean up carrierwave uploads
