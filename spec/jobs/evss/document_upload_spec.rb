@@ -34,7 +34,7 @@ RSpec.describe EVSS::DocumentUpload, type: :job do
 end
 
 RSpec.describe EVSSClaim::DocumentUpload, type: :job do
-  before(:each) { Sidekiq::Worker.clear_all }
+  after(:each) { Sidekiq::Worker.clear_all }
 
   it 're-queues the job into the new namespace' do
     expect { described_class.new.perform(nil, nil, nil) }

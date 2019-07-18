@@ -6,6 +6,8 @@ RSpec.describe VIC::SubmissionJob do
   let(:uuid) { 'fab2eea7-982e-4171-a2cb-8e9455ab00ed' }
   let(:user) { create(:user, :loa3) }
 
+  after(:each) { Sidekiq::Worker.clear_all }
+
   describe '#perform' do
     context 'when the service is up' do
       let(:vic_submission) { create(:vic_submission_loa3_user) }
@@ -36,7 +38,6 @@ RSpec.describe VIC::SubmissionJob do
       end
 
       context 'with a valid vic submission' do
-        before(:each) { Sidekiq::Worker.clear_all }
         before do
           expect(User).to receive(:find).with(user.uuid).and_return(user)
           expect_any_instance_of(VIC::Service).to receive(:submit).with(
@@ -64,6 +65,8 @@ RSpec.describe VIC::SubmissionJob do
     end
 
     context 'when the service has an error' do
+      before { Sidekiq::Worker.clear_all }
+
       it 'should set the submission to failed' do
         vic_submission = create(:vic_submission)
         ProcessFileJob.drain

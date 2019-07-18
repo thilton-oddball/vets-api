@@ -24,7 +24,7 @@ RSpec.describe Form526Submission do
   end
 
   describe '#start' do
-    before { Sidekiq::Worker.clear_all }
+    after(:each) { Sidekiq::Worker.clear_all }
 
     context 'when it is increase only' do
       let(:klass) { EVSS::DisabilityCompensationForm::SubmitForm526IncreaseOnly }
