@@ -77,7 +77,7 @@ VCR.configure do |c|
   end
 end
 
-# Our config each env has only one database so this line is redundant and adds 5+ seconds to load time
+# In our config we only use one database per env, this line adds 5+ seconds to load time for each spec run
 # ActiveRecord::Migration.maintain_test_schema!
 
 require 'sidekiq/testing'
