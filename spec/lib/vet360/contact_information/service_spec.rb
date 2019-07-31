@@ -125,7 +125,6 @@ describe Vet360::ContactInformation::Service, skip_vet360: true do
     let(:address) { build(:vet360_address, vet360_id: user.vet360_id, source_system_user: user.icn) }
     context 'when successful' do
       it 'returns a status of 200' do
-        binding.pry; fail
         VCR.use_cassette('vet360/contact_information/put_address_success', VCR::MATCH_EVERYTHING) do
           address.id = 437
           address.address_line1 = '1494 Martin Luther King Rd'
