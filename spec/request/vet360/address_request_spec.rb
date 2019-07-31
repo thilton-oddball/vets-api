@@ -9,7 +9,7 @@ RSpec.describe 'address', type: :request do
   let(:headers) { { 'Content-Type' => 'application/json', 'Accept' => 'application/json' } }
 
   before do
-    Timecop.freeze(Time.zone.local(2018, 6, 6, 15, 35, 55))
+    # Timecop.freeze(Time.zone.local(2018, 6, 6, 15, 35, 55))
     sign_in_as(user)
   end
 
@@ -93,6 +93,10 @@ RSpec.describe 'address', type: :request do
 
     context 'with a 200 response' do
       it 'should match the email address schema', :aggregate_failures do
+        VCR.config do |c|
+          c.allow_http_connections_when_no_cassette = true
+        end
+        binding.pry; fail
         VCR.use_cassette('vet360/contact_information/put_address_success') do
           put('/v0/profile/addresses', params: address.to_json, headers: headers)
 
