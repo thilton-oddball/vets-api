@@ -89,12 +89,13 @@ RSpec.describe('hca', type: :feature) do
     next_form_page
     common_fill_hca_form(true)
 
-    binding.pry; fail
+    health_care_application = HealthCareApplication.last
+    expect(health_care_application.state).to eq('pending')
     # run job and make sure it succeeds
     job = HCA::SubmissionJob.jobs.last
-    expect(job['args'][0]['icn']).to eq(user.icn)
+    expect(job['args'][2]).to eq(health_care_application.id)
     HCA::SubmissionJob.drain
-    expect(HealthCareApplication.find(job['args'][2]).state).to eq('success')
+    expect(health_care_application.reload.state)).to eq('success')
   end
 
   it 'anonymous application', js: true do
