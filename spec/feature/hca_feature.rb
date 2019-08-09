@@ -89,6 +89,7 @@ RSpec.describe('hca', type: :feature) do
     next_form_page
     common_fill_hca_form(true)
 
+    binding.pry; fail
     # run job and make sure it succeeds
     job = HCA::SubmissionJob.jobs.last
     expect(job['args'][0]['icn']).to eq(user.icn)
