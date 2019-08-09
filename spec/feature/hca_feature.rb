@@ -94,6 +94,7 @@ RSpec.describe('hca', type: :feature) do
     # run job and make sure it succeeds
     job = HCA::SubmissionJob.jobs.last
     expect(job['args'][2]).to eq(health_care_application.id)
+    binding.pry; fail
     HCA::SubmissionJob.drain
     expect(health_care_application.reload.state).to eq('success')
   end
