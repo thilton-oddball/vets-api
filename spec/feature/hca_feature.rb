@@ -95,7 +95,7 @@ RSpec.describe('hca', type: :feature) do
     job = HCA::SubmissionJob.jobs.last
     expect(job['args'][2]).to eq(health_care_application.id)
     HCA::SubmissionJob.drain
-    expect(health_care_application.reload.state)).to eq('success')
+    expect(health_care_application.reload.state).to eq('success')
   end
 
   it 'anonymous application', js: true do
