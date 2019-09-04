@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'direct_deposit_mailer'
+require 'hca_submission_failure_mailer'
+
 class TransactionalEmailAnalyticsJob
   include Sidekiq::Worker
 
